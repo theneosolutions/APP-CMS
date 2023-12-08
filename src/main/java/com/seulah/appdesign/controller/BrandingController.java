@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping("/branding")
+@RequestMapping("/api/v1/cms/branding")
 public class BrandingController {
     private final BrandingService brandingService;
 

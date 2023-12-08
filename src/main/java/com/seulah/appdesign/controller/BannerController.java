@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/banner")
+@RequestMapping("/api/v1/cms/banner")
 @Slf4j
 public class BannerController {
     private final BannerService bannerService;

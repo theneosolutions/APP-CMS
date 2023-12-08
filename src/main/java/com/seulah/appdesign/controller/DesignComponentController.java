@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping("/designComponent")
+@RequestMapping("/api/v1/cms/designComponent")
 public class DesignComponentController {
     private final DesignComponentService designComponentService;
 

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/appFlow")
+@RequestMapping("/api/v1/cms/appFlow")
 @Slf4j
 public class AppFlowController {
     private final AppFlowService appFlowService;
