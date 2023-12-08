@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/navbar")
+@RequestMapping("/api/v1/cms/navbar")
 @Slf4j
 public class NavigationController {
     private final NavigationService navigationService;

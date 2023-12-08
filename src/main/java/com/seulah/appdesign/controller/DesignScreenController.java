@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping("/designScreen")
+@RequestMapping("/api/v1/cms/designScreen")
 public class DesignScreenController {
     private final DesignScreenService designScreenService;
 
