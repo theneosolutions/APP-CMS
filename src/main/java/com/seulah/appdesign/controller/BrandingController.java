@@ -50,9 +50,4 @@ public class BrandingController {
         return brandingService.updateById(id, brandingRequest);
     }
 
-    @PutMapping(value = "/deleteLogo", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> deleteLogo(@RequestParam String id) {
-        log.info("Delete logo from Branding By Id {}" , id);
-        return brandingService.deleteLogo(id);
-    }
 }

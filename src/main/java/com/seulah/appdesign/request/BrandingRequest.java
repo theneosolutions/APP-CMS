@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BrandingRequest {
-    private String logo;
+
 
     private String splashScreen;
 
