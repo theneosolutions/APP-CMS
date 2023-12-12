@@ -7,6 +7,7 @@ import com.seulah.appdesign.repository.BrandingRepository;
 import com.seulah.appdesign.request.MessageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -24,13 +25,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class BrandLogoService {
 
     private final BrandLogoRepository brandingLogoRepository;
+
+    @Value("${image.path}")
+    private String imagePath;
 
     private final BrandingRepository brandingRepository;
 
@@ -59,7 +65,7 @@ public class BrandLogoService {
         String osName = getOperatingSystem();
         String localPath;
         if (osName.contains("Window")) {
-            localPath = "C:\\Users\\DELL\\Desktop\\image";
+            localPath = imagePath;
         } else {
             localPath = "/";
         }
@@ -74,14 +80,6 @@ public class BrandLogoService {
         log.info("File saved to local drive: {}", filePath);
     }
 
-    private void saveToDatabase(MultipartFile file, String brandId) {
-        BrandingLogo brandingLogo = new BrandingLogo();
-        brandingLogo.setBrandId(brandId);
-        brandingLogo.setLogo(file.getOriginalFilename());
-
-        brandingLogoRepository.save(brandingLogo);
-        log.info("Branding logo saved to the database");
-    }
 
     private String getFileExtension(MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
@@ -92,28 +90,52 @@ public class BrandLogoService {
         return System.getProperty("os.name");
     }
 
-    public ResponseEntity<Resource> getLogoByBrandId(String brandId) throws MalformedURLException {
-        Optional<BrandingLogo> brandingLogo = brandingLogoRepository.findAllByBrandId(brandId);
-        if (brandingLogo.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Resource> getLogoByBrandId(String brandId)  {
+        List<BrandingLogo> brandingLogos = brandingLogoRepository.findAllByBrandId(brandId);
+        if (brandingLogos.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        Resource resource = loadFileAsResource(brandingLogo.get().getLogo());
+        List<Resource> resources = brandingLogos.stream()
+                .map(logo -> {
+                    try {
+                        return loadFileAsResource(logo.getLogo());
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+
+        Resource concatenatedResource = concatenateResources(resources);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .contentType(MediaType.IMAGE_PNG)
-                .body(resource);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + brandId + ".zip\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM) // Adjust content type as needed
+                .body(concatenatedResource);
     }
 
     private Resource loadFileAsResource(String fileName) throws MalformedURLException {
-        Path filePath = Paths.get("C:\\Users\\DELL\\Desktop\\image").resolve(fileName).normalize();
-        Resource resource = new UrlResource(filePath.toUri());
+        String localPath = imagePath;
 
+        Path filePath = Paths.get(localPath).resolve(fileName).normalize();
+        Resource resource = new UrlResource(filePath.toUri());
         if (resource.exists()) {
             return resource;
         } else {
             throw new RuntimeException("File not found: " + fileName);
         }
+    }
+
+    private Resource concatenateResources(List<Resource> resources) {
+        return resources.get(0);
+    }
+
+    private void saveToDatabase(MultipartFile file, String brandId) {
+        BrandingLogo brandingLogo = new BrandingLogo();
+        brandingLogo.setBrandId(brandId);
+        brandingLogo.setLogo(file.getOriginalFilename());
+
+        brandingLogoRepository.save(brandingLogo);
+        log.info("Branding logo saved to the database");
     }
 }
 
