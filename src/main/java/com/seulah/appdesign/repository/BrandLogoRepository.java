@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BrandLogoRepository extends MongoRepository<BrandingLogo, String> {
-    Optional<BrandingLogo> findAllByBrandId(String brandId);
 
+    Optional<BrandingLogo> findByBrandId(String brandId);
+
+    List<BrandingLogo> findAllByBrandId(String brandId);
 }
