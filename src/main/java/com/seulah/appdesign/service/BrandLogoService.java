@@ -61,7 +61,7 @@ public class BrandLogoService {
         return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
     }
 
-    private void saveToLocalDrive(MultipartFile file) throws IOException {
+    public void saveToLocalDrive(MultipartFile file) throws IOException {
         String osName = getOperatingSystem();
         String localPath;
         if (osName.contains("Window")) {
@@ -81,7 +81,7 @@ public class BrandLogoService {
     }
 
 
-    private String getFileExtension(MultipartFile file) {
+    public String getFileExtension(MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         return FilenameUtils.getExtension(originalFilename);
     }
@@ -113,7 +113,7 @@ public class BrandLogoService {
                 .body(concatenatedResource);
     }
 
-    private Resource loadFileAsResource(String fileName) throws MalformedURLException {
+    public Resource loadFileAsResource(String fileName) throws MalformedURLException {
         String localPath = imagePath;
 
         Path filePath = Paths.get(localPath).resolve(fileName).normalize();

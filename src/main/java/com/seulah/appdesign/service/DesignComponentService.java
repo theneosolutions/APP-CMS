@@ -37,7 +37,6 @@ public class DesignComponentService {
         }
         return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
     }
-
     public ResponseEntity<MessageResponse> getAllDesignComponent() {
         List<DesignComponent> designComponentList = designComponentRepository.findAll();
         return new ResponseEntity<>(new MessageResponse("Success", designComponentList, false), HttpStatus.OK);

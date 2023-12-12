@@ -5,18 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class BrandingRequest {
+@NoArgsConstructor
+public class BrandingLayoutRequest {
+    private String height;
+    private String width;
 
-
-    private String splashScreen;
-
-    private String content;
-    private List<String> color;
-
+    private String lottieFiles;
 }

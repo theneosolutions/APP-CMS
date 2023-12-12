@@ -5,10 +5,6 @@ import com.seulah.appdesign.entity.Branding;
 import com.seulah.appdesign.repository.BrandingRepository;
 import com.seulah.appdesign.request.BrandingRequest;
 import com.seulah.appdesign.request.MessageResponse;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,18 +17,13 @@ import java.util.Optional;
 public class BrandingService {
     private final BrandingRepository brandingRepository;
 
-    private final MongoTemplate mongoTemplate;
-
-    public BrandingService(BrandingRepository brandingRepository, MongoTemplate mongoTemplate) {
+    public BrandingService(BrandingRepository brandingRepository) {
         this.brandingRepository = brandingRepository;
-        this.mongoTemplate = mongoTemplate;
     }
-
 
     public ResponseEntity<MessageResponse> saveBranding(BrandingRequest brandingRequest) {
         Branding branding = new Branding();
         branding.setColor(brandingRequest.getColor());
-        branding.setLayout(brandingRequest.getLayout());
         branding.setSplashScreen(brandingRequest.getSplashScreen());
         branding.setContent(brandingRequest.getContent());
         branding = brandingRepository.save(branding);
@@ -43,10 +34,8 @@ public class BrandingService {
 
     public ResponseEntity<MessageResponse> getBrandingById(String id) {
         Optional<Branding> appDesign = brandingRepository.findById(id);
-        if (appDesign.isPresent()) {
-            return new ResponseEntity<>(new MessageResponse("Success", appDesign, false), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return appDesign.map(design -> new ResponseEntity<>(new MessageResponse("Success", design, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
+
     }
 
     public ResponseEntity<MessageResponse> getAll() {
@@ -75,10 +64,6 @@ public class BrandingService {
         }
         if (brandingRequest.getSplashScreen() != null && !brandingRequest.getSplashScreen().isEmpty()) {
             branding.setSplashScreen(brandingRequest.getSplashScreen());
-        }
-
-        if (brandingRequest.getLayout() != null && !brandingRequest.getLayout().isEmpty()) {
-            branding.setLayout(brandingRequest.getLayout());
         }
         if (brandingRequest.getContent() != null && !brandingRequest.getContent().isEmpty()) {
             branding.setContent(brandingRequest.getContent());
