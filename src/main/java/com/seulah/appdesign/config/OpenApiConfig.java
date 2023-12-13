@@ -29,7 +29,7 @@ public class OpenApiConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Seualh REST API",
+                "Seulah REST API",
                 "CMS Api Documentation.",
                 "V1",
                 "",
