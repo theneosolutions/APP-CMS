@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 public class DesignComponentRequest {
     private String sizeRedisCard;
-    private List<String> components;
+    private String components;
 }

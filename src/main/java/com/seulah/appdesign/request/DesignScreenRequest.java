@@ -18,4 +18,5 @@ public class DesignScreenRequest {
     private List<String> screens;
     private String screen;
 
+
 }

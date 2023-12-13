@@ -19,5 +19,5 @@ public class DesignComponent {
     private String id;
 
     private String sizeRedisCard;
-    private List<String> components;
+    private String components;
 }

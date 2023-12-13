@@ -22,4 +22,7 @@ public class DesignScreen {
 
     private String addScreen;
 
+
+    private List<DesignComponent> designComponentList;
+
 }

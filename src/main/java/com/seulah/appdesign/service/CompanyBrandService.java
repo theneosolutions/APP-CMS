@@ -19,7 +19,9 @@ public class CompanyBrandService {
     }
 
     public ResponseEntity<MessageResponse> createCompanyBrand(String companyId, String brandId) {
-        CompanyBrand companyBrand = new CompanyBrand(companyId, brandId);
+        CompanyBrand companyBrand = new CompanyBrand();
+        companyBrand.setBrandId(brandId);
+        companyBrand.setCompanyId(companyId);
 
         return new ResponseEntity<>(new MessageResponse("Successfully Created Banner", companyBrandRepository.save(companyBrand), false), HttpStatus.CREATED);
     }
