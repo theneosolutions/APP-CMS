@@ -32,7 +32,6 @@ public class DesignScreenService {
     public ResponseEntity<MessageResponse> saveDesignScreen(DesignScreenRequest designRequest) {
         DesignScreen design = new DesignScreen();
         design.setScreenName(designRequest.getScreenName());
-        design.setScreens(designRequest.getScreens());
         design = designScreenRepository.save(design);
 
         return new ResponseEntity<>(new MessageResponse("Successfully Created Design", design, false), HttpStatus.CREATED);
@@ -65,9 +64,6 @@ public class DesignScreenService {
             DesignScreen design = designOptional.get();
             if (designRequest.getScreenName() != null && !designRequest.getScreenName().isEmpty()) {
                 design.setScreenName(designRequest.getScreenName());
-            }
-            if (designRequest.getScreens() != null && !designRequest.getScreens().isEmpty()) {
-                design.setScreens(designRequest.getScreens());
             }
 
             design = designScreenRepository.save(design);

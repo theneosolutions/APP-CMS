@@ -18,7 +18,6 @@ public class DesignScreen {
     @Id
     private String id;
 
-    private List<String> screens;
 
     private String screenName;
 
