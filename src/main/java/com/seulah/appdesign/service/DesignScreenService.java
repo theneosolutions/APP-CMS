@@ -63,8 +63,11 @@ public class DesignScreenService {
         Optional<DesignScreen> designOptional = designScreenRepository.findById(id);
         if (designOptional.isPresent()) {
             DesignScreen design = designOptional.get();
-            if (designRequest.getScreenName() != null && !designRequest.getScreenName().isEmpty()) {
-                design.setScreenName(designRequest.getScreenName());
+            if (designRequest.getApplicationName() != null && !designRequest.getApplicationName().isEmpty()) {
+                design.setApplicationName(designRequest.getApplicationName());
+            }
+            if (designRequest.getScreenList() != null && !designRequest.getScreenList().isEmpty()) {
+                design.setScreenList(designRequest.getScreenList());
             }
 
             design = designScreenRepository.save(design);
