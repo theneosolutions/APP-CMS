@@ -31,7 +31,7 @@ public class DesignScreenService {
 
     public ResponseEntity<MessageResponse> saveDesignScreen(DesignScreenRequest designRequest) {
         DesignScreen design = new DesignScreen();
-        design.setScreenName(designRequest.getScreen());
+        design.setScreenName(designRequest.getScreenName());
         design.setScreens(designRequest.getScreens());
         design = designScreenRepository.save(design);
 
@@ -63,8 +63,8 @@ public class DesignScreenService {
         Optional<DesignScreen> designOptional = designScreenRepository.findById(id);
         if (designOptional.isPresent()) {
             DesignScreen design = designOptional.get();
-            if (designRequest.getScreen() != null && !designRequest.getScreen().isEmpty()) {
-                design.setScreenName(designRequest.getScreen());
+            if (designRequest.getScreenName() != null && !designRequest.getScreenName().isEmpty()) {
+                design.setScreenName(designRequest.getScreenName());
             }
             if (designRequest.getScreens() != null && !designRequest.getScreens().isEmpty()) {
                 design.setScreens(designRequest.getScreens());
