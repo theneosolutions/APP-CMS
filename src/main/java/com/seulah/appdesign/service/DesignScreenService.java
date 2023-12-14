@@ -31,7 +31,7 @@ public class DesignScreenService {
 
     public ResponseEntity<MessageResponse> saveDesignScreen(DesignScreenRequest designRequest) {
         DesignScreen design = new DesignScreen();
-        design.setAddScreen(designRequest.getScreen());
+        design.setScreenName(designRequest.getScreen());
         design.setScreens(designRequest.getScreens());
         design = designScreenRepository.save(design);
 
@@ -41,10 +41,7 @@ public class DesignScreenService {
 
     public ResponseEntity<MessageResponse> getDesignScreenById(String id) {
         Optional<DesignScreen> design = designScreenRepository.findById(id);
-        if (design.isPresent()) {
-            return new ResponseEntity<>(new MessageResponse("Success", design, false), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return design.map(designScreen -> new ResponseEntity<>(new MessageResponse("Success", designScreen, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
     }
 
     public ResponseEntity<MessageResponse> getAllDesignScreen() {
@@ -67,7 +64,7 @@ public class DesignScreenService {
         if (designOptional.isPresent()) {
             DesignScreen design = designOptional.get();
             if (designRequest.getScreen() != null && !designRequest.getScreen().isEmpty()) {
-                design.setAddScreen(designRequest.getScreen());
+                design.setScreenName(designRequest.getScreen());
             }
             if (designRequest.getScreens() != null && !designRequest.getScreens().isEmpty()) {
                 design.setScreens(designRequest.getScreens());

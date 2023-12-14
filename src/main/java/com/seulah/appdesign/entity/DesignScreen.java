@@ -20,7 +20,7 @@ public class DesignScreen {
 
     private List<String> screens;
 
-    private String addScreen;
+    private String screenName;
 
 
     private List<DesignComponent> designComponentList;

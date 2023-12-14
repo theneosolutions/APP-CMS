@@ -37,10 +37,7 @@ public class DesignComponentService {
 
     public ResponseEntity<MessageResponse> getDesignComponentById(String id) {
         Optional<DesignComponent> designComponent = designComponentRepository.findById(id);
-        if (designComponent.isPresent()) {
-            return new ResponseEntity<>(new MessageResponse("Success", designComponent, false), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return designComponent.map(design -> new ResponseEntity<>(new MessageResponse("Success", design, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
     }
 
     public ResponseEntity<MessageResponse> getAllDesignComponent() {

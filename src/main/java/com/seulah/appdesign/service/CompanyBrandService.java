@@ -28,10 +28,7 @@ public class CompanyBrandService {
 
     public ResponseEntity<MessageResponse> getByBrandId(String brandId) {
         Optional<CompanyBrand> companyBrand = companyBrandRepository.findByBrandId(brandId);
-        if (companyBrand.isPresent()) {
-            return new ResponseEntity<>(new MessageResponse("Success", companyBrand, false), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return companyBrand.map(brand -> new ResponseEntity<>(new MessageResponse("Success", brand, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
     }
 
     public ResponseEntity<MessageResponse> getAll() {

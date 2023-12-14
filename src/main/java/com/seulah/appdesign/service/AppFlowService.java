@@ -32,10 +32,7 @@ public class AppFlowService {
 
     public ResponseEntity<MessageResponse> getAppFlowById(String id) {
         Optional<AppFlow> appFlow = appFlowRepository.findById(id);
-        if (appFlow.isPresent()) {
-            return new ResponseEntity<>(new MessageResponse("Success", appFlow, false), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return appFlow.map(flow -> new ResponseEntity<>(new MessageResponse("Success", flow, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
     }
 
     public ResponseEntity<MessageResponse> getAll() {

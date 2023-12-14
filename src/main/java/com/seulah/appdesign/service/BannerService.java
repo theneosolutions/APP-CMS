@@ -31,10 +31,7 @@ public class BannerService {
 
     public ResponseEntity<MessageResponse> getBannerByID(String id) {
         Optional<Banner> banner = bannerRepository.findById(id);
-        if (banner.isPresent()) {
-            return new ResponseEntity<>(new MessageResponse("Success", banner, false), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return banner.map(ban -> new ResponseEntity<>(new MessageResponse("Success", ban, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
     }
 
     public ResponseEntity<MessageResponse> getAll() {

@@ -16,7 +16,7 @@ import java.util.List;
 public class DesignScreenRequest {
 
     private List<String> screens;
-    private String screen;
+    private String screenName;
 
 
 }

@@ -32,10 +32,7 @@ public class NavigationService {
 
     public ResponseEntity<MessageResponse> getDesignById(String id) {
         Optional<Navigations> navigations = navigationRepository.findById(id);
-        if (navigations.isPresent()) {
-            return new ResponseEntity<>(new MessageResponse("Success", navigations, false), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return navigations.map(navigation -> new ResponseEntity<>(new MessageResponse("Success", navigation, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
     }
 
     public ResponseEntity<MessageResponse> getAll() {
