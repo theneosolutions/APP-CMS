@@ -2,12 +2,15 @@ package com.seulah.appdesign.service;
 
 import com.seulah.appdesign.entity.Banner;
 import com.seulah.appdesign.repository.BannerRepository;
-import com.seulah.appdesign.request.BannerRequest;
 import com.seulah.appdesign.request.MessageResponse;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,18 +18,11 @@ import java.util.Optional;
 public class BannerService {
     private final BannerRepository bannerRepository;
 
-    public BannerService(BannerRepository bannerRepository) {
+    private final BrandLogoService brandLogoService;
+
+    public BannerService(BannerRepository bannerRepository, BrandLogoService brandLogoService) {
         this.bannerRepository = bannerRepository;
-    }
-
-    public ResponseEntity<MessageResponse> saveBanner(BannerRequest bannerRequest) {
-        Banner banner = new Banner();
-
-        banner.setBannerDesign(bannerRequest.getBannerDesign());
-        banner.setBannerImage(bannerRequest.getBannerImage());
-        banner = bannerRepository.save(banner);
-
-        return new ResponseEntity<>(new MessageResponse("Successfully Created Banner", banner, false), HttpStatus.CREATED);
+        this.brandLogoService = brandLogoService;
     }
 
     public ResponseEntity<MessageResponse> getBannerByID(String id) {
@@ -49,20 +45,27 @@ public class BannerService {
         return new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK);
     }
 
-    public ResponseEntity<MessageResponse> updateById(String id, BannerRequest bannerRequest) {
-        Optional<Banner> bannerOptional = bannerRepository.findById(id);
-        if (bannerOptional.isPresent()) {
-            Banner banner = bannerOptional.get();
-            if (bannerRequest.getBannerDesign() != null && !bannerRequest.getBannerDesign().isEmpty()) {
-                banner.setBannerDesign(bannerRequest.getBannerDesign());
-            }
-            if (bannerRequest.getBannerImage() != null && !bannerRequest.getBannerImage().isEmpty()) {
-                banner.setBannerImage(bannerRequest.getBannerImage());
-            }
 
-            banner = bannerRepository.save(banner);
-            return new ResponseEntity<>(new MessageResponse("Successfully Updated", banner, false), HttpStatus.OK);
+    public ResponseEntity<MessageResponse> saveBanner(MultipartFile bannerImage, String bannerDesign) throws IOException {
+
+        brandLogoService.saveToLocalDrive(bannerImage);
+        saveToDatabase(bannerImage, bannerDesign);
+        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+    }
+
+    private void saveToDatabase(MultipartFile file, String bannerDesign) {
+        Banner banner = new Banner();
+        banner.setBannerDesign(bannerDesign);
+        banner.setBannerImage(file.getOriginalFilename());
+        bannerRepository.save(banner);
+    }
+
+    public ResponseEntity<Resource> getBannerImageById(String id) throws MalformedURLException {
+        Optional<Banner> optionalBanner = bannerRepository.findById(id);
+        if (optionalBanner.isPresent()) {
+            Resource resource = brandLogoService.loadFileAsResource(optionalBanner.get().getBannerImage());
+            return new ResponseEntity<>(resource, HttpStatus.OK);
         }
-        return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
