@@ -19,8 +19,8 @@ public class DesignScreen {
     private String id;
 
 
-    private String screenName;
-
+    private String applicationName;
+    private List<String> screenList;
 
     private List<DesignComponent> designComponentList;
 

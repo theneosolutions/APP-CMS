@@ -31,7 +31,8 @@ public class DesignScreenService {
 
     public ResponseEntity<MessageResponse> saveDesignScreen(DesignScreenRequest designRequest) {
         DesignScreen design = new DesignScreen();
-        design.setScreenName(designRequest.getScreenName());
+        design.setApplicationName(designRequest.getApplicationName());
+        design.setScreenList(designRequest.getScreenList());
         design = designScreenRepository.save(design);
 
         return new ResponseEntity<>(new MessageResponse("Successfully Created Design", design, false), HttpStatus.CREATED);

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 @RestController
 @RequestMapping("/api/v1/cms/brandLogo")
@@ -21,12 +20,12 @@ public class BrandLogoController {
 
 
     @PostMapping("/uploadLogo")
-    public ResponseEntity<MessageResponse> saveBrandingLogo(@RequestParam MultipartFile file, @RequestParam String brandId) throws IOException {
+    public ResponseEntity<MessageResponse> saveBrandingLogo(@RequestPart MultipartFile file, @RequestParam String brandId) throws IOException {
         return brandLogoService.saveBrandingLogo(file, brandId);
     }
 
     @GetMapping("/getLogoByBrandId")
-    public ResponseEntity<Resource> getLogoByBrandId(@RequestParam String brandId) throws MalformedURLException {
+    public ResponseEntity<Resource> getLogoByBrandId(@RequestParam String brandId) {
         return brandLogoService.getLogoByBrandId(brandId);
     }
 
