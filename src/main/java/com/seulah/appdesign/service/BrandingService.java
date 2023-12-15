@@ -21,14 +21,16 @@ public class BrandingService {
     }
 
     public ResponseEntity<MessageResponse> saveBranding(String brandingName) {
-        Branding branding = new Branding();
+        Branding branding = brandingRepository.findByBrandName(brandingName);
+        if (branding != null) {
+            return new ResponseEntity<>(new MessageResponse("Brand Name Already Exist", null, false), HttpStatus.CONFLICT);
+        }
+        branding = new Branding();
         branding.setBrandName(brandingName);
         branding = brandingRepository.save(branding);
-
         return new ResponseEntity<>(new MessageResponse("Successfully Created App Design", branding, false), HttpStatus.CREATED);
     }
-
-
+    
     public ResponseEntity<MessageResponse> getBrandingById(String id) {
         Optional<Branding> appDesign = brandingRepository.findById(id);
         return appDesign.map(design -> new ResponseEntity<>(new MessageResponse("Success", design, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
