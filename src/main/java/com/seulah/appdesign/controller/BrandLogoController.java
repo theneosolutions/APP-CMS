@@ -20,8 +20,8 @@ public class BrandLogoController {
 
 
     @PostMapping("/uploadLogo")
-    public ResponseEntity<MessageResponse> saveBrandingLogo(@RequestPart MultipartFile file, @RequestParam String brandId) throws IOException {
-        return brandLogoService.saveBrandingLogo(file, brandId);
+    public ResponseEntity<MessageResponse> saveBrandingLogo(@RequestPart MultipartFile file, @RequestParam String brandId,@RequestParam int height,@RequestParam int width) throws IOException {
+        return brandLogoService.saveBrandingLogo(file, brandId,height,width);
     }
 
     @GetMapping("/getLogoByBrandId")

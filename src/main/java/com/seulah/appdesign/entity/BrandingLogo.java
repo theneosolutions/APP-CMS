@@ -18,4 +18,7 @@ public class BrandingLogo {
     private String brandId;
 
     private String logo;
+
+    private int height;
+    private int width;
 }
