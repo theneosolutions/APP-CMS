@@ -30,7 +30,7 @@ public class BrandingService {
         branding = brandingRepository.save(branding);
         return new ResponseEntity<>(new MessageResponse("Successfully Created App Design", branding, false), HttpStatus.CREATED);
     }
-    
+
     public ResponseEntity<MessageResponse> getBrandingById(String id) {
         Optional<Branding> appDesign = brandingRepository.findById(id);
         return appDesign.map(design -> new ResponseEntity<>(new MessageResponse("Success", design, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
