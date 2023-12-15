@@ -3,7 +3,6 @@ package com.seulah.appdesign.service;
 
 import com.seulah.appdesign.entity.Branding;
 import com.seulah.appdesign.repository.BrandingRepository;
-import com.seulah.appdesign.request.BrandingRequest;
 import com.seulah.appdesign.request.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +20,9 @@ public class BrandingService {
         this.brandingRepository = brandingRepository;
     }
 
-    public ResponseEntity<MessageResponse> saveBranding(BrandingRequest brandingRequest) {
+    public ResponseEntity<MessageResponse> saveBranding(String brandingName) {
         Branding branding = new Branding();
-        branding.setColor(brandingRequest.getColor());
-        branding.setSplashScreen(brandingRequest.getSplashScreen());
-        branding.setContent(brandingRequest.getContent());
+        branding.setBrandName(brandingName);
         branding = brandingRepository.save(branding);
 
         return new ResponseEntity<>(new MessageResponse("Successfully Created App Design", branding, false), HttpStatus.CREATED);
@@ -53,20 +50,14 @@ public class BrandingService {
         return new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK);
     }
 
-    public ResponseEntity<MessageResponse> updateById(String id, BrandingRequest brandingRequest) {
+    public ResponseEntity<MessageResponse> updateById(String id, String brandName) {
         Optional<Branding> appDesignOptional = brandingRepository.findById(id);
         if (appDesignOptional.isEmpty()) {
             return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
         }
         Branding branding = appDesignOptional.get();
-        if (brandingRequest.getColor() != null && !brandingRequest.getColor().isEmpty()) {
-            branding.setColor(brandingRequest.getColor());
-        }
-        if (brandingRequest.getSplashScreen() != null && !brandingRequest.getSplashScreen().isEmpty()) {
-            branding.setSplashScreen(brandingRequest.getSplashScreen());
-        }
-        if (brandingRequest.getContent() != null && !brandingRequest.getContent().isEmpty()) {
-            branding.setContent(brandingRequest.getContent());
+        if (brandName != null && !brandName.isEmpty()) {
+            branding.setBrandName(brandName);
         }
 
         branding = brandingRepository.save(branding);

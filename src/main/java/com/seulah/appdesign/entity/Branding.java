@@ -17,7 +17,7 @@ import java.util.List;
 public class Branding {
     @Id
     private String id;
-
+private String brandName;
 
     private String splashScreen;
 

@@ -1,7 +1,6 @@
 package com.seulah.appdesign.controller;
 
 
-import com.seulah.appdesign.request.BrandingRequest;
 import com.seulah.appdesign.request.MessageResponse;
 import com.seulah.appdesign.service.BrandingService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +19,9 @@ public class BrandingController {
     }
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> saveBranding(@RequestBody BrandingRequest brandingRequest) {
-        log.info("Saving Branding {}", brandingRequest);
-        return brandingService.saveBranding(brandingRequest);
+    public ResponseEntity<MessageResponse> saveBranding(@RequestParam String brandName) {
+        log.info("Saving Branding {}",brandName );
+        return brandingService.saveBranding(brandName);
     }
 
 
@@ -45,9 +44,9 @@ public class BrandingController {
     }
 
     @PutMapping(value = "/updateById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> updateById(@RequestParam String id, @RequestBody BrandingRequest brandingRequest) {
-        log.info("Update Branding {} By Id {}", brandingRequest, id);
-        return brandingService.updateById(id, brandingRequest);
+    public ResponseEntity<MessageResponse> updateById(@RequestParam String id, @RequestParam String brandName) {
+        log.info("Update Branding {} By Id {}", brandName, id);
+        return brandingService.updateById(id, brandName);
     }
 
 }
