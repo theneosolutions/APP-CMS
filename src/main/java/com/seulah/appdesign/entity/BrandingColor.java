@@ -14,10 +14,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BrandingScreen {
+public class BrandingColor {
     @Id
     private String id;
     private String brandId;
 
-    private List<String> screens;
+    private List<String> colors;
 }
