@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Branding {
     @Id
     private String id;
-    @Indexed(unique = true)
+    @Indexed(unique = true, background = true)
     private String brandName;
 
 

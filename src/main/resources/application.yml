@@ -1,6 +1,8 @@
 spring:
   data:
     mongodb.uri: ${db_url:mongodb://localhost:27017/seulah-app-design?createDatabaseIfNotExist=true}
+    mongodb:
+      auto-index-creation: true
   sql:
     init.mode: always
   jpa:
