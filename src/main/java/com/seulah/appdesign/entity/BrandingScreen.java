@@ -4,28 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
+import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
+@Document
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
-public class Branding {
+public class BrandingScreen {
     @Id
     private String id;
-    @Indexed(unique = true)
-    private String brandName;
+    private String brandId;
 
-    private String splashScreen;
-
-    private String content;
-
-    private List<String> color;
-
-
+    private List<String> screens;
 }
