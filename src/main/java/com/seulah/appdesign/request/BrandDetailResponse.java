@@ -7,25 +7,17 @@ import java.util.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class BrandDetailResponse {
-
-    private Branding brand;
+    private String brandId;
+    private Branding branding;
     private BrandingSplashScreen brandingSplashScreen;
     private BrandingColor brandingColor;
-    private List<String> brandingLogo;
-    private List<String> brandingLayout;
-    private List<String> icon;
+    private byte[] logoContent;
+    private List<LayoutDetail> brandingLayoutDetails;
 
-    public BrandDetailResponse(Branding brand, BrandingSplashScreen brandingSplashScreen, BrandingColor brandingColor,
-                               List<String> brandingLogo, List<String> brandingLayout, List<String> brandingIcon) {
-        this.brand = brand;
-        this.brandingSplashScreen = brandingSplashScreen;
-        this.brandingColor = brandingColor;
-        this.brandingLogo = brandingLogo;
-        this.brandingLayout = brandingLayout;
-        this.icon = brandingIcon;
-        // Set other fields...
-    }
 
 }
+
+

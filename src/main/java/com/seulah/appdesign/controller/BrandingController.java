@@ -7,6 +7,8 @@ import lombok.extern.slf4j.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
+
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/cms/branding")
@@ -49,13 +51,13 @@ public class BrandingController {
     }
 
     @GetMapping(value = "/getBrandDetail", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> getBrandDetail(@RequestParam String id) {
+    public ResponseEntity<BrandDetailResponse> getBrandDetail(@RequestParam String id) throws IOException {
         log.info("Getting Branding Detail By Id {}", id);
         return brandingService.getBrandDetail(id);
     }
 
     @GetMapping(value = "/getBrandDetailByName", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> getBrandDetailByBrandName(@RequestParam String brandName) {
+    public ResponseEntity<BrandDetailResponse> getBrandDetailByBrandName(@RequestParam String brandName) throws IOException {
         log.info("Getting Branding Detail By Brand Name {}", brandName);
         return brandingService.getBrandDetailByBrandName(brandName);
     }

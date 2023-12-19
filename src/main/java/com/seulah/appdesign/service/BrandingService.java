@@ -7,6 +7,7 @@ import com.seulah.appdesign.request.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
 
+import java.io.*;
 import java.util.*;
 
 
@@ -82,37 +83,47 @@ public class BrandingService {
         return new ResponseEntity<>(new MessageResponse("Successfully Updated", branding, false), HttpStatus.OK);
     }
 
-    public ResponseEntity<MessageResponse> getBrandDetail(String brandId) {
-        HashMap<String, Object> response = new HashMap<>();
+    public ResponseEntity<BrandDetailResponse> getBrandDetail(String brandId) throws IOException {
         Optional<Branding> branding = brandingRepository.findById(brandId);
         Optional<BrandingSplashScreen> brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId);
         Optional<BrandingColor> brandingColor = brandColorRepository.findByBrandId(brandId);
         BrandingLogo brandingLogos = brandLogoRepository.findByBrandId(brandId);
         List<BrandingLayout> brandingLayouts = brandingLayoutRepository.findAllByBrandId(brandId);
-        List<String> logoResponse = new ArrayList<>();
-        logoResponse.add(brandingLogos.getBrandId());
-        logoResponse.add(brandLogoService.getLogoFileUrlByBrandId(brandId));
 
-        List<String> layoutList = new ArrayList<>();
-        brandingLayouts.forEach(layout -> {
-            layoutList.add(layout.getBrandId());
-            layoutList.add(brandingLayoutService.getIconByBrandId(brandId));
-            layoutList.add(brandingLayoutService.getLottieByBrandId(brandId));
-        });
-        response.put("banding", branding);
-        response.put("brandingSplashScreen", brandingSplashScreen);
-        response.put("brandingColor", brandingColor);
-        response.put("brandingLogo", logoResponse);
-        response.put("brandingLayout", layoutList);
-        return new ResponseEntity<>(new MessageResponse("Success", response, false), HttpStatus.OK);
+        byte[] brandLogo = brandLogoService.getLogoFileUrlByBrandId(brandId);
+        List<LayoutDetail> layoutDetails = new ArrayList<>();
+        List<byte[]> iconContents = brandingLayoutService.getIconByBrandId(brandId);
+        List<byte[]> lottieContents = brandingLayoutService.getLottieByBrandId(brandId);
+
+        int size = Math.min(iconContents.size(), lottieContents.size());
+        for (int i = 0; i < size; i++) {
+            LayoutDetail layoutDetail = new LayoutDetail();
+            layoutDetail.setBrandId(brandingLayouts.get(i).getBrandId());
+            layoutDetail.setIconContent(iconContents.get(i));
+            layoutDetail.setLottieContent(lottieContents.get(i));
+            layoutDetails.add(layoutDetail);
+        }
+
+        BrandDetailResponse brandDetailResponse = new BrandDetailResponse(
+                brandingLogos.getBrandId(),
+                branding.orElse(null),
+                brandingSplashScreen.orElse(null),
+                brandingColor.orElse(null),
+                brandLogo,
+                layoutDetails
+        );
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(brandDetailResponse);
     }
 
 
-    public ResponseEntity<MessageResponse> getBrandDetailByBrandName(String brandName) {
+    public ResponseEntity<BrandDetailResponse> getBrandDetailByBrandName(String brandName) throws IOException {
         Branding branding = brandingRepository.findByBrandName(brandName);
         if (branding != null) {
             return getBrandDetail(branding.getId());
         }
-        return new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK);
+        return null;
     }
 }

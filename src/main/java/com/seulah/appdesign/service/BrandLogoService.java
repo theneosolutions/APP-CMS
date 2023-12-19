@@ -26,8 +26,7 @@ public class BrandLogoService {
     @Value("${image.path}")
     private String imagePath;
 
-    @Value("${application.bucket.name}")
-    private String bucketName;
+
     private final FileUploadService fileUploadService;
 
     private final BrandingRepository brandingRepository;
@@ -92,11 +91,11 @@ public class BrandLogoService {
         return System.getProperty("os.name");
     }
 
-    public String getLogoFileUrlByBrandId(String brandId) {
+    public byte[] getLogoFileUrlByBrandId(String brandId) throws NoSuchFileException {
         BrandingLogo brandingLogo = brandingLogoRepository.findByBrandId(brandId);
         if (brandingLogo != null) {
             String fileName = brandingLogo.getLogo();
-            return fileUploadService.generateS3Url(bucketName, fileName);
+            return fileUploadService.downloadFile(fileName);
         }
         return null;
     }

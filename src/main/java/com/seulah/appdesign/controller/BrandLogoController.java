@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.*;
 
 import java.io.*;
+import java.nio.file.*;
 
 @RestController
 @RequestMapping("/api/v1/cms/brandLogo")
@@ -24,13 +25,10 @@ public class BrandLogoController {
     }
 
     @GetMapping("/brandLogo/getLogoById")
-    public String getBrandLogoByBrandId(@RequestParam String brandId) {
+    public byte[] getBrandLogoByBrandId(@RequestParam String brandId) throws NoSuchFileException {
         return brandLogoService.getLogoFileUrlByBrandId(brandId);
     }
 
-//    @GetMapping("/getLogoByBrandId")
-//    public ResponseEntity<Resource> getLogoByBrandId(@RequestParam String brandId) {
-//        return brandLogoService.getLogoByBrandId(brandId);
-//    }
+
 
 }

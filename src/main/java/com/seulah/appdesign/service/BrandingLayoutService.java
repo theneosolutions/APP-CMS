@@ -4,19 +4,18 @@ import com.seulah.appdesign.entity.*;
 import com.seulah.appdesign.repository.*;
 import com.seulah.appdesign.request.*;
 import lombok.extern.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
+import java.io.*;
 import java.util.*;
 
 @Service
 @Slf4j
 public class BrandingLayoutService {
 
-    @Value("${application.bucket.name}")
-    private String bucketName;
+
     private final BrandingLayoutRepository brandingLayoutRepository;
 
     private final BrandLogoService brandLogoService;
@@ -51,13 +50,13 @@ public class BrandingLayoutService {
 
     private void saveToDatabase(MultipartFile file, String brandId, MultipartFile lottieFile) {
         BrandingLayout brandingLayout = new BrandingLayout();
-        brandingLayout.setLottieFiles(lottieFile.getOriginalFilename());
         brandingLayout.setBrandId(brandId);
+        brandingLayout.setLottieFiles(lottieFile.getOriginalFilename());
         brandingLayout.setIcon(file.getOriginalFilename());
-
         brandingLayoutRepository.save(brandingLayout);
-        log.info("Branding logo saved to the database");
+
     }
+
 
     public ResponseEntity<MessageResponse> deleteBrandingLayout(String id) {
         Optional<BrandingLayout> optionalBrandingLayout = brandingLayoutRepository.findById(id);
@@ -76,21 +75,33 @@ public class BrandingLayoutService {
     }
 
 
-    public String getLottieByBrandId(String brandId) {
-        BrandingLayout brandingLayoutLottieFile = brandingLayoutRepository.findByBrandId(brandId);
-        if (brandingLayoutLottieFile != null) {
-            String fileName = brandingLayoutLottieFile.getLottieFiles();
-            return fileUploadService.generateS3Url(bucketName, fileName);
+    public List<byte[]> getLottieByBrandId(String brandId) throws IOException {
+        List<BrandingLayout> brandingLayoutLottieFile = brandingLayoutRepository.findAllByBrandId(brandId);
+        List<byte[]> iconContents = new ArrayList<>();
+
+        if (brandingLayoutLottieFile != null && !brandingLayoutLottieFile.isEmpty()) {
+            for (BrandingLayout icon : brandingLayoutLottieFile) {
+                byte[] content = fileUploadService.downloadFile(icon.getLottieFiles());
+                iconContents.add(content);
+            }
         }
-        return null;
+
+        return iconContents;
     }
 
-    public String getIconByBrandId(String brandId) {
-        BrandingLayout brandingLayoutIcon = brandingLayoutRepository.findByBrandId(brandId);
-        if (brandingLayoutIcon != null) {
-            String fileName = brandingLayoutIcon.getIcon();
-            return fileUploadService.generateS3Url(bucketName, fileName);
+    public List<byte[]> getIconByBrandId(String brandId) throws IOException {
+        List<BrandingLayout> brandingLayoutIcons = brandingLayoutRepository.findAllByBrandId(brandId);
+        List<byte[]> iconContents = new ArrayList<>();
+
+        if (brandingLayoutIcons != null && !brandingLayoutIcons.isEmpty()) {
+            for (BrandingLayout icon : brandingLayoutIcons) {
+                byte[] content = fileUploadService.downloadFile(icon.getIcon());
+                iconContents.add(content);
+            }
         }
-        return null;
+
+        return iconContents;
     }
+
+
 }

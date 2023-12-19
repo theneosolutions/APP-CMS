@@ -46,8 +46,12 @@ public class BrandColorService {
             String value = newColor.get("value");
 
             Optional<Map<String, String>> existingColor = existingColors.stream()
-                    .filter(color -> color.get("key").equals(key))
+                    .filter(color -> {
+                        String colorKey = color.get("key");
+                        return key != null && key.equals(colorKey);
+                    })
                     .findFirst();
+
             if (existingColor.isPresent()) {
                 existingColor.get().put("value", value);
             } else {

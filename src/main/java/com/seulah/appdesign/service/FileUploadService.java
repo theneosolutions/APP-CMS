@@ -1,13 +1,17 @@
 package com.seulah.appdesign.service;
 
+import com.amazonaws.*;
 import com.amazonaws.services.s3.*;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.*;
 import lombok.extern.slf4j.*;
+import org.apache.http.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
 import java.io.*;
+import java.nio.file.*;
 
 @Service
 @Slf4j
@@ -39,27 +43,22 @@ public class FileUploadService {
         }
         return convertedFile;
     }
-
-    public byte[] downloadFile(String fileName) {
+    public byte[] downloadFile(final String fileName) throws NoSuchFileException {
         try {
-            S3Object s3Object = s3Client.getObject(bucketName, fileName);
-            S3ObjectInputStream inputStream = s3Object.getObjectContent();
-            try {
-                return inputStream.readAllBytes();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            byte[] content;
+            final S3Object s3Object = s3Client.getObject(bucketName, fileName);
+            final S3ObjectInputStream stream = s3Object.getObjectContent();
+            content = IOUtils.toByteArray(stream);
+            s3Object.close();
+            return content;
+        } catch (AmazonS3Exception e) {
+            if (e.getStatusCode() == HttpStatus.SC_NOT_FOUND) {
+                throw new NoSuchFileException("File Not Found");
             }
-        } catch (Exception e) {
-            log.error("Exception", e);
-
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return null;
+        return new byte[0];
     }
     public String generateS3Url(String bucketName, String fileName) {
         return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;

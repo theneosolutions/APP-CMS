@@ -9,4 +9,8 @@ public interface BrandingLayoutRepository extends MongoRepository<BrandingLayout
     BrandingLayout findByBrandId(String id);
 
     List<BrandingLayout> findAllByBrandId(String brandId);
+
+    BrandingLayout findByLottieFiles(String lottieFiles);
+
+    BrandingLayout findByIcon(String lottieFiles);
 }
