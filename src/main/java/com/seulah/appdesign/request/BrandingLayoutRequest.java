@@ -5,19 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+public class BrandingLayoutRequest {
+    private String height;
+    private String width;
 
-
-public class DesignScreenRequest {
-
-    private String applicationName;
-
-    private List<String> screenList;
-
-
+    private String lottieFiles;
 }

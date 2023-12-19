@@ -50,4 +50,14 @@ public class DesignScreenController {
         log.info("Update Design Screen{} By Id {}", designScreenRequest, id);
         return designScreenService.updateDesignById(id, designScreenRequest);
     }
+    @PutMapping(value = "/addComponentInScreen", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> addComponentInScreen(@RequestParam String screenId,@RequestParam String componentId) {
+        log.info("Adding component in Screen By screenId {} and Component Id {}", screenId,componentId);
+        return designScreenService.addComponentInScreen(screenId,componentId);
+    }
+    @PutMapping(value = "/deleteComponentFromScreen", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> deleteComponentFromScreen(@RequestParam String screenId,@RequestParam String componentId) {
+        log.info("Deleting component in Screen By screenId {} and Component Id {}", screenId,componentId);
+        return designScreenService.deleteComponentFromScreen(screenId,componentId);
+    }
 }

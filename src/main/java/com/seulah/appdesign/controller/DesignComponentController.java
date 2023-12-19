@@ -2,10 +2,8 @@ package com.seulah.appdesign.controller;
 
 
 import com.seulah.appdesign.request.DesignComponentRequest;
-import com.seulah.appdesign.request.DesignScreenRequest;
 import com.seulah.appdesign.request.MessageResponse;
 import com.seulah.appdesign.service.DesignComponentService;
-import com.seulah.appdesign.service.DesignScreenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

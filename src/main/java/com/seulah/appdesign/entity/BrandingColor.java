@@ -4,19 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+import java.util.Map;
 
+@Document
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
-public class DesignComponent {
+public class BrandingColor {
     @Id
     private String id;
+    private String brandId;
 
-    private String sizeRedisCard;
-    private String components;
+    private List<Map<String,String>> colors;
 }

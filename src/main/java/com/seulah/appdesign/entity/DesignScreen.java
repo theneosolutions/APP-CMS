@@ -18,8 +18,10 @@ public class DesignScreen {
     @Id
     private String id;
 
-    private List<String> screens;
 
-    private String addScreen;
+    private String applicationName;
+    private List<String> screenList;
+
+    private List<DesignComponent> designComponentList;
 
 }

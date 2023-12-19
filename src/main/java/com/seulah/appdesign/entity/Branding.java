@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
@@ -17,14 +17,8 @@ import java.util.List;
 public class Branding {
     @Id
     private String id;
+    @Indexed(unique = true, background = true)
+    private String brandName;
 
-
-    private String splashScreen;
-
-    private String content;
-
-    private List<String> color;
-
-    private String layout;
 
 }

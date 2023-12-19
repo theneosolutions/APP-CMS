@@ -1,33 +1,21 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.Branding;
-import com.seulah.appdesign.entity.BrandingLogo;
-import com.seulah.appdesign.repository.BrandLogoRepository;
-import com.seulah.appdesign.repository.BrandingRepository;
-import com.seulah.appdesign.request.MessageResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import com.seulah.appdesign.entity.*;
+import com.seulah.appdesign.repository.*;
+import com.seulah.appdesign.request.*;
+import lombok.extern.slf4j.*;
+import org.apache.commons.io.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.core.io.*;
+import org.springframework.http.*;
+import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
+import org.springframework.web.multipart.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.net.*;
+import java.nio.file.*;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -38,15 +26,20 @@ public class BrandLogoService {
     @Value("${image.path}")
     private String imagePath;
 
+
+    private final FileUploadService fileUploadService;
+
     private final BrandingRepository brandingRepository;
 
-    public BrandLogoService(BrandLogoRepository brandingLogoRepository, BrandingRepository brandingRepository) {
+    public BrandLogoService(BrandLogoRepository brandingLogoRepository, FileUploadService fileUploadService, BrandingRepository brandingRepository) {
         this.brandingLogoRepository = brandingLogoRepository;
+        this.fileUploadService = fileUploadService;
         this.brandingRepository = brandingRepository;
     }
 
+
     @Transactional
-    public ResponseEntity<MessageResponse> saveBrandingLogo(MultipartFile file, String brandId) throws IOException {
+    public ResponseEntity<MessageResponse> saveBrandingLogo(MultipartFile file, String brandId, int height, int width) {
         Optional<Branding> branding = brandingRepository.findById(brandId);
         if (branding.isEmpty()) {
             return new ResponseEntity<>(new MessageResponse("No brand exist with this id", null, false), HttpStatus.BAD_REQUEST);
@@ -55,33 +48,41 @@ public class BrandLogoService {
             log.error("Only PNG and SVG images are allowed.");
             return new ResponseEntity<>(new MessageResponse("Only PNG and SVG images are allowed. ", null, false), HttpStatus.BAD_REQUEST);
         }
-
-        saveToLocalDrive(file);
-        saveToDatabase(file, brandId);
+        BrandingLogo brandingLogo = brandingLogoRepository.findByBrandId(brandId);
+        if (brandingLogo != null) {
+            fileUploadService.deleteFile(brandingLogo.getLogo());
+        }
+        fileUploadService.uploadFile(file);
+        saveToDatabase(file, brandId, height, width);
         return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
     }
 
-    private void saveToLocalDrive(MultipartFile file) throws IOException {
-        String osName = getOperatingSystem();
-        String localPath;
-        if (osName.contains("Window")) {
-            localPath = imagePath;
-        } else {
-            localPath = "/";
+    public void saveToLocalDrive(MultipartFile file) {
+        try {
+
+            String osName = getOperatingSystem();
+            String localPath;
+            if (osName.contains("Window")) {
+                localPath = imagePath;
+            } else {
+                localPath = "/";
+            }
+            Files.createDirectories(Paths.get(localPath));
+            Path filePath = Paths.get(localPath + File.separator + file.getOriginalFilename());
+
+            log.info("File Contents: " + new String(file.getBytes()));
+
+            file.getInputStream();
+
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            log.info("File saved to local drive: {}", filePath);
+        } catch (Exception e) {
+            log.error("Failed to upload file");
         }
-        Files.createDirectories(Paths.get(localPath));
-        Path filePath = Paths.get(localPath + File.separator + file.getOriginalFilename());
-
-        log.info("File Contents: " + new String(file.getBytes()));
-
-        file.getInputStream();
-
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        log.info("File saved to local drive: {}", filePath);
     }
 
 
-    private String getFileExtension(MultipartFile file) {
+    public String getFileExtension(MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         return FilenameUtils.getExtension(originalFilename);
     }
@@ -90,30 +91,16 @@ public class BrandLogoService {
         return System.getProperty("os.name");
     }
 
-    public ResponseEntity<Resource> getLogoByBrandId(String brandId)  {
-        List<BrandingLogo> brandingLogos = brandingLogoRepository.findAllByBrandId(brandId);
-        if (brandingLogos.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public byte[] getLogoFileUrlByBrandId(String brandId) throws NoSuchFileException {
+        BrandingLogo brandingLogo = brandingLogoRepository.findByBrandId(brandId);
+        if (brandingLogo != null) {
+            String fileName = brandingLogo.getLogo();
+            return fileUploadService.downloadFile(fileName);
         }
-        List<Resource> resources = brandingLogos.stream()
-                .map(logo -> {
-                    try {
-                        return loadFileAsResource(logo.getLogo());
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .collect(Collectors.toList());
-
-        Resource concatenatedResource = concatenateResources(resources);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + brandId + ".zip\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM) // Adjust content type as needed
-                .body(concatenatedResource);
+        return null;
     }
 
-    private Resource loadFileAsResource(String fileName) throws MalformedURLException {
+    public Resource loadFileAsResource(String fileName) throws MalformedURLException {
         String localPath = imagePath;
 
         Path filePath = Paths.get(localPath).resolve(fileName).normalize();
@@ -125,15 +112,21 @@ public class BrandLogoService {
         }
     }
 
-    private Resource concatenateResources(List<Resource> resources) {
-        return resources.get(0);
-    }
 
-    private void saveToDatabase(MultipartFile file, String brandId) {
-        BrandingLogo brandingLogo = new BrandingLogo();
-        brandingLogo.setBrandId(brandId);
-        brandingLogo.setLogo(file.getOriginalFilename());
-
+    private void saveToDatabase(MultipartFile file, String brandId, int height, int width) {
+        BrandingLogo brandingLogo = brandingLogoRepository.findByBrandId(brandId);
+        if (brandingLogo == null) {
+            brandingLogo = new BrandingLogo();
+            brandingLogo.setBrandId(brandId);
+            brandingLogo.setHeight(height);
+            brandingLogo.setWidth(width);
+            brandingLogo.setLogo(file.getOriginalFilename());
+        } else {
+            brandingLogo.setLogo(file.getOriginalFilename());
+            brandingLogo.setBrandId(brandId);
+            brandingLogo.setWidth(width);
+            brandingLogo.setHeight(height);
+        }
         brandingLogoRepository.save(brandingLogo);
         log.info("Branding logo saved to the database");
     }
