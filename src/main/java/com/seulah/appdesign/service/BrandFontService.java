@@ -6,7 +6,9 @@ import com.seulah.appdesign.request.*;
 import lombok.extern.slf4j.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
+import org.springframework.web.multipart.*;
 
+import java.nio.file.*;
 import java.util.*;
 
 @Service
@@ -16,33 +18,37 @@ public class BrandFontService {
     private final BrandFontRepository brandFontRepository;
     private final BrandingRepository brandingRepository;
 
-    public BrandFontService(BrandFontRepository brandFontRepository, BrandingRepository brandingRepository) {
+    private final FileUploadService fileUploadService;
+
+    public BrandFontService(BrandFontRepository brandFontRepository, BrandingRepository brandingRepository, FileUploadService fileUploadService) {
         this.brandFontRepository = brandFontRepository;
         this.brandingRepository = brandingRepository;
+        this.fileUploadService = fileUploadService;
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingFont(List<Map<String, String>> fonts, String brandId) {
+    public ResponseEntity<MessageResponse> saveBrandingFont(MultipartFile fontFile, String brandId) {
         Optional<Branding> brandingOptional = brandingRepository.findById(brandId);
         if (brandingOptional.isPresent()) {
-            BrandingFont brandingFont = brandFontRepository.findByBrandId(brandId)
-                    .orElseGet(BrandingFont::new);
-
-            brandingFont.setBrandId(brandId);
-//            if (brandingFont.getFonts() != null && !brandingFont.getFonts().isEmpty()) {
-//                updateExistingFonts(brandingFont.getFonts(), fonts);
-//            } else {
-            brandingFont.setFonts(fonts);
-
-            brandingFont = brandFontRepository.save(brandingFont);
-            return new ResponseEntity<>(new MessageResponse("Successfully Updated", brandingFont, false), HttpStatus.OK);
+            fileUploadService.uploadFile(fontFile);
+            saveToDatabase(fontFile, brandId);
+            return new ResponseEntity<>(new MessageResponse("Successfully Uploaded", null, false), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
     }
 
-    public ResponseEntity<MessageResponse> getFontByBrandId(String brandId) {
-        List<BrandingFont> brandingFonts = brandFontRepository.findAllByBrandId(brandId);
-        return new ResponseEntity<>(new MessageResponse("Success", brandingFonts, false), HttpStatus.OK);
+    private void saveToDatabase(MultipartFile file, String brandId) {
+        BrandingFont brandingFont = brandFontRepository.findByBrandId(brandId).orElse(null);
+        if (brandingFont == null) {
+            brandingFont = new BrandingFont();
+            brandingFont.setFont(file.getOriginalFilename());
+        } else {
+            brandingFont.setFont(file.getOriginalFilename());
+
+        }
+        brandingFont.setBrandId(brandId);
+        brandFontRepository.save(brandingFont);
+        log.info("Branding logo saved to the database");
     }
 
 
@@ -57,5 +63,13 @@ public class BrandFontService {
     }
 
 
+    public byte[] getFontFileUrlByBrandId(String brandId) throws NoSuchFileException {
+        Optional<BrandingFont> brandingFont = brandFontRepository.findByBrandId(brandId);
+        if (brandingFont.isPresent()) {
+            String fileName = brandingFont.get().getFont();
+            return fileUploadService.downloadFile(fileName);
+        }
+        return null;
+    }
 }
 

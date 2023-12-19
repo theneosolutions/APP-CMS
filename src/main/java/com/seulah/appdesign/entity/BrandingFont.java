@@ -4,8 +4,6 @@ import lombok.*;
 import nonapi.io.github.classgraph.json.*;
 import org.springframework.data.mongodb.core.mapping.*;
 
-import java.util.*;
-
 /**
  * @author Muhammad Mansoor
  */
@@ -19,5 +17,5 @@ public class BrandingFont {
     @Id
     private String id;
     private String brandId;
-    private List<Map<String, String>> fonts;
+    private String font;
 }

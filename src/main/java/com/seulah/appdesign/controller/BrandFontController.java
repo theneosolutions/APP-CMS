@@ -5,8 +5,9 @@ import com.seulah.appdesign.service.*;
 import lombok.extern.slf4j.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.*;
 
-import java.util.*;
+import java.nio.file.*;
 
 @RestController
 @Slf4j
@@ -20,13 +21,12 @@ public class BrandFontController {
 
 
     @PostMapping("/brandingFont")
-    public ResponseEntity<MessageResponse> saveBrandingFont(@RequestBody List<Map<String, String>> fonts, @RequestParam String brandId) {
-        return brandFontService.saveBrandingFont(fonts, brandId);
+    public ResponseEntity<MessageResponse> saveBrandingFont(@RequestPart MultipartFile fontFile, @RequestParam String brandId) {
+        return brandFontService.saveBrandingFont(fontFile, brandId);
     }
-
-    @GetMapping("/getFontByBrandId")
-    public ResponseEntity<MessageResponse> getFontByBrandId(@RequestParam String brandId) {
-        return brandFontService.getFontByBrandId(brandId);
+    @GetMapping("/brandFonts/getFontById")
+    public byte[] getBrandFontsByBrandId(@RequestParam String brandId) throws NoSuchFileException {
+        return brandFontService.getFontFileUrlByBrandId(brandId);
     }
 
 

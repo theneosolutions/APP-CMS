@@ -1,23 +1,19 @@
 package com.seulah.appdesign.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.*;
+import nonapi.io.github.classgraph.json.*;
 import org.springframework.data.mongodb.core.mapping.*;
 
+@Document
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
-public class Banner {
+public class BrandingLayoutIcon {
     @Id
     private String id;
+    private String brandId;
 
-    private String bannerDesign;
-
-    private String bannerImage;
-
-    private int height;
-    private int width;
-
+    private String name;
+    private String icon;
 }

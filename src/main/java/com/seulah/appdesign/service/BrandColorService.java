@@ -41,25 +41,29 @@ public class BrandColorService {
     }
 
     private void updateExistingColors(List<Map<String, String>> existingColors, List<Map<String, String>> newColors) {
+        List<Map<String, String>> colorsToAdd = new ArrayList<>();
         for (Map<String, String> newColor : newColors) {
-            String key = newColor.get("key");
-            String value = newColor.get("value");
+            String key = newColor.get("name");
+            String value = newColor.get("color");
 
             Optional<Map<String, String>> existingColor = existingColors.stream()
                     .filter(color -> {
-                        String colorKey = color.get("key");
+                        String colorKey = color.get("name");
                         return key != null && key.equals(colorKey);
                     })
                     .findFirst();
 
             if (existingColor.isPresent()) {
-                existingColor.get().put("value", value);
+                existingColor.get().put("color", value);
             } else {
-                existingColors.add(newColor);
+                colorsToAdd.add(newColor);
             }
-
         }
+        existingColors.addAll(colorsToAdd);
     }
+
+
+
 
     public ResponseEntity<MessageResponse> getColorByBrandId(String brandId) {
         List<BrandingColor> brandingColors = brandColorRepository.findAllByBrandId(brandId);
