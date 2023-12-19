@@ -1,17 +1,13 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.Branding;
-import com.seulah.appdesign.entity.BrandingColor;
-import com.seulah.appdesign.repository.BrandColorRepository;
-import com.seulah.appdesign.repository.BrandingRepository;
-import com.seulah.appdesign.request.MessageResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import com.seulah.appdesign.entity.*;
+import com.seulah.appdesign.repository.*;
+import com.seulah.appdesign.request.*;
+import lombok.extern.slf4j.*;
+import org.springframework.http.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -26,29 +22,46 @@ public class BrandColorService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingColor(List<String> colors, String brandId) {
-        Optional<Branding> branding = brandingRepository.findById(brandId);
-        if (branding.isPresent()) {
-            BrandingColor brandingColor = new BrandingColor();
+    public ResponseEntity<MessageResponse> saveBrandingColor(List<Map<String, String>> colors, String brandId) {
+        Optional<Branding> brandingOptional = brandingRepository.findById(brandId);
+        if (brandingOptional.isPresent()) {
+            BrandingColor brandingColor = brandColorRepository.findByBrandId(brandId)
+                    .orElseGet(BrandingColor::new);
+
             brandingColor.setBrandId(brandId);
-            brandingColor.setColors(colors);
+            if (brandingColor.getColors() != null && !brandingColor.getColors().isEmpty()) {
+                updateExistingColors(brandingColor.getColors(), colors);
+            } else {
+                brandingColor.setColors(colors);
+            }
             brandingColor = brandColorRepository.save(brandingColor);
             return new ResponseEntity<>(new MessageResponse("Successfully Updated", brandingColor, false), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
     }
 
+    private void updateExistingColors(List<Map<String, String>> existingColors, List<Map<String, String>> newColors) {
+        for (Map<String, String> newColor : newColors) {
+            String key = newColor.get("key");
+            String value = newColor.get("value");
+
+            Optional<Map<String, String>> existingColor = existingColors.stream()
+                    .filter(color -> color.get("key").equals(key))
+                    .findFirst();
+            if (existingColor.isPresent()) {
+                existingColor.get().put("value", value);
+            } else {
+                existingColors.add(newColor);
+            }
+
+        }
+    }
 
     public ResponseEntity<MessageResponse> getColorByBrandId(String brandId) {
-        Optional<BrandingColor> brandingScreen = brandColorRepository.findByBrandId(brandId);
-        return brandingScreen.map(brand -> new ResponseEntity<>(new MessageResponse("Success", brand, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
-
-    }
-
-    public ResponseEntity<MessageResponse> getAll() {
-        List<BrandingColor> brandingColors = brandColorRepository.findAll();
+        List<BrandingColor> brandingColors = brandColorRepository.findAllByBrandId(brandId);
         return new ResponseEntity<>(new MessageResponse("Success", brandingColors, false), HttpStatus.OK);
     }
+
 
     public ResponseEntity<MessageResponse> deleteById(String id) {
         Optional<BrandingColor> brandingScreen = brandColorRepository.findById(id);
@@ -60,18 +73,5 @@ public class BrandColorService {
         return new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK);
     }
 
-    public ResponseEntity<MessageResponse> updateById(String id, List<String> colors) {
-        Optional<BrandingColor> optionalBrandingScreen = brandColorRepository.findById(id);
-        if (optionalBrandingScreen.isEmpty()) {
-            return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
-        }
-        BrandingColor brandingColor = optionalBrandingScreen.get();
-        if (colors != null && !colors.isEmpty()) {
-            brandingColor.setColors(colors);
-        }
-
-        brandingColor = brandColorRepository.save(brandingColor);
-        return new ResponseEntity<>(new MessageResponse("Successfully Updated", brandingColor, false), HttpStatus.OK);
-    }
 }
 

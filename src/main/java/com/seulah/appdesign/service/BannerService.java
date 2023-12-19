@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,7 @@ public class BannerService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBanner(MultipartFile bannerImage, String bannerDesign) throws IOException {
+    public ResponseEntity<MessageResponse> saveBanner(MultipartFile bannerImage, String bannerDesign) {
 
         brandLogoService.saveToLocalDrive(bannerImage);
         saveToDatabase(bannerImage, bannerDesign);

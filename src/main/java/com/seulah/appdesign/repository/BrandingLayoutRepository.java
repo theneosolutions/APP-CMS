@@ -1,7 +1,12 @@
 package com.seulah.appdesign.repository;
 
-import com.seulah.appdesign.entity.BrandingLayout;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.seulah.appdesign.entity.*;
+import org.springframework.data.mongodb.repository.*;
 
-public interface BrandingLayoutRepository extends MongoRepository<BrandingLayout,String> {
+import java.util.*;
+
+public interface BrandingLayoutRepository extends MongoRepository<BrandingLayout, String> {
+    BrandingLayout findByBrandId(String id);
+
+    List<BrandingLayout> findAllByBrandId(String brandId);
 }

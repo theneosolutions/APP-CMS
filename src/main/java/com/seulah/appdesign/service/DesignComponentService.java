@@ -1,18 +1,13 @@
 package com.seulah.appdesign.service;
 
 
-import com.seulah.appdesign.entity.DesignComponent;
-import com.seulah.appdesign.entity.DesignScreen;
-import com.seulah.appdesign.repository.DesignComponentRepository;
-import com.seulah.appdesign.repository.DesignScreenRepository;
-import com.seulah.appdesign.request.DesignComponentRequest;
-import com.seulah.appdesign.request.MessageResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import com.seulah.appdesign.entity.*;
+import com.seulah.appdesign.repository.*;
+import com.seulah.appdesign.request.*;
+import org.springframework.http.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -64,7 +59,6 @@ public class DesignComponentService {
     }
 
 
-
     public ResponseEntity<MessageResponse> updateDesignComponentById(String id, DesignComponentRequest designComponentRequest) {
         Optional<DesignComponent> designComponentOptional = designComponentRepository.findById(id);
         if (designComponentOptional.isPresent()) {
@@ -76,7 +70,7 @@ public class DesignComponentService {
             }
             return new ResponseEntity<>(new MessageResponse("Successfully Updated", designComponentRepository.save(designComponentOptional.get()), false), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("No record found against this id", null, false), HttpStatus.OK);
     }
 
 

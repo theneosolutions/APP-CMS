@@ -1,11 +1,10 @@
 package com.seulah.appdesign.controller;
 
 
-import com.seulah.appdesign.request.MessageResponse;
-import com.seulah.appdesign.service.BrandingService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import com.seulah.appdesign.request.*;
+import com.seulah.appdesign.service.*;
+import lombok.extern.slf4j.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +19,7 @@ public class BrandingController {
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MessageResponse> saveBranding(@RequestParam String brandName) {
-        log.info("Saving Branding {}",brandName );
+        log.info("Saving Branding {}", brandName);
         return brandingService.saveBranding(brandName);
     }
 
@@ -47,6 +46,18 @@ public class BrandingController {
     public ResponseEntity<MessageResponse> updateById(@RequestParam String id, @RequestParam String brandName) {
         log.info("Update Branding {} By Id {}", brandName, id);
         return brandingService.updateById(id, brandName);
+    }
+
+    @GetMapping(value = "/getBrandDetail", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> getBrandDetail(@RequestParam String id) {
+        log.info("Getting Branding Detail By Id {}", id);
+        return brandingService.getBrandDetail(id);
+    }
+
+    @GetMapping(value = "/getBrandDetailByName", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> getBrandDetailByBrandName(@RequestParam String brandName) {
+        log.info("Getting Branding Detail By Brand Name {}", brandName);
+        return brandingService.getBrandDetailByBrandName(brandName);
     }
 
 }

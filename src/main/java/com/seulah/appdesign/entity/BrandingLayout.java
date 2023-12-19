@@ -15,8 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class BrandingLayout {
     @Id
     private String id;
-    private String height;
-    private String width;
+    private String brandId;
 
     private String icon;
     private String lottieFiles;

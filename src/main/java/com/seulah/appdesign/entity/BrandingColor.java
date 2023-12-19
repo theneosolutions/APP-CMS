@@ -8,6 +8,7 @@ import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Map;
 
 @Document
 @Getter
@@ -19,5 +20,5 @@ public class BrandingColor {
     private String id;
     private String brandId;
 
-    private List<String> colors;
+    private List<Map<String,String>> colors;
 }

@@ -1,13 +1,12 @@
 package com.seulah.appdesign.controller;
 
-import com.seulah.appdesign.request.MessageResponse;
-import com.seulah.appdesign.service.BrandColorService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import com.seulah.appdesign.request.*;
+import com.seulah.appdesign.service.*;
+import lombok.extern.slf4j.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -21,7 +20,7 @@ public class BrandColorController {
 
 
     @PostMapping("/brandingColor")
-    public ResponseEntity<MessageResponse> saveBrandingColor(@RequestParam List<String> colors, @RequestParam String brandId) {
+    public ResponseEntity<MessageResponse> saveBrandingColor(@RequestBody List<Map<String, String>> colors, @RequestParam String brandId) {
         return brandColorService.saveBrandingColor(colors, brandId);
     }
 
@@ -30,11 +29,6 @@ public class BrandColorController {
         return brandColorService.getColorByBrandId(brandId);
     }
 
-    @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> getAll() {
-        log.info("Get All ");
-        return brandColorService.getAll();
-    }
 
     @DeleteMapping(value = "/deleteById", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MessageResponse> deleteById(@RequestParam String id) {
@@ -42,10 +36,5 @@ public class BrandColorController {
         return brandColorService.deleteById(id);
     }
 
-    @PutMapping(value = "/updateById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> updateById(@RequestParam String id, @RequestParam List<String> colors) {
-        log.info("Update Branding Screens{} By Id {}", colors, id);
-        return brandColorService.updateById(id, colors);
-    }
 
 }

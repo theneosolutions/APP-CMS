@@ -1,49 +1,58 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.BrandingLayout;
-import com.seulah.appdesign.repository.BrandingLayoutRepository;
-import com.seulah.appdesign.request.BrandingLayoutRequest;
-import com.seulah.appdesign.request.MessageResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import com.seulah.appdesign.entity.*;
+import com.seulah.appdesign.repository.*;
+import com.seulah.appdesign.request.*;
+import lombok.extern.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
+import org.springframework.stereotype.*;
+import org.springframework.web.multipart.*;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
 public class BrandingLayoutService {
+
+    @Value("${application.bucket.name}")
+    private String bucketName;
     private final BrandingLayoutRepository brandingLayoutRepository;
 
     private final BrandLogoService brandLogoService;
 
-    public BrandingLayoutService(BrandingLayoutRepository brandingLayoutRepository, BrandLogoService brandLogoService) {
+    private final BrandingRepository brandingRepository;
+
+    private final FileUploadService fileUploadService;
+
+    public BrandingLayoutService(BrandingLayoutRepository brandingLayoutRepository, BrandLogoService brandLogoService, BrandingRepository brandingRepository, FileUploadService fileUploadService) {
         this.brandingLayoutRepository = brandingLayoutRepository;
         this.brandLogoService = brandLogoService;
+        this.brandingRepository = brandingRepository;
+        this.fileUploadService = fileUploadService;
     }
 
-    public ResponseEntity<MessageResponse> createBrandingLayout(MultipartFile icon, BrandingLayoutRequest brandingLayoutRequest) throws IOException {
-        String fileExtension = brandLogoService.getFileExtension(icon);
-        if (!fileExtension.equalsIgnoreCase("ico")) {
-            log.error("Only ICO images are allowed.");
-            return new ResponseEntity<>(new MessageResponse("Only ICO images are allowed. ", null, false), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<MessageResponse> createBrandingLayout(MultipartFile icon, String brandId, MultipartFile lottieFile) {
+        Optional<Branding> branding = brandingRepository.findById(brandId);
+        if (branding.isPresent()) {
+            String fileExtension = brandLogoService.getFileExtension(icon);
+            if (!fileExtension.equalsIgnoreCase("ico")) {
+                log.error("Only ICO images are allowed.");
+                return new ResponseEntity<>(new MessageResponse("Only ICO images are allowed. ", null, false), HttpStatus.BAD_REQUEST);
+            }
+
+            fileUploadService.uploadFile(icon);
+            fileUploadService.uploadFile(lottieFile);
+            saveToDatabase(icon, brandId, lottieFile);
+            return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
         }
-
-        brandLogoService.saveToLocalDrive(icon);
-        saveToDatabase(icon, brandingLayoutRequest);
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("No record found against brand id", null, false), HttpStatus.OK);
     }
 
-    private void saveToDatabase(MultipartFile file, BrandingLayoutRequest brandingLayoutRequest) {
+    private void saveToDatabase(MultipartFile file, String brandId, MultipartFile lottieFile) {
         BrandingLayout brandingLayout = new BrandingLayout();
-        brandingLayout.setHeight(brandingLayoutRequest.getHeight());
-        brandingLayout.setWidth(brandingLayoutRequest.getWidth());
-        brandingLayout.setLottieFiles(brandingLayoutRequest.getLottieFiles());
+        brandingLayout.setLottieFiles(lottieFile.getOriginalFilename());
+        brandingLayout.setBrandId(brandId);
         brandingLayout.setIcon(file.getOriginalFilename());
 
         brandingLayoutRepository.save(brandingLayout);
@@ -60,18 +69,28 @@ public class BrandingLayoutService {
     }
 
 
-    public ResponseEntity<Resource> getBrandingLayoutIconById(String id) throws MalformedURLException {
-        Optional<BrandingLayout> optionalBrandingLayout = brandingLayoutRepository.findById(id);
-        if (optionalBrandingLayout.isPresent()) {
-            Resource resource = brandLogoService.loadFileAsResource(optionalBrandingLayout.get().getIcon());
-            return new ResponseEntity<>(resource, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
     public ResponseEntity<MessageResponse> getBrandingLayoutById(String id) {
         Optional<BrandingLayout> brandingLayout = brandingLayoutRepository.findById(id);
         return brandingLayout.map(layout -> new ResponseEntity<>(new MessageResponse("Success", layout, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
 
+    }
+
+
+    public String getLottieByBrandId(String brandId) {
+        BrandingLayout brandingLayoutLottieFile = brandingLayoutRepository.findByBrandId(brandId);
+        if (brandingLayoutLottieFile != null) {
+            String fileName = brandingLayoutLottieFile.getLottieFiles();
+            return fileUploadService.generateS3Url(bucketName, fileName);
+        }
+        return null;
+    }
+
+    public String getIconByBrandId(String brandId) {
+        BrandingLayout brandingLayoutIcon = brandingLayoutRepository.findByBrandId(brandId);
+        if (brandingLayoutIcon != null) {
+            String fileName = brandingLayoutIcon.getIcon();
+            return fileUploadService.generateS3Url(bucketName, fileName);
+        }
+        return null;
     }
 }

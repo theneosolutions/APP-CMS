@@ -1,6 +1,5 @@
 package com.seulah.appdesign.controller;
 
-import com.seulah.appdesign.request.BannerRequest;
 import com.seulah.appdesign.request.MessageResponse;
 import com.seulah.appdesign.service.BannerService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 
 @RestController
@@ -24,7 +22,7 @@ public class BannerController {
     }
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> saveBanner(@RequestParam String bannerDesign, @RequestPart MultipartFile bannerImage) throws IOException {
+    public ResponseEntity<MessageResponse> saveBanner(@RequestParam String bannerDesign, @RequestPart MultipartFile bannerImage) {
         log.info("Saving Banner {}", bannerDesign);
         return bannerService.saveBanner(bannerImage, bannerDesign);
     }
@@ -47,6 +45,7 @@ public class BannerController {
         log.info("Delete By Id: {}", id);
         return bannerService.deleteById(id);
     }
+
     @GetMapping("/getBannerImageById")
     public ResponseEntity<Resource> getBannerImageById(@RequestParam String id) throws MalformedURLException {
         return bannerService.getBannerImageById(id);

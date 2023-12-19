@@ -26,5 +26,18 @@ eureka:
     ip-address: true
 image:
   path: ${image.path}
+cloud:
+  aws:
+    credentials:
+      access-key: ${access_key}
+      secret-key: ${secret_key}
+    region:
+      static: ${s3_region}
+    stack:
+      auto: false
+
+application:
+  bucket:
+    name: seulahbucket
 
 
