@@ -1,28 +1,25 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.Banner;
-import com.seulah.appdesign.repository.BannerRepository;
-import com.seulah.appdesign.request.MessageResponse;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import com.seulah.appdesign.entity.*;
+import com.seulah.appdesign.repository.*;
+import com.seulah.appdesign.request.*;
+import org.springframework.http.*;
+import org.springframework.stereotype.*;
+import org.springframework.web.multipart.*;
 
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.*;
+import java.util.*;
 
 @Service
 public class BannerService {
     private final BannerRepository bannerRepository;
+    private final FileUploadService fileUploadService;
 
-    private final BrandLogoService brandLogoService;
-
-    public BannerService(BannerRepository bannerRepository, BrandLogoService brandLogoService) {
+    public BannerService(BannerRepository bannerRepository, FileUploadService fileUploadService) {
         this.bannerRepository = bannerRepository;
-        this.brandLogoService = brandLogoService;
+        this.fileUploadService = fileUploadService;
     }
+
 
     public ResponseEntity<MessageResponse> getBannerByID(String id) {
         Optional<Banner> banner = bannerRepository.findById(id);
@@ -45,26 +42,29 @@ public class BannerService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBanner(MultipartFile bannerImage, String bannerDesign) {
+    public ResponseEntity<MessageResponse> saveBanner(MultipartFile bannerImage, String bannerDesign, int height, int width) {
 
-        brandLogoService.saveToLocalDrive(bannerImage);
-        saveToDatabase(bannerImage, bannerDesign);
+        fileUploadService.uploadFile(bannerImage);
+        saveToDatabase(bannerImage, bannerDesign, height, width);
         return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
     }
 
-    private void saveToDatabase(MultipartFile file, String bannerDesign) {
+    private void saveToDatabase(MultipartFile file, String bannerDesign, int height, int width) {
         Banner banner = new Banner();
         banner.setBannerDesign(bannerDesign);
+        banner.setWidth(width);
+        banner.setHeight(height);
         banner.setBannerImage(file.getOriginalFilename());
         bannerRepository.save(banner);
     }
 
-    public ResponseEntity<Resource> getBannerImageById(String id) throws MalformedURLException {
+    public byte[] getBannerImageById(String id) throws NoSuchFileException {
         Optional<Banner> optionalBanner = bannerRepository.findById(id);
         if (optionalBanner.isPresent()) {
-            Resource resource = brandLogoService.loadFileAsResource(optionalBanner.get().getBannerImage());
-            return new ResponseEntity<>(resource, HttpStatus.OK);
+            String fileName = optionalBanner.get().getBannerImage();
+            return fileUploadService.downloadFile(fileName);
         }
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return null;
+
     }
 }

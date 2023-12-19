@@ -12,7 +12,7 @@ import java.util.*;
 public class BrandDetailResponse {
     private String brandId;
     private Branding branding;
-    private BrandingSplashScreen brandingSplashScreen;
+    private byte[] brandingSplashScreen;
     private BrandingColor brandingColor;
     private byte[] logoContent;
     private List<LayoutDetail> brandingLayoutDetails;

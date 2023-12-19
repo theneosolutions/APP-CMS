@@ -18,24 +18,22 @@ public class BrandingService {
     private final BrandLogoService brandLogoService;
 
 
-    private final BrandSplashScreenRepository brandSplashScreenRepository;
+    private final BrandSplashScreenService brandSplashScreenService;
 
     private final BrandColorRepository brandColorRepository;
 
     private final BrandingLayoutService brandingLayoutService;
     private final BrandingLayoutRepository brandingLayoutRepository;
 
-    private final BrandLogoRepository brandLogoRepository;
-
-    public BrandingService(BrandingRepository brandingRepository, BrandLogoService brandLogoService, BrandSplashScreenRepository brandSplashScreenRepository, BrandColorRepository brandColorRepository, BrandingLayoutService brandingLayoutService, BrandingLayoutRepository brandingLayoutRepository, BrandLogoRepository brandLogoRepository) {
+    public BrandingService(BrandingRepository brandingRepository, BrandLogoService brandLogoService, BrandSplashScreenService brandSplashScreenService, BrandColorRepository brandColorRepository, BrandingLayoutService brandingLayoutService, BrandingLayoutRepository brandingLayoutRepository) {
         this.brandingRepository = brandingRepository;
         this.brandLogoService = brandLogoService;
-        this.brandSplashScreenRepository = brandSplashScreenRepository;
+        this.brandSplashScreenService = brandSplashScreenService;
         this.brandColorRepository = brandColorRepository;
         this.brandingLayoutService = brandingLayoutService;
         this.brandingLayoutRepository = brandingLayoutRepository;
-        this.brandLogoRepository = brandLogoRepository;
     }
+
 
     public ResponseEntity<MessageResponse> saveBranding(String brandingName) {
         Branding branding = brandingRepository.findByBrandName(brandingName);
@@ -85,12 +83,11 @@ public class BrandingService {
 
     public ResponseEntity<BrandDetailResponse> getBrandDetail(String brandId) throws IOException {
         Optional<Branding> branding = brandingRepository.findById(brandId);
-        Optional<BrandingSplashScreen> brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId);
         Optional<BrandingColor> brandingColor = brandColorRepository.findByBrandId(brandId);
-        BrandingLogo brandingLogos = brandLogoRepository.findByBrandId(brandId);
         List<BrandingLayout> brandingLayouts = brandingLayoutRepository.findAllByBrandId(brandId);
 
         byte[] brandLogo = brandLogoService.getLogoFileUrlByBrandId(brandId);
+        byte[] splashScreen = brandSplashScreenService.getBrandSplashScreenByBrandId(brandId);
         List<LayoutDetail> layoutDetails = new ArrayList<>();
         List<byte[]> iconContents = brandingLayoutService.getIconByBrandId(brandId);
         List<byte[]> lottieContents = brandingLayoutService.getLottieByBrandId(brandId);
@@ -105,9 +102,9 @@ public class BrandingService {
         }
 
         BrandDetailResponse brandDetailResponse = new BrandDetailResponse(
-                brandingLogos.getBrandId(),
+                brandId,
                 branding.orElse(null),
-                brandingSplashScreen.orElse(null),
+                splashScreen,
                 brandingColor.orElse(null),
                 brandLogo,
                 layoutDetails

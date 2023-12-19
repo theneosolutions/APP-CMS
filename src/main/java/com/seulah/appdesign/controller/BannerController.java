@@ -1,15 +1,13 @@
 package com.seulah.appdesign.controller;
 
-import com.seulah.appdesign.request.MessageResponse;
-import com.seulah.appdesign.service.BannerService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import com.seulah.appdesign.request.*;
+import com.seulah.appdesign.service.*;
+import lombok.extern.slf4j.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.*;
 
-import java.net.MalformedURLException;
+import java.nio.file.*;
 
 @RestController
 @RequestMapping("/api/v1/cms/banner")
@@ -22,9 +20,9 @@ public class BannerController {
     }
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> saveBanner(@RequestParam String bannerDesign, @RequestPart MultipartFile bannerImage) {
-        log.info("Saving Banner {}", bannerDesign);
-        return bannerService.saveBanner(bannerImage, bannerDesign);
+    public ResponseEntity<MessageResponse> saveBanner(@RequestParam String bannerDesign, @RequestPart MultipartFile bannerImage,@RequestParam int height, @RequestParam int width) {
+        log.info("Saving Banner {} , height {}, width {}", bannerDesign,height,width);
+        return bannerService.saveBanner(bannerImage, bannerDesign,height,width);
     }
 
 
@@ -47,7 +45,7 @@ public class BannerController {
     }
 
     @GetMapping("/getBannerImageById")
-    public ResponseEntity<Resource> getBannerImageById(@RequestParam String id) throws MalformedURLException {
+    public byte[] getBannerImageById(@RequestParam String id) throws NoSuchFileException {
         return bannerService.getBannerImageById(id);
     }
 }

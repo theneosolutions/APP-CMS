@@ -5,15 +5,11 @@ import com.seulah.appdesign.repository.*;
 import com.seulah.appdesign.request.*;
 import lombok.extern.slf4j.*;
 import org.apache.commons.io.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.core.io.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 import org.springframework.web.multipart.*;
 
-import java.io.*;
-import java.net.*;
 import java.nio.file.*;
 import java.util.*;
 
@@ -22,11 +18,6 @@ import java.util.*;
 public class BrandLogoService {
 
     private final BrandLogoRepository brandingLogoRepository;
-
-    @Value("${image.path}")
-    private String imagePath;
-
-
     private final FileUploadService fileUploadService;
 
     private final BrandingRepository brandingRepository;
@@ -57,38 +48,9 @@ public class BrandLogoService {
         return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
     }
 
-    public void saveToLocalDrive(MultipartFile file) {
-        try {
-
-            String osName = getOperatingSystem();
-            String localPath;
-            if (osName.contains("Window")) {
-                localPath = imagePath;
-            } else {
-                localPath = "/";
-            }
-            Files.createDirectories(Paths.get(localPath));
-            Path filePath = Paths.get(localPath + File.separator + file.getOriginalFilename());
-
-            log.info("File Contents: " + new String(file.getBytes()));
-
-            file.getInputStream();
-
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            log.info("File saved to local drive: {}", filePath);
-        } catch (Exception e) {
-            log.error("Failed to upload file");
-        }
-    }
-
-
     public String getFileExtension(MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         return FilenameUtils.getExtension(originalFilename);
-    }
-
-    public String getOperatingSystem() {
-        return System.getProperty("os.name");
     }
 
     public byte[] getLogoFileUrlByBrandId(String brandId) throws NoSuchFileException {
@@ -98,18 +60,6 @@ public class BrandLogoService {
             return fileUploadService.downloadFile(fileName);
         }
         return null;
-    }
-
-    public Resource loadFileAsResource(String fileName) throws MalformedURLException {
-        String localPath = imagePath;
-
-        Path filePath = Paths.get(localPath).resolve(fileName).normalize();
-        Resource resource = new UrlResource(filePath.toUri());
-        if (resource.exists()) {
-            return resource;
-        } else {
-            throw new RuntimeException("File not found: " + fileName);
-        }
     }
 
 

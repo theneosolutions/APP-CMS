@@ -19,4 +19,7 @@ public class BrandingSplashScreen {
     private String brandId;
 
     private String splashScreen;
+
+    private int width;
+    private int height;
 }

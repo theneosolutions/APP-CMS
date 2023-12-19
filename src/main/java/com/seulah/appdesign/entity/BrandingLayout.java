@@ -1,11 +1,8 @@
 package com.seulah.appdesign.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import nonapi.io.github.classgraph.json.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.*;
+import nonapi.io.github.classgraph.json.*;
+import org.springframework.data.mongodb.core.mapping.*;
 
 @Document
 @Getter
@@ -17,6 +14,6 @@ public class BrandingLayout {
     private String id;
     private String brandId;
 
-    private String icon;
+    private String name;
     private String lottieFiles;
 }

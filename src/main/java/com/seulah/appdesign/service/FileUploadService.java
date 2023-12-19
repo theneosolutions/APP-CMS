@@ -1,6 +1,5 @@
 package com.seulah.appdesign.service;
 
-import com.amazonaws.*;
 import com.amazonaws.services.s3.*;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.*;
@@ -60,11 +59,7 @@ public class FileUploadService {
         }
         return new byte[0];
     }
-    public String generateS3Url(String bucketName, String fileName) {
-        return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
-    }
-    public String deleteFile(String fileName) {
+    public void deleteFile(String fileName) {
         s3Client.deleteObject(bucketName, fileName);
-        return fileName + " removed ...";
     }
 }

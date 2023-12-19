@@ -1,14 +1,11 @@
 package com.seulah.appdesign.controller;
 
-import com.seulah.appdesign.request.MessageResponse;
-import com.seulah.appdesign.service.BrandingLayoutService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
+import com.seulah.appdesign.request.*;
+import com.seulah.appdesign.service.*;
+import lombok.extern.slf4j.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.net.MalformedURLException;
+import org.springframework.web.multipart.*;
 
 @RestController
 @RequestMapping("/api/v1/cms/brandingLayout")
@@ -21,8 +18,13 @@ public class BrandingLayoutController {
     }
 
     @PostMapping("/createBrandingLayout")
-    public ResponseEntity<MessageResponse> createBrandingLayout(@RequestParam String brandId, @RequestPart(value = "icon") MultipartFile icon, @RequestPart(value = "lottieFile") MultipartFile lottieFile) {
-        return brandingLayoutService.createBrandingLayout(icon, brandId, lottieFile);
+    public ResponseEntity<MessageResponse> createBrandingLayout(@RequestParam String brandId, @RequestPart(value = "lottieFile") MultipartFile lottieFile) {
+        return brandingLayoutService.createBrandingLayout(brandId, lottieFile);
+    }
+
+    @PostMapping("/createBrandingLayoutIcon")
+    public ResponseEntity<MessageResponse> createBrandingLayoutIcon(@RequestParam String brandId, @RequestPart(value = "icon") MultipartFile icon) {
+        return brandingLayoutService.createBrandingLayoutIcon(brandId, icon);
     }
 
     @DeleteMapping("/deleteBrandingLayout")
