@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.*;
 
 import java.nio.file.*;
+import java.util.HashMap;
 
 @RestController
 @Slf4j
@@ -33,8 +34,9 @@ public class BrandSplashScreenController {
     }
 
     @GetMapping("/brandSplashScreen/getById")
-    public byte[] getBrandSplashScreenByBrandId(@RequestParam String brandId) throws NoSuchFileException {
-        return brandSplashScreenService.getBrandSplashScreenByBrandId(brandId);
+    public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId) throws NoSuchFileException {
+        HashMap<String,String> responseMap= new HashMap<>();
+        return ResponseEntity.ok().body(responseMap.put("SplashScreen",brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
     }
 
 
