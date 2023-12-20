@@ -7,7 +7,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.*;
 
-import java.nio.file.*;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -21,11 +21,12 @@ public class BrandFontController {
 
 
     @PostMapping("/brandingFont")
-    public ResponseEntity<MessageResponse> saveBrandingFont(@RequestPart MultipartFile fontFile, @RequestParam String brandId) {
-        return brandFontService.saveBrandingFont(fontFile, brandId);
+    public ResponseEntity<MessageResponse> saveBrandingFont(@RequestPart(value = "file") List<MultipartFile> fontFiles, @RequestParam String brandId) {
+        return brandFontService.saveBrandingFont(fontFiles, brandId);
     }
+
     @GetMapping("/brandFonts/getFontById")
-    public byte[] getBrandFontsByBrandId(@RequestParam String brandId) throws NoSuchFileException {
+    public ResponseEntity<byte[]> getBrandFontsByBrandId(@RequestParam String brandId) {
         return brandFontService.getFontFileUrlByBrandId(brandId);
     }
 
