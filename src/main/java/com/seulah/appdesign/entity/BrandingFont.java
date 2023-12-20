@@ -17,5 +17,6 @@ public class BrandingFont {
     @Id
     private String id;
     private String brandId;
+    private String name;
     private String font;
 }
