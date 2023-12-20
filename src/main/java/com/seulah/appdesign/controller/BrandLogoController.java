@@ -9,6 +9,7 @@ import org.springframework.web.multipart.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.Base64;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/v1/cms/brandLogo")
@@ -26,8 +27,10 @@ public class BrandLogoController {
     }
 
     @GetMapping("/brandLogo/getLogoById")
-    public String getBrandLogoByBrandId(@RequestParam String brandId) throws NoSuchFileException {
+    public ResponseEntity<?> getBrandLogoByBrandId(@RequestParam String brandId) throws NoSuchFileException {
         String base64Image = Base64.getEncoder().encodeToString(brandLogoService.getLogoFileUrlByBrandId(brandId));
-        return base64Image;
+        HashMap<String,String> logo = new HashMap();
+        logo.put("logo",base64Image);
+        return ResponseEntity.ok().body(logo);
     }
 }
