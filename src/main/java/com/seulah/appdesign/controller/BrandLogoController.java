@@ -8,6 +8,7 @@ import org.springframework.web.multipart.*;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.Base64;
 
 @RestController
 @RequestMapping("/api/v1/cms/brandLogo")
@@ -25,10 +26,8 @@ public class BrandLogoController {
     }
 
     @GetMapping("/brandLogo/getLogoById")
-    public byte[] getBrandLogoByBrandId(@RequestParam String brandId) throws NoSuchFileException {
-        return brandLogoService.getLogoFileUrlByBrandId(brandId);
+    public String getBrandLogoByBrandId(@RequestParam String brandId) throws NoSuchFileException {
+        String base64Image = Base64.getEncoder().encodeToString(brandLogoService.getLogoFileUrlByBrandId(brandId));
+        return base64Image;
     }
-
-
-
 }
