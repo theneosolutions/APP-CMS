@@ -28,13 +28,13 @@ public class BrandFontService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingFont(List<MultipartFile> fontFiles, String brandId) {
+    public ResponseEntity<MessageResponse> saveBrandingFont(MultipartFile[] fontFiles, String brandId) {
         Optional<Branding> brandingOptional = brandingRepository.findById(brandId);
         if (brandingOptional.isPresent()) {
-            fontFiles.forEach(file -> {
+            for (MultipartFile file : fontFiles) {
                 fileUploadService.uploadFile(file);
                 saveToDatabase(file, file.getOriginalFilename(), brandId);
-            });
+            }
             return new ResponseEntity<>(new MessageResponse("Successfully Uploaded", null, false), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
