@@ -56,6 +56,7 @@ public class BrandingLayoutService {
     public ResponseEntity<MessageResponse> deleteBrandingLayout(String id) {
         Optional<BrandingLayout> optionalBrandingLayout = brandingLayoutRepository.findById(id);
         if (optionalBrandingLayout.isPresent()) {
+            fileUploadService.deleteFile(optionalBrandingLayout.get().getLottieFiles());
             brandingLayoutRepository.delete(optionalBrandingLayout.get());
             return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
         }
