@@ -8,7 +8,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
-import java.nio.file.*;
 import java.util.*;
 
 @Service
@@ -68,7 +67,7 @@ public class BrandSplashScreenService {
         log.info("Branding logo saved to the database");
     }
 
-    public byte[] getBrandSplashScreenByBrandId(String brandId) throws NoSuchFileException {
+    public byte[] getBrandSplashScreenByBrandId(String brandId) {
         BrandingSplashScreen brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId).orElse(null);
         if (brandingSplashScreen != null) {
             String fileName = brandingSplashScreen.getSplashScreen();

@@ -10,7 +10,6 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 import org.springframework.web.multipart.*;
 
-import java.nio.file.*;
 import java.util.*;
 
 @Service
@@ -53,7 +52,7 @@ public class BrandLogoService {
         return FilenameUtils.getExtension(originalFilename);
     }
 
-    public byte[] getLogoFileUrlByBrandId(String brandId) throws NoSuchFileException {
+    public byte[] getLogoFileUrlByBrandId(String brandId) {
         BrandingLogo brandingLogo = brandingLogoRepository.findByBrandId(brandId);
         if (brandingLogo != null) {
             String fileName = brandingLogo.getLogo();

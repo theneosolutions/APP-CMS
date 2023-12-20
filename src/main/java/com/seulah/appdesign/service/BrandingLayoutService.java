@@ -8,7 +8,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
-import java.io.*;
 import java.util.*;
 
 @Service
@@ -70,7 +69,7 @@ public class BrandingLayoutService {
 
     }
 
-    public List<byte[]> getLottieByBrandId(String brandId) throws IOException {
+    public List<byte[]> getLottieByBrandId(String brandId) {
         List<BrandingLayout> brandingLayoutLottieFile = brandingLayoutRepository.findAllByBrandId(brandId);
         List<byte[]> iconContents = new ArrayList<>();
 
@@ -84,7 +83,7 @@ public class BrandingLayoutService {
         return iconContents;
     }
 
-    public List<byte[]> getIconByBrandId(String brandId) throws IOException {
+    public List<byte[]> getIconByBrandId(String brandId) {
         List<BrandingLayoutIcon> brandingLayoutIcons = brandingLayoutIconRepository.findAllByBrandId(brandId);
         List<byte[]> iconContents = new ArrayList<>();
 

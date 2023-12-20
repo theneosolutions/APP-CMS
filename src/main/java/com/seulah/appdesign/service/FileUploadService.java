@@ -11,7 +11,6 @@ import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
 import java.io.*;
-import java.nio.file.*;
 
 @Service
 @Slf4j
@@ -44,7 +43,7 @@ public class FileUploadService {
         return convertedFile;
     }
 
-    public byte[] downloadFile(final String fileName) throws NoSuchFileException {
+    public byte[] downloadFile(final String fileName) {
         try {
             byte[] content;
             final S3Object s3Object = s3Client.getObject(bucketName, fileName);
@@ -73,15 +72,14 @@ public class FileUploadService {
             while ((len = is.read(buffer, 0, buffer.length)) != -1) {
                 outputStream.write(buffer, 0, len);
             }
-
             return outputStream;
         } catch (IOException ioException) {
             log.error("IOException: " + ioException.getMessage());
         } catch (AmazonServiceException serviceException) {
-            log.info("AmazonServiceException Message:    " + serviceException.getMessage());
+            log.error("AmazonServiceException Message:    " + serviceException.getMessage());
             throw serviceException;
         } catch (AmazonClientException clientException) {
-            log.info("AmazonClientException Message: " + clientException.getMessage());
+            log.error("AmazonClientException Message: " + clientException.getMessage());
             throw clientException;
         }
 

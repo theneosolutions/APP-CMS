@@ -7,7 +7,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
-import java.nio.file.*;
 import java.util.*;
 
 @Service
@@ -59,7 +58,7 @@ public class BannerService {
         bannerRepository.save(banner);
     }
 
-    public byte[] getBannerImageById(String id) throws NoSuchFileException {
+    public byte[] getBannerImageById(String id) {
         Optional<Banner> optionalBanner = bannerRepository.findById(id);
         if (optionalBanner.isPresent()) {
             String fileName = optionalBanner.get().getBannerImage();
