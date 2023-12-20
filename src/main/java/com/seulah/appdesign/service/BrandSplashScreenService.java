@@ -38,30 +38,26 @@ public class BrandSplashScreenService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(MultipartFile splashScreenImage, String brandId, int height, int width) {
+    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(MultipartFile splashScreenImage, String brandId) {
         Optional<Branding> branding = brandingRepository.findById(brandId);
         if (branding.isPresent()) {
             fileUploadService.uploadFile(splashScreenImage);
-            saveToDatabase(splashScreenImage, brandId, height, width);
+            saveToDatabase(splashScreenImage, brandId);
             return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No record found against this id", null, false), HttpStatus.OK);
     }
 
-    private void saveToDatabase(MultipartFile file, String brandId, int height, int width) {
+    private void saveToDatabase(MultipartFile file, String brandId) {
         BrandingSplashScreen brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId).orElse(null);
         if (brandingSplashScreen == null) {
             brandingSplashScreen = new BrandingSplashScreen();
             brandingSplashScreen.setSplashScreen(file.getOriginalFilename());
             brandingSplashScreen.setBrandId(brandId);
-            brandingSplashScreen.setHeight(height);
-            brandingSplashScreen.setWidth(width);
 
         } else {
             brandingSplashScreen.setSplashScreen(file.getOriginalFilename());
             brandingSplashScreen.setBrandId(brandId);
-            brandingSplashScreen.setWidth(width);
-            brandingSplashScreen.setHeight(height);
         }
         brandSplashScreenRepository.save(brandingSplashScreen);
         log.info("Branding logo saved to the database");
