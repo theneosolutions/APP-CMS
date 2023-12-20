@@ -42,6 +42,7 @@ public class FileUploadService {
         }
         return convertedFile;
     }
+
     public byte[] downloadFile(final String fileName) throws NoSuchFileException {
         try {
             byte[] content;
@@ -52,13 +53,14 @@ public class FileUploadService {
             return content;
         } catch (AmazonS3Exception e) {
             if (e.getStatusCode() == HttpStatus.SC_NOT_FOUND) {
-                throw new NoSuchFileException("File Not Found");
+                log.error("File Not Found");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return new byte[0];
     }
+
     public void deleteFile(String fileName) {
         s3Client.deleteObject(bucketName, fileName);
     }
