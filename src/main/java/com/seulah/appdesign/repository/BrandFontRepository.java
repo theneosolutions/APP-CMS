@@ -11,4 +11,7 @@ public interface BrandFontRepository extends MongoRepository<BrandingFont, Strin
     Optional<BrandingFont> findByBrandId(String brandId);
 
     List<BrandingFont> findAllByBrandId(String brandId);
+
+
+    BrandingFont findByName(String brandId);
 }
