@@ -19,17 +19,18 @@ public class BrandingService {
 
     private final BrandLogoRepository brandLogoRepository;
     private final BrandSplashScreenService brandSplashScreenService;
-
+    private final BrandSplashScreenRepository brandSplashScreenRepository;
     private final BrandColorRepository brandColorRepository;
 
     private final BrandingLayoutService brandingLayoutService;
     private final BrandingLayoutRepository brandingLayoutRepository;
 
-    public BrandingService(BrandingRepository brandingRepository, BrandLogoService brandLogoService, BrandLogoRepository brandLogoRepository, BrandSplashScreenService brandSplashScreenService, BrandColorRepository brandColorRepository, BrandingLayoutService brandingLayoutService, BrandingLayoutRepository brandingLayoutRepository) {
+    public BrandingService(BrandingRepository brandingRepository, BrandLogoService brandLogoService, BrandLogoRepository brandLogoRepository, BrandSplashScreenService brandSplashScreenService, BrandSplashScreenRepository brandSplashScreenRepository, BrandColorRepository brandColorRepository, BrandingLayoutService brandingLayoutService, BrandingLayoutRepository brandingLayoutRepository) {
         this.brandingRepository = brandingRepository;
         this.brandLogoService = brandLogoService;
         this.brandLogoRepository = brandLogoRepository;
         this.brandSplashScreenService = brandSplashScreenService;
+        this.brandSplashScreenRepository = brandSplashScreenRepository;
         this.brandColorRepository = brandColorRepository;
         this.brandingLayoutService = brandingLayoutService;
         this.brandingLayoutRepository = brandingLayoutRepository;
@@ -89,7 +90,8 @@ public class BrandingService {
         BrandingLogo brandingLogo = brandLogoRepository.findByBrandId(brandId);
 
         byte[] brandLogo = brandLogoService.getLogoFileUrlByBrandId(brandId);
-        byte[] splashScreen = brandSplashScreenService.getBrandSplashScreenByBrandId(brandId);
+        Optional<BrandingSplashScreen> brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId);
+       String splashScreen = brandingSplashScreen.get().getSplashScreen();
         List<LayoutDetail> layoutDetails = new ArrayList<>();
         List<byte[]> iconContents = brandingLayoutService.getIconByBrandId(brandId);
         List<byte[]> lottieContents = brandingLayoutService.getLottieByBrandId(brandId);
