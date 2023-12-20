@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   data:
     mongodb.uri: ${db_url:mongodb://localhost:27017/seulah-app-design?createDatabaseIfNotExist=true}
     mongodb:
