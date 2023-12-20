@@ -36,6 +36,7 @@ public class BrandSplashScreenController {
     @GetMapping("/brandSplashScreen/getById")
     public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId) throws NoSuchFileException {
         HashMap<String,String> responseMap= new HashMap<>();
+        System.out.println(brandSplashScreenService.getBrandSplashScreenByBrandId(brandId));
         return ResponseEntity.ok().body(responseMap.put("SplashScreen",brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
     }
 

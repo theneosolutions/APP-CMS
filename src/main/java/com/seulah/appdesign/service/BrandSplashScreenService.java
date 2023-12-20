@@ -82,7 +82,7 @@ public class BrandSplashScreenService {
         log.info("Branding logo saved to the database");
     }
 
-    public String getBrandSplashScreenByBrandId(String brandId) throws NoSuchFileException {
+    public String getBrandSplashScreenByBrandId(String brandId)  {
         BrandingSplashScreen brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId).orElse(null);
         if (brandingSplashScreen != null) {
             return brandingSplashScreen.getSplashScreen();
