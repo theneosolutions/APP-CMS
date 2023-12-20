@@ -58,9 +58,13 @@ public class BrandFontService {
 
 
     public ResponseEntity<MessageResponse> deleteById(String id) {
-        Optional<BrandingFont> brandingFont = brandFontRepository.findById(id);
-        if (brandingFont.isPresent()) {
-            brandFontRepository.delete(brandingFont.get());
+        List<BrandingFont> brandingFonts = brandFontRepository.findAllByBrandId(id);
+        if (brandingFonts != null && !brandingFonts.isEmpty()) {
+            brandingFonts.forEach(font -> {
+                fileUploadService.deleteFile(font.getFont());
+                brandFontRepository.delete(font);
+
+            });
             return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
         }
 
@@ -95,16 +99,6 @@ public class BrandFontService {
         return result;
     }
 
-    private MediaType contentType(String filename) {
-        String[] fileArrSplit = filename.split("\\.");
-        String fileExtension = fileArrSplit[fileArrSplit.length - 1];
-        return switch (fileExtension) {
-            case "txt" -> MediaType.TEXT_PLAIN;
-            case "png" -> MediaType.IMAGE_PNG;
-            case "jpg" -> MediaType.IMAGE_JPEG;
-            default -> MediaType.APPLICATION_OCTET_STREAM;
-        };
-    }
 
 }
 

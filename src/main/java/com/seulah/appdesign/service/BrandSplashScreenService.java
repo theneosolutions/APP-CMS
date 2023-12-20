@@ -34,6 +34,7 @@ public class BrandSplashScreenService {
     public ResponseEntity<MessageResponse> deleteById(String id) {
         Optional<BrandingSplashScreen> brandingSplashScreenOptional = brandSplashScreenRepository.findById(id);
         if (brandingSplashScreenOptional.isPresent()) {
+            fileUploadService.deleteFile(brandingSplashScreenOptional.get().getSplashScreen());
             brandSplashScreenRepository.delete(brandingSplashScreenOptional.get());
             return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
         }

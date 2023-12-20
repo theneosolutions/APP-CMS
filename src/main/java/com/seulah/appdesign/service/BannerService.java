@@ -34,6 +34,7 @@ public class BannerService {
     public ResponseEntity<MessageResponse> deleteById(String id) {
         Optional<Banner> banner = bannerRepository.findById(id);
         if (banner.isPresent()) {
+            fileUploadService.deleteFile(banner.get().getBannerImage());
             bannerRepository.delete(banner.get());
             return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
         }
