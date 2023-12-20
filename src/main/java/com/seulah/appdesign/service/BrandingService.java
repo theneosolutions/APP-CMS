@@ -17,7 +17,7 @@ public class BrandingService {
 
     private final BrandLogoService brandLogoService;
 
-
+    private final BrandLogoRepository brandLogoRepository;
     private final BrandSplashScreenService brandSplashScreenService;
 
     private final BrandColorRepository brandColorRepository;
@@ -25,9 +25,10 @@ public class BrandingService {
     private final BrandingLayoutService brandingLayoutService;
     private final BrandingLayoutRepository brandingLayoutRepository;
 
-    public BrandingService(BrandingRepository brandingRepository, BrandLogoService brandLogoService, BrandSplashScreenService brandSplashScreenService, BrandColorRepository brandColorRepository, BrandingLayoutService brandingLayoutService, BrandingLayoutRepository brandingLayoutRepository) {
+    public BrandingService(BrandingRepository brandingRepository, BrandLogoService brandLogoService, BrandLogoRepository brandLogoRepository, BrandSplashScreenService brandSplashScreenService, BrandColorRepository brandColorRepository, BrandingLayoutService brandingLayoutService, BrandingLayoutRepository brandingLayoutRepository) {
         this.brandingRepository = brandingRepository;
         this.brandLogoService = brandLogoService;
+        this.brandLogoRepository = brandLogoRepository;
         this.brandSplashScreenService = brandSplashScreenService;
         this.brandColorRepository = brandColorRepository;
         this.brandingLayoutService = brandingLayoutService;
@@ -85,6 +86,7 @@ public class BrandingService {
         Optional<Branding> branding = brandingRepository.findById(brandId);
         Optional<BrandingColor> brandingColor = brandColorRepository.findByBrandId(brandId);
         List<BrandingLayout> brandingLayouts = brandingLayoutRepository.findAllByBrandId(brandId);
+        BrandingLogo brandingLogo = brandLogoRepository.findByBrandId(brandId);
 
         byte[] brandLogo = brandLogoService.getLogoFileUrlByBrandId(brandId);
         byte[] splashScreen = brandSplashScreenService.getBrandSplashScreenByBrandId(brandId);
@@ -107,7 +109,7 @@ public class BrandingService {
                 splashScreen,
                 brandingColor.orElse(null),
                 brandLogo,
-                layoutDetails
+                layoutDetails,brandingLogo
         );
 
         return ResponseEntity.ok()
