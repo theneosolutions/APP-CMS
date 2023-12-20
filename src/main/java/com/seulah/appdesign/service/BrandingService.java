@@ -94,6 +94,10 @@ public class BrandingService {
         List<byte[]> iconContents = brandingLayoutService.getIconByBrandId(brandId);
         List<byte[]> lottieContents = brandingLayoutService.getLottieByBrandId(brandId);
 
+        HashMap<String, Object> logoDetail = new HashMap<>();
+        logoDetail.put("brandLogo", brandingLogo);
+        logoDetail.put("brandLogoContent", brandLogo);
+
         int size = Math.min(iconContents.size(), lottieContents.size());
         for (int i = 0; i < size; i++) {
             LayoutDetail layoutDetail = new LayoutDetail();
@@ -108,8 +112,7 @@ public class BrandingService {
                 branding.orElse(null),
                 splashScreen,
                 brandingColor.orElse(null),
-                brandLogo,
-                layoutDetails,brandingLogo
+                layoutDetails, logoDetail
         );
 
         return ResponseEntity.ok()

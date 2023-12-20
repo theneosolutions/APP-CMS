@@ -14,10 +14,9 @@ public class BrandDetailResponse {
     private Branding branding;
     private byte[] brandingSplashScreen;
     private BrandingColor brandingColor;
-    private byte[] logoContent;
     private List<LayoutDetail> brandingLayoutDetails;
 
-    private BrandingLogo brandingLogo;
+    private HashMap<String,Object> brandingLogoDetail;
 }
 
 
