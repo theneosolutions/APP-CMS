@@ -17,7 +17,7 @@ public class BrandDetailResponse {
     private byte[] logoContent;
     private List<LayoutDetail> brandingLayoutDetails;
 
-
+    private BrandingLogo brandingLogo;
 }
 
 
