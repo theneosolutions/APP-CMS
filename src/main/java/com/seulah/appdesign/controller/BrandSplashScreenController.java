@@ -22,8 +22,8 @@ public class BrandSplashScreenController {
 
 
     @PostMapping("/brandingSplashScreen")
-    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(@RequestPart(value = "file") MultipartFile splashScreenImage, @RequestParam String brandId) {
-        return brandSplashScreenService.saveBrandingSplashScreen(splashScreenImage, brandId);
+    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(@RequestPart(value = "file") MultipartFile splashScreenImage,@RequestPart(value = "file2") MultipartFile splashScreen1,@RequestPart(value = "file3") MultipartFile splashScreen2,@RequestPart(value = "file4") MultipartFile splashScreen3, @RequestParam String brandId) {
+        return brandSplashScreenService.saveBrandingSplashScreen(splashScreenImage,splashScreen1,splashScreen2,splashScreen3, brandId);
     }
 
 

@@ -42,20 +42,26 @@ public class BrandSplashScreenService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(MultipartFile splashScreenImage, String brandId) {
+    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(MultipartFile splashScreenImage,
+                                                                    MultipartFile splashScreen1,
+                                                                    MultipartFile splashScreen2,
+                                                                    MultipartFile splashScreen3,String brandId) {
         Optional<Branding> branding = brandingRepository.findById(brandId);
         if (branding.isPresent()) {
             // fileUploadService.uploadFile(splashScreenImage);
             try {
                 // Get the content of the file as a byte array
                 byte[] fileBytes = splashScreenImage.getBytes();
-
+                byte[] fileBytes1 = splashScreen1.getBytes();
+                byte[] fileBytes2 = splashScreen2.getBytes();
+                byte[] fileBytes3 = splashScreen3.getBytes();
                 // Convert the byte array to a String (you can modify this based on your use case)
                 String fileContent = new String(fileBytes);
-                saveToDatabase(fileContent, brandId);
-                // Print or process the file content as needed
-                System.out.println("File Content:");
-                System.out.println(fileContent);
+                String fileContent1 = new String(fileBytes1);
+                String fileContent2 = new String(fileBytes2);
+                String fileContent3 = new String(fileBytes3);
+                saveToDatabase(fileContent,fileContent1,fileContent2,fileContent3, brandId);
+
 
                 return new ResponseEntity<>(new MessageResponse("Record has been saved", null, false), HttpStatus.OK);
 
@@ -67,16 +73,23 @@ public class BrandSplashScreenService {
         return new ResponseEntity<>(new MessageResponse("No record found against this id", null, false), HttpStatus.NOT_FOUND);
     }
 
-    private void saveToDatabase(String file, String brandId) {
+    private void saveToDatabase(String file,String file1,String file2,String file3, String brandId) {
         BrandingSplashScreen brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId).orElse(null);
         if (brandingSplashScreen == null) {
             brandingSplashScreen = new BrandingSplashScreen();
             brandingSplashScreen.setSplashScreen(file);
+            brandingSplashScreen.setSplashScreen1(file1);
+            brandingSplashScreen.setSplashScreen2(file2);
+            brandingSplashScreen.setSplashScreen3(file3);
             brandingSplashScreen.setBrandId(brandId);
 
         } else {
             brandingSplashScreen.setSplashScreen(file);
+            brandingSplashScreen.setSplashScreen1(file1);
+            brandingSplashScreen.setSplashScreen2(file2);
+            brandingSplashScreen.setSplashScreen3(file3);
             brandingSplashScreen.setBrandId(brandId);
+
         }
         brandSplashScreenRepository.save(brandingSplashScreen);
         log.info("Branding logo saved to the database");
