@@ -21,8 +21,8 @@ public class BrandFontController {
 
 
     @PostMapping("/brandingFont")
-    public ResponseEntity<MessageResponse> saveBrandingFont(@RequestPart(value = "file") MultipartFile[] fontFiles, @RequestParam String brandId) {
-        return brandFontService.saveBrandingFont(fontFiles, brandId);
+    public ResponseEntity<MessageResponse> saveBrandingFont(@RequestBody List<Map<String, MultipartFile>> files, @RequestParam String brandId) {
+        return brandFontService.saveBrandingFont(files, brandId);
     }
 
     @GetMapping("/brandFonts/getFontById")
