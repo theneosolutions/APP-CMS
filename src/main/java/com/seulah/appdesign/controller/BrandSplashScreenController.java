@@ -1,5 +1,7 @@
 package com.seulah.appdesign.controller;
 
+
+import com.seulah.appdesign.request.BrandSliderRequest;
 import com.seulah.appdesign.request.MessageResponse;
 import com.seulah.appdesign.service.BrandSplashScreenService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
+
 
 @RestController
 @Slf4j
@@ -22,8 +26,13 @@ public class BrandSplashScreenController {
 
 
     @PostMapping("/brandingSplashScreen")
-    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(@RequestPart(value = "file") MultipartFile splashScreenImage, @RequestPart(value = "file2") MultipartFile splashScreen1, @RequestPart(value = "file3") MultipartFile splashScreen2, @RequestPart(value = "file4") MultipartFile splashScreen3, @RequestParam String brandId) {
-        return brandSplashScreenService.saveBrandingSplashScreen(splashScreenImage, splashScreen1, splashScreen2, splashScreen3, brandId);
+    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(@RequestPart(value = "file") MultipartFile splashScreenImage, @RequestParam String brandId) {
+        return brandSplashScreenService.saveBrandingSplashScreen(splashScreenImage, brandId);
+    }
+
+    @PostMapping("/brandingSliderScreen")
+    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam("mainTittle") String mainTittle, @RequestBody List<BrandSliderRequest> brandSliderScreenList, @RequestParam String brandId) {
+        return brandSplashScreenService.saveBrandingSlidercreen(mainTittle, brandSliderScreenList, brandId);
     }
 
 
