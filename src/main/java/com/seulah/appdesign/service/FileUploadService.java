@@ -1,17 +1,17 @@
 package com.seulah.appdesign.service;
 
-import com.amazonaws.*;
-import com.amazonaws.services.s3.*;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import com.amazonaws.util.*;
-import lombok.extern.slf4j.*;
-import org.apache.http.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.multipart.*;
+import com.amazonaws.util.IOUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.nio.file.*;
 
 @Service
 @Slf4j
@@ -44,7 +44,7 @@ public class FileUploadService {
         return convertedFile;
     }
 
-    public byte[] downloadFile(final String fileName) throws NoSuchFileException {
+    public byte[] downloadFile(final String fileName) {
         try {
             byte[] content;
             final S3Object s3Object = s3Client.getObject(bucketName, fileName);

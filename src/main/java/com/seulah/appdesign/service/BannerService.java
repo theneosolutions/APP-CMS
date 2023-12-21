@@ -67,7 +67,7 @@ public class BannerService {
         bannerRepository.save(banner);
     }
 
-    public byte[] getBannerImageById(String id) throws NoSuchFileException {
+    public byte[] getBannerImageById(String id)  {
         Optional<Banner> optionalBanner = bannerRepository.findById(id);
         if (optionalBanner.isPresent()) {
             String fileName = optionalBanner.get().getBannerImage();
