@@ -1,13 +1,16 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.*;
-import com.seulah.appdesign.repository.*;
-import com.seulah.appdesign.request.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.multipart.*;
+import com.seulah.appdesign.entity.Banner;
+import com.seulah.appdesign.repository.BannerRepository;
+import com.seulah.appdesign.request.MessageResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BannerService {
@@ -21,8 +24,15 @@ public class BannerService {
 
 
     public ResponseEntity<MessageResponse> getBannerByID(String id) {
+        HashMap<String, Object> response = new HashMap<>();
         Optional<Banner> banner = bannerRepository.findById(id);
-        return banner.map(ban -> new ResponseEntity<>(new MessageResponse("Success", ban, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
+        byte[] image = getBannerImageById(id);
+        if (banner.isPresent()) {
+            response.put("bannerDetail", banner);
+        }
+        response.put("image", image);
+        return new ResponseEntity<>(new MessageResponse("Success", response, false), HttpStatus.OK);
+
     }
 
     public ResponseEntity<MessageResponse> getAll() {
