@@ -93,11 +93,12 @@ public class BrandSplashScreenService {
 
     public ResponseEntity<MessageResponse> saveBrandingSliderScreen(BrandSliderScreen brandSliderScreen) {
         Optional<BrandSliderScreen> branding = brandSliderScreenRepository.findByMainTittle(brandSliderScreen.getMainTittle());
+        boolean value = branding.get().getBrandSliderScreenList().stream()
+                .anyMatch(e -> e.getPosition().equals(brandSliderScreen.getBrandSliderScreenList().get(0).getPosition()));
         if (branding.isPresent()) {
             // fileUploadService.uploadFile(splashScreenImage);
             try {
-                boolean value = branding.get().getBrandSliderScreenList().stream()
-                        .anyMatch(e -> e.getPosition().equals(brandSliderScreen.getBrandSliderScreenList().get(0).getPosition()));
+
                 if(value){
                     return new ResponseEntity<>(new MessageResponse("Position is already exist", null, false), HttpStatus.FOUND);
                 }
@@ -109,8 +110,17 @@ public class BrandSplashScreenService {
                 e.printStackTrace();
             }
 
+        }else {
+            if (value) {
+                return new ResponseEntity<>(new MessageResponse("Position is already exist", null, false), HttpStatus.FOUND);
+            }
+            branding.get().getBrandSliderScreenList().addAll(brandSliderScreen.getBrandSliderScreenList());
+            sliderSaveToDatabase(branding.get());
+            return new ResponseEntity<>(new MessageResponse("Record has been saved", null, false), HttpStatus.OK);
+
         }
-        return new ResponseEntity<>(new MessageResponse("No record found against this id", null, false), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new MessageResponse("Something Went Wrong", null, false), HttpStatus.BAD_GATEWAY);
+
     }
 
     private void sliderSaveToDatabase(BrandSliderScreen brandSliderScreen) {
