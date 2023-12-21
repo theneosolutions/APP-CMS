@@ -21,9 +21,17 @@ public class BannerService {
     }
 
 
+
     public ResponseEntity<MessageResponse> getBannerByID(String id) {
+        HashMap<String, Object> response = new HashMap<>();
         Optional<Banner> banner = bannerRepository.findById(id);
-        return banner.map(ban -> new ResponseEntity<>(new MessageResponse("Success", ban, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
+        byte[] image = getBannerImageById(id);
+        if (banner.isPresent()) {
+            response.put("bannerDetail", banner);
+        }
+        response.put("image", image);
+        return new ResponseEntity<>(new MessageResponse("Success", response, false), HttpStatus.OK);
+
     }
 
     public ResponseEntity<MessageResponse> getAll() {
