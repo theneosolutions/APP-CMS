@@ -47,7 +47,10 @@ public class BrandSplashScreenController {
         return brandSplashScreenService.saveBrandingSliderScreen(brandSliderScreen);
     }
 
-
+    @GetMapping("/brandSliderScreen/getById")
+    public ResponseEntity<?> getBrandSliderScreenByBrandId(@RequestParam String brandId) {
+        return ResponseEntity.ok().body(brandSplashScreenService.getBrandSliderScreenByBrandId(brandId));
+    }
     @DeleteMapping(value = "/deleteById", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MessageResponse> deleteById(@RequestParam String id) {
         log.info("Delete By Id: {}", id);

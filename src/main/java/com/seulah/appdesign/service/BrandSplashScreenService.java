@@ -124,4 +124,12 @@ public class BrandSplashScreenService {
         }
         return null;
     }
+
+    public BrandSliderScreen getBrandSliderScreenByBrandId(String brandId) {
+        Optional<BrandSliderScreen> brandingSliderScreen = brandSliderScreenRepository.findByBrandId(brandId);
+        if (brandingSliderScreen != null) {
+            return brandingSliderScreen.get();
+        }
+        return null;
+    }
 }
