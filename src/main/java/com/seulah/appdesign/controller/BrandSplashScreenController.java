@@ -1,6 +1,7 @@
 package com.seulah.appdesign.controller;
 
 
+import com.seulah.appdesign.entity.BrandSliderScreen;
 import com.seulah.appdesign.request.BrandSliderRequest;
 import com.seulah.appdesign.request.MessageResponse;
 import com.seulah.appdesign.service.BrandSplashScreenService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,8 +33,13 @@ public class BrandSplashScreenController {
     }
 
     @PostMapping("/brandingSliderScreen")
-    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam("mainTittle") String mainTittle, @RequestBody List<BrandSliderRequest> brandSliderScreenList, @RequestParam String brandId) {
-        return brandSplashScreenService.saveBrandingSlidercreen(mainTittle, brandSliderScreenList, brandId);
+    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam("mainTittle") String mainTittle,@RequestParam("brandId") String brandId,@RequestParam("desc") String desc,@RequestParam("title") String title,@RequestParam("position")  String position, @RequestParam("file") MultipartFile brandSliderScreenList ) {
+        BrandSliderRequest brandSliderRequest = new BrandSliderRequest(title,desc,brandSliderScreenList,position);
+        List<BrandSliderRequest> brandSliderRequests = new ArrayList<>();
+        brandSliderRequests.add(brandSliderRequest);
+        BrandSliderScreen brandSliderScreen = new BrandSliderScreen(mainTittle,brandSliderRequests,brandId);
+
+        return brandSplashScreenService.saveBrandingSlidercreen(brandSliderScreen);
     }
 
 

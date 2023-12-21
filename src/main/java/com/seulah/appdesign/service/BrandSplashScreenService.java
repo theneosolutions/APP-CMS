@@ -91,13 +91,12 @@ public class BrandSplashScreenService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingSlidercreen(String mainTitle, List<BrandSliderRequest> brandSliderRequests, String brandId) {
-        BrandSliderScreen brandSliderScreen = new BrandSliderScreen(mainTitle,brandSliderRequests,brandId);
+    public ResponseEntity<MessageResponse> saveBrandingSlidercreen(BrandSliderScreen brandSliderScreen) {
         Optional<BrandSliderScreen> branding = brandSliderScreenRepository.findById(brandSliderScreen.getBrandId());
         if (branding.isPresent()) {
             // fileUploadService.uploadFile(splashScreenImage);
             try {
-                sliderSaveToDatabase(branding.get());
+                sliderSaveToDatabase(brandSliderScreen);
                 return new ResponseEntity<>(new MessageResponse("Record has been saved", null, false), HttpStatus.OK);
 
             } catch (Exception e) {
