@@ -1,13 +1,13 @@
 package com.seulah.appdesign.controller;
 
-import com.seulah.appdesign.request.*;
-import com.seulah.appdesign.service.*;
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
+import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.service.BrandSplashScreenService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.*;
 import java.util.HashMap;
 
 @RestController
@@ -22,8 +22,8 @@ public class BrandSplashScreenController {
 
 
     @PostMapping("/brandingSplashScreen")
-    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(@RequestPart(value = "file") MultipartFile splashScreenImage,@RequestPart(value = "file2") MultipartFile splashScreen1,@RequestPart(value = "file3") MultipartFile splashScreen2,@RequestPart(value = "file4") MultipartFile splashScreen3, @RequestParam String brandId) {
-        return brandSplashScreenService.saveBrandingSplashScreen(splashScreenImage,splashScreen1,splashScreen2,splashScreen3, brandId);
+    public ResponseEntity<MessageResponse> saveBrandingSplashScreen(@RequestPart(value = "file") MultipartFile splashScreenImage, @RequestPart(value = "file2") MultipartFile splashScreen1, @RequestPart(value = "file3") MultipartFile splashScreen2, @RequestPart(value = "file4") MultipartFile splashScreen3, @RequestParam String brandId) {
+        return brandSplashScreenService.saveBrandingSplashScreen(splashScreenImage, splashScreen1, splashScreen2, splashScreen3, brandId);
     }
 
 
@@ -34,10 +34,10 @@ public class BrandSplashScreenController {
     }
 
     @GetMapping("/brandSplashScreen/getById")
-    public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId) throws NoSuchFileException {
-        HashMap<String,String> responseMap= new HashMap<>();
+    public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId) {
+        HashMap<String, String> responseMap = new HashMap<>();
         System.out.println(brandSplashScreenService.getBrandSplashScreenByBrandId(brandId));
-        return ResponseEntity.ok().body(responseMap.put("SplashScreen",brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
+        return ResponseEntity.ok().body(responseMap.put("SplashScreen", brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
     }
 
 

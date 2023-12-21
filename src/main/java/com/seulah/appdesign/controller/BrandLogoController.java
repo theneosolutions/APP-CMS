@@ -1,13 +1,12 @@
 package com.seulah.appdesign.controller;
 
-import com.seulah.appdesign.request.*;
-import com.seulah.appdesign.service.*;
-import org.springframework.http.*;
+import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.service.BrandLogoService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.nio.file.*;
+import java.nio.file.NoSuchFileException;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -22,15 +21,15 @@ public class BrandLogoController {
 
 
     @PostMapping("/uploadLogo")
-    public ResponseEntity<MessageResponse> saveBrandingLogo(@RequestPart(value = "file") MultipartFile file, @RequestParam String brandId, @RequestParam int height, @RequestParam int width) throws IOException {
+    public ResponseEntity<MessageResponse> saveBrandingLogo(@RequestPart(value = "file") MultipartFile file, @RequestParam String brandId, @RequestParam int height, @RequestParam int width) {
         return brandLogoService.saveBrandingLogo(file, brandId, height, width);
     }
 
     @GetMapping("/brandLogo/getLogoById")
     public ResponseEntity<?> getBrandLogoByBrandId(@RequestParam String brandId) throws NoSuchFileException {
         String base64Image = Base64.getEncoder().encodeToString(brandLogoService.getLogoFileUrlByBrandId(brandId));
-        HashMap<String,String> logo = new HashMap();
-        logo.put("logo",base64Image);
+        HashMap<String, String> logo = new HashMap<>();
+        logo.put("logo", base64Image);
         return ResponseEntity.ok().body(logo);
     }
 }

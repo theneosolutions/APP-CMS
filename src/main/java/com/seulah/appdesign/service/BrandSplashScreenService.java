@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.NoSuchFileException;
 import java.util.Optional;
 
 @Service
@@ -46,7 +45,7 @@ public class BrandSplashScreenService {
     public ResponseEntity<MessageResponse> saveBrandingSplashScreen(MultipartFile splashScreenImage,
                                                                     MultipartFile splashScreen1,
                                                                     MultipartFile splashScreen2,
-                                                                    MultipartFile splashScreen3,String brandId) {
+                                                                    MultipartFile splashScreen3, String brandId) {
         Optional<Branding> branding = brandingRepository.findById(brandId);
         if (branding.isPresent()) {
             // fileUploadService.uploadFile(splashScreenImage);
@@ -61,7 +60,7 @@ public class BrandSplashScreenService {
                 String fileContent1 = new String(fileBytes1);
                 String fileContent2 = new String(fileBytes2);
                 String fileContent3 = new String(fileBytes3);
-                saveToDatabase(fileContent,fileContent1,fileContent2,fileContent3, brandId);
+                saveToDatabase(fileContent, fileContent1, fileContent2, fileContent3, brandId);
 
 
                 return new ResponseEntity<>(new MessageResponse("Record has been saved", null, false), HttpStatus.OK);
@@ -74,29 +73,22 @@ public class BrandSplashScreenService {
         return new ResponseEntity<>(new MessageResponse("No record found against this id", null, false), HttpStatus.NOT_FOUND);
     }
 
-    private void saveToDatabase(String file,String file1,String file2,String file3, String brandId) {
+    private void saveToDatabase(String file, String file1, String file2, String file3, String brandId) {
         BrandingSplashScreen brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId).orElse(null);
         if (brandingSplashScreen == null) {
             brandingSplashScreen = new BrandingSplashScreen();
-            brandingSplashScreen.setSplashScreen(file);
-            brandingSplashScreen.setSplashScreen1(file1);
-            brandingSplashScreen.setSplashScreen2(file2);
-            brandingSplashScreen.setSplashScreen3(file3);
-            brandingSplashScreen.setBrandId(brandId);
-
-        } else {
-            brandingSplashScreen.setSplashScreen(file);
-            brandingSplashScreen.setSplashScreen1(file1);
-            brandingSplashScreen.setSplashScreen2(file2);
-            brandingSplashScreen.setSplashScreen3(file3);
-            brandingSplashScreen.setBrandId(brandId);
 
         }
+        brandingSplashScreen.setSplashScreen(file);
+        brandingSplashScreen.setSplashScreen1(file1);
+        brandingSplashScreen.setSplashScreen2(file2);
+        brandingSplashScreen.setSplashScreen3(file3);
+        brandingSplashScreen.setBrandId(brandId);
         brandSplashScreenRepository.save(brandingSplashScreen);
         log.info("Branding logo saved to the database");
     }
 
-    public String getBrandSplashScreenByBrandId(String brandId)  {
+    public String getBrandSplashScreenByBrandId(String brandId) {
         BrandingSplashScreen brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId).orElse(null);
         if (brandingSplashScreen != null) {
             return brandingSplashScreen.getSplashScreen();

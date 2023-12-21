@@ -1,15 +1,21 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.*;
-import com.seulah.appdesign.repository.*;
-import com.seulah.appdesign.request.*;
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.multipart.*;
+import com.seulah.appdesign.entity.Branding;
+import com.seulah.appdesign.entity.BrandingLayout;
+import com.seulah.appdesign.entity.BrandingLayoutIcon;
+import com.seulah.appdesign.repository.BrandingLayoutIconRepository;
+import com.seulah.appdesign.repository.BrandingLayoutRepository;
+import com.seulah.appdesign.repository.BrandingRepository;
+import com.seulah.appdesign.request.MessageResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -70,7 +76,7 @@ public class BrandingLayoutService {
 
     }
 
-    public List<byte[]> getLottieByBrandId(String brandId) throws IOException {
+    public List<byte[]> getLottieByBrandId(String brandId) {
         List<BrandingLayout> brandingLayoutLottieFile = brandingLayoutRepository.findAllByBrandId(brandId);
         List<byte[]> iconContents = new ArrayList<>();
 
@@ -84,7 +90,7 @@ public class BrandingLayoutService {
         return iconContents;
     }
 
-    public List<byte[]> getIconByBrandId(String brandId) throws IOException {
+    public List<byte[]> getIconByBrandId(String brandId) {
         List<BrandingLayoutIcon> brandingLayoutIcons = brandingLayoutIconRepository.findAllByBrandId(brandId);
         List<byte[]> iconContents = new ArrayList<>();
 

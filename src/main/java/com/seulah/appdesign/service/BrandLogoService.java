@@ -1,17 +1,19 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.*;
-import com.seulah.appdesign.repository.*;
-import com.seulah.appdesign.request.*;
-import lombok.extern.slf4j.*;
-import org.apache.commons.io.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.transaction.annotation.*;
-import org.springframework.web.multipart.*;
+import com.seulah.appdesign.entity.Branding;
+import com.seulah.appdesign.entity.BrandingLogo;
+import com.seulah.appdesign.repository.BrandLogoRepository;
+import com.seulah.appdesign.repository.BrandingRepository;
+import com.seulah.appdesign.request.MessageResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.*;
-import java.util.*;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -53,7 +55,7 @@ public class BrandLogoService {
         return FilenameUtils.getExtension(originalFilename);
     }
 
-    public byte[] getLogoFileUrlByBrandId(String brandId) throws NoSuchFileException {
+    public byte[] getLogoFileUrlByBrandId(String brandId) {
         BrandingLogo brandingLogo = brandingLogoRepository.findByBrandId(brandId);
         if (brandingLogo != null) {
             String fileName = brandingLogo.getLogo();

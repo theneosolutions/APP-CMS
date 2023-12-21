@@ -1,14 +1,16 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.*;
-import com.seulah.appdesign.repository.*;
-import com.seulah.appdesign.request.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.multipart.*;
+import com.seulah.appdesign.entity.Banner;
+import com.seulah.appdesign.repository.BannerRepository;
+import com.seulah.appdesign.request.MessageResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BannerService {
@@ -19,7 +21,6 @@ public class BannerService {
         this.bannerRepository = bannerRepository;
         this.fileUploadService = fileUploadService;
     }
-
 
 
     public ResponseEntity<MessageResponse> getBannerByID(String id) {
@@ -67,7 +68,7 @@ public class BannerService {
         bannerRepository.save(banner);
     }
 
-    public byte[] getBannerImageById(String id)  {
+    public byte[] getBannerImageById(String id) {
         Optional<Banner> optionalBanner = bannerRepository.findById(id);
         if (optionalBanner.isPresent()) {
             String fileName = optionalBanner.get().getBannerImage();
