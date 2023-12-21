@@ -91,12 +91,18 @@ public class BrandSplashScreenService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingSlidercreen(BrandSliderScreen brandSliderScreen) {
-        Optional<BrandSliderScreen> branding = brandSliderScreenRepository.findByBrandId(brandSliderScreen.getBrandId());
+    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(BrandSliderScreen brandSliderScreen) {
+        Optional<BrandSliderScreen> branding = brandSliderScreenRepository.findByMainTittle(brandSliderScreen.getMainTittle());
         if (branding.isPresent()) {
             // fileUploadService.uploadFile(splashScreenImage);
             try {
-                sliderSaveToDatabase(brandSliderScreen);
+                boolean value = branding.get().getBrandSliderScreenList().stream()
+                        .anyMatch(e -> e.getPosition().equals(brandSliderScreen.getBrandSliderScreenList().get(0).getPosition()));
+                if(value){
+                    return new ResponseEntity<>(new MessageResponse("Position is already exist", null, false), HttpStatus.FOUND);
+                }
+                branding.get().getBrandSliderScreenList().addAll(brandSliderScreen.getBrandSliderScreenList());
+                sliderSaveToDatabase(branding.get());
                 return new ResponseEntity<>(new MessageResponse("Record has been saved", null, false), HttpStatus.OK);
 
             } catch (Exception e) {
@@ -107,8 +113,8 @@ public class BrandSplashScreenService {
         return new ResponseEntity<>(new MessageResponse("No record found against this id", null, false), HttpStatus.NOT_FOUND);
     }
 
-    private void sliderSaveToDatabase(BrandSliderScreen brandSliderScreenList) {
-        brandSliderScreenRepository.save(brandSliderScreenList);
+    private void sliderSaveToDatabase(BrandSliderScreen brandSliderScreen) {
+        brandSliderScreenRepository.save(brandSliderScreen);
         log.info("Slider has been saved to the database");
     }
     public String getBrandSplashScreenByBrandId(String brandId) {

@@ -44,7 +44,7 @@ public class BrandSplashScreenController {
         brandSliderRequests.add(brandSliderRequest);
         BrandSliderScreen brandSliderScreen = new BrandSliderScreen(mainTittle,brandSliderRequests,brandId);
 
-        return brandSplashScreenService.saveBrandingSlidercreen(brandSliderScreen);
+        return brandSplashScreenService.saveBrandingSliderScreen(brandSliderScreen);
     }
 
 
