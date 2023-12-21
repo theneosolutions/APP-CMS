@@ -33,7 +33,7 @@ public class BrandSplashScreenController {
     }
 
     @PostMapping("/brandingSliderScreen")
-    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam("mainTittle") String mainTittle,@RequestParam("brandId") String brandId,@RequestParam("desc") String desc,@RequestParam("title") String title,@RequestParam("position")  String position, @RequestParam("file") MultipartFile brandSliderScreenList ) {
+    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam(value = "mainTittle") String mainTittle,@RequestParam(value ="brandId") String brandId,@RequestParam(value ="desc") String desc,@RequestParam(value ="title") String title,@RequestParam(value ="position")  String position, @RequestParam(value ="file") MultipartFile brandSliderScreenList ) {
         BrandSliderRequest brandSliderRequest = new BrandSliderRequest(title,desc,brandSliderScreenList,position);
         List<BrandSliderRequest> brandSliderRequests = new ArrayList<>();
         brandSliderRequests.add(brandSliderRequest);
