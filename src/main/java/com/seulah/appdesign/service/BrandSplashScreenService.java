@@ -92,7 +92,7 @@ public class BrandSplashScreenService {
 
 
     public ResponseEntity<MessageResponse> saveBrandingSlidercreen(BrandSliderScreen brandSliderScreen) {
-        Optional<BrandSliderScreen> branding = brandSliderScreenRepository.findById(brandSliderScreen.getBrandId());
+        Optional<BrandSliderScreen> branding = brandSliderScreenRepository.findByBrandId(brandSliderScreen.getBrandId());
         if (branding.isPresent()) {
             // fileUploadService.uploadFile(splashScreenImage);
             try {
