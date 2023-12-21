@@ -13,6 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class BrandSliderRequest {
     private String title;
     private String desc;
-    private MultipartFile file;
+    private String file;
     private String position;
 }

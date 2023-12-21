@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,12 @@ public class BrandSplashScreenController {
     }
 
     @PostMapping("/brandingSliderScreen")
-    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam(value = "mainTittle") String mainTittle,@RequestParam(value ="brandId") String brandId,@RequestParam(value ="desc") String desc,@RequestParam(value ="title") String title,@RequestParam(value ="position")  String position, @RequestParam(value ="file") MultipartFile brandSliderScreenList ) {
-        BrandSliderRequest brandSliderRequest = new BrandSliderRequest(title,desc,brandSliderScreenList,position);
+    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam(value = "mainTittle") String mainTittle,@RequestParam(value ="brandId") String brandId,@RequestParam(value ="desc") String desc,@RequestParam(value ="title") String title,@RequestParam(value ="position")  String position, @RequestParam(value ="file") MultipartFile brandSliderScreenList ) throws IOException {
+        byte[] fileBytes = brandSliderScreenList.getBytes();
+        // Convert the byte array to a String (you can modify this based on your use case)
+        String fileContent = new String(fileBytes);
+
+        BrandSliderRequest brandSliderRequest = new BrandSliderRequest(title,desc,fileContent,position);
         List<BrandSliderRequest> brandSliderRequests = new ArrayList<>();
         brandSliderRequests.add(brandSliderRequest);
         BrandSliderScreen brandSliderScreen = new BrandSliderScreen(mainTittle,brandSliderRequests,brandId);
