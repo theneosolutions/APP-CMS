@@ -28,16 +28,12 @@ public class BrandFontService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingFont(List<Map<String, MultipartFile>> files, String brandId) {
+    public ResponseEntity<MessageResponse> saveBrandingFont(MultipartFile[] fontFiles, String brandId) {
         Optional<Branding> brandingOptional = brandingRepository.findById(brandId);
         if (brandingOptional.isPresent()) {
-            for (Map<String, MultipartFile> fileMap : files) {
-                for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
-                    String fieldName = entry.getKey();
-                    MultipartFile file = entry.getValue();
-
-                    saveToDatabase(file, file.getOriginalFilename(), brandId);
-                }
+            for (MultipartFile file : fontFiles) {
+                fileUploadService.uploadFile(file);
+                saveToDatabase(file, file.getOriginalFilename(), brandId);
             }
             return new ResponseEntity<>(new MessageResponse("Successfully Uploaded", null, false), HttpStatus.OK);
         }
