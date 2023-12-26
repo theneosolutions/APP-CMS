@@ -132,8 +132,8 @@ public class BrandSplashScreenService {
         return null;
     }
 
-    public Optional<BrandSliderScreen> getBrandSliderScreenByBrandId(String brandId) {
-        Optional<BrandSliderScreen> brandingSliderScreen = brandSliderScreenRepository.findByBrandId(brandId);
+    public List<BrandSliderScreen> getBrandSliderScreenByBrandId(String brandId) {
+        List<BrandSliderScreen> brandingSliderScreen = brandSliderScreenRepository.findByBrandId(brandId);
         if (brandingSliderScreen != null) {
             return brandingSliderScreen;
         }
