@@ -111,9 +111,6 @@ public class BrandSplashScreenService {
             }
 
         }else {
-            if (value) {
-                return new ResponseEntity<>(new MessageResponse("Position is already exist", null, false), HttpStatus.FOUND);
-            }
             branding.get().getBrandSliderScreenList().addAll(brandSliderScreen.getBrandSliderScreenList());
             sliderSaveToDatabase(branding.get());
             return new ResponseEntity<>(new MessageResponse("Record has been saved", null, false), HttpStatus.OK);
@@ -135,10 +132,10 @@ public class BrandSplashScreenService {
         return null;
     }
 
-    public BrandSliderScreen getBrandSliderScreenByBrandId(String brandId) {
+    public Optional<BrandSliderScreen> getBrandSliderScreenByBrandId(String brandId) {
         Optional<BrandSliderScreen> brandingSliderScreen = brandSliderScreenRepository.findByBrandId(brandId);
         if (brandingSliderScreen != null) {
-            return brandingSliderScreen.get();
+            return brandingSliderScreen;
         }
         return null;
     }
