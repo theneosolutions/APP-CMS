@@ -1,13 +1,15 @@
 package com.seulah.appdesign.controller;
 
 
-import com.seulah.appdesign.request.*;
-import com.seulah.appdesign.service.*;
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
+import com.seulah.appdesign.request.BrandDetailResponse;
+import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.service.BrandingService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
+import java.io.IOException;
 
 @RestController
 @Slf4j
@@ -51,7 +53,7 @@ public class BrandingController {
     }
 
     @GetMapping(value = "/getBrandDetail", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BrandDetailResponse> getBrandDetail(@RequestParam String id) throws IOException {
+    public ResponseEntity<BrandDetailResponse> getBrandDetail(@RequestParam String id) {
         log.info("Getting Branding Detail By Id {}", id);
         return brandingService.getBrandDetail(id);
     }

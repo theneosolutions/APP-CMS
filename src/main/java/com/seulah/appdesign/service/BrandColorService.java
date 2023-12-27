@@ -1,13 +1,20 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.*;
-import com.seulah.appdesign.repository.*;
-import com.seulah.appdesign.request.*;
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
+import com.seulah.appdesign.entity.Branding;
+import com.seulah.appdesign.entity.BrandingColor;
+import com.seulah.appdesign.repository.BrandColorRepository;
+import com.seulah.appdesign.repository.BrandingRepository;
+import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.utils.Constants;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -35,6 +42,7 @@ public class BrandColorService {
                 brandingColor.setColors(colors);
             }
             brandingColor = brandColorRepository.save(brandingColor);
+            log.info("Successfully updated brand color {}", colors);
             return new ResponseEntity<>(new MessageResponse("Successfully Updated", brandingColor, false), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
@@ -63,11 +71,9 @@ public class BrandColorService {
     }
 
 
-
-
     public ResponseEntity<MessageResponse> getColorByBrandId(String brandId) {
         List<BrandingColor> brandingColors = brandColorRepository.findAllByBrandId(brandId);
-        return new ResponseEntity<>(new MessageResponse("Success", brandingColors, false), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, brandingColors, false), HttpStatus.OK);
     }
 
 

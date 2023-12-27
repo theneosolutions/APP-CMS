@@ -1,11 +1,11 @@
 package com.seulah.appdesign.controller;
 
-import com.seulah.appdesign.request.*;
-import com.seulah.appdesign.service.*;
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
+import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.service.BrandingLayoutService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/cms/brandingLayout")
@@ -19,16 +19,19 @@ public class BrandingLayoutController {
 
     @PostMapping("/createBrandingLayout")
     public ResponseEntity<MessageResponse> createBrandingLayout(@RequestParam String brandId, @RequestPart(value = "lottieFile") MultipartFile lottieFile) {
+        log.info("Creating branding layout Lottie files{}", lottieFile.getOriginalFilename());
         return brandingLayoutService.createBrandingLayout(brandId, lottieFile);
     }
 
     @PostMapping("/createBrandingLayoutIcon")
     public ResponseEntity<MessageResponse> createBrandingLayoutIcon(@RequestParam String brandId, @RequestPart(value = "icon") MultipartFile icon) {
+        log.info("Creating branding icon {}", icon.getOriginalFilename());
         return brandingLayoutService.createBrandingLayoutIcon(brandId, icon);
     }
 
     @DeleteMapping("/deleteBrandingLayout")
     public ResponseEntity<MessageResponse> deleteBrandingLayout(@RequestParam String id) {
+        log.info("deleting branding layout by id {}", id);
         return brandingLayoutService.deleteBrandingLayout(id);
     }
 

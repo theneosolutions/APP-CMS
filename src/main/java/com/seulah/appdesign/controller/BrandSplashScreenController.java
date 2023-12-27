@@ -30,20 +30,20 @@ public class BrandSplashScreenController {
 
     @PostMapping("/brandingSplashScreen")
     public ResponseEntity<MessageResponse> saveBrandingSplashScreen(@RequestPart(value = "file") MultipartFile splashScreenImage, @RequestParam String brandId) {
+        log.info("Saving brand splash screen against brand id {}", brandId);
         return brandSplashScreenService.saveBrandingSplashScreen(splashScreenImage, brandId);
     }
 
     @PostMapping("/brandingSliderScreen")
-    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam(value = "mainTittle") String mainTittle,@RequestParam(value ="brandId") String brandId,@RequestParam(value ="desc") String desc,@RequestParam(value ="title") String title,@RequestParam(value ="position")  String position, @RequestParam(value ="file") MultipartFile brandSliderScreenList ) throws IOException {
+    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam(value = "mainTittle") String mainTittle, @RequestParam(value = "brandId") String brandId, @RequestParam(value = "desc") String desc, @RequestParam(value = "title") String title, @RequestParam(value = "position") String position, @RequestParam(value = "file") MultipartFile brandSliderScreenList) throws IOException {
         byte[] fileBytes = brandSliderScreenList.getBytes();
-        // Convert the byte array to a String (you can modify this based on your use case)
         String fileContent = new String(fileBytes);
 
-        BrandSliderRequest brandSliderRequest = new BrandSliderRequest(title,desc,fileContent,position);
+        BrandSliderRequest brandSliderRequest = new BrandSliderRequest(title, desc, fileContent, position);
         List<BrandSliderRequest> brandSliderRequests = new ArrayList<>();
         brandSliderRequests.add(brandSliderRequest);
-        BrandSliderScreen brandSliderScreen = new BrandSliderScreen(mainTittle,brandSliderRequests,brandId);
-
+        BrandSliderScreen brandSliderScreen = new BrandSliderScreen(mainTittle, brandSliderRequests, brandId);
+        log.info("saved brand slider screen against brand id {}", brandId);
         return brandSplashScreenService.saveBrandingSliderScreen(brandSliderScreen);
     }
 
@@ -51,6 +51,7 @@ public class BrandSplashScreenController {
     public ResponseEntity<?> getBrandSliderScreenByBrandId(@RequestParam String brandId) {
         return ResponseEntity.ok().body(brandSplashScreenService.getBrandSliderScreenByBrandId(brandId));
     }
+
     @DeleteMapping(value = "/deleteById", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MessageResponse> deleteById(@RequestParam String id) {
         log.info("Delete By Id: {}", id);
@@ -60,7 +61,6 @@ public class BrandSplashScreenController {
     @GetMapping("/brandSplashScreen/getById")
     public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId) {
         HashMap<String, String> responseMap = new HashMap<>();
-        System.out.println(brandSplashScreenService.getBrandSplashScreenByBrandId(brandId));
         return ResponseEntity.ok().body(responseMap.put("SplashScreen", brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
     }
 

@@ -35,6 +35,7 @@ public class BrandLogoService {
     public ResponseEntity<MessageResponse> saveBrandingLogo(MultipartFile file, String brandId, int height, int width) {
         Optional<Branding> branding = brandingRepository.findById(brandId);
         if (branding.isEmpty()) {
+            log.error("data not found against brand id {}", brandId);
             return new ResponseEntity<>(new MessageResponse("No brand exist with this id", null, false), HttpStatus.BAD_REQUEST);
         }
         if (!getFileExtension(file).equalsIgnoreCase("png") && !getFileExtension(file).equalsIgnoreCase("svg")) {
@@ -47,6 +48,7 @@ public class BrandLogoService {
         }
         fileUploadService.uploadFile(file);
         saveToDatabase(file, brandId, height, width);
+        log.info("Brand logo saved successfully");
         return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
     }
 
@@ -61,7 +63,7 @@ public class BrandLogoService {
             String fileName = brandingLogo.getLogo();
             return fileUploadService.downloadFile(fileName);
         }
-        return null;
+        return new byte[0];
     }
 
 

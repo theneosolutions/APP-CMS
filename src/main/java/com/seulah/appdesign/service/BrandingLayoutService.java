@@ -7,6 +7,7 @@ import com.seulah.appdesign.repository.BrandingLayoutIconRepository;
 import com.seulah.appdesign.repository.BrandingLayoutRepository;
 import com.seulah.appdesign.repository.BrandingRepository;
 import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,8 @@ public class BrandingLayoutService {
         if (branding.isPresent()) {
             fileUploadService.uploadFile(lottieFile);
             saveToDatabase(brandId, lottieFile);
-            return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+            log.info("Created branding layout lottie file ");
+            return new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, null, false), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No record found against brand id", null, false), HttpStatus.OK);
     }
@@ -55,7 +57,7 @@ public class BrandingLayoutService {
         brandingLayout.setBrandId(brandId);
         brandingLayout.setLottieFiles(lottieFile.getOriginalFilename());
         brandingLayoutRepository.save(brandingLayout);
-
+        log.info("saved lottie file successfully");
     }
 
 
@@ -64,7 +66,8 @@ public class BrandingLayoutService {
         if (optionalBrandingLayout.isPresent()) {
             fileUploadService.deleteFile(optionalBrandingLayout.get().getLottieFiles());
             brandingLayoutRepository.delete(optionalBrandingLayout.get());
-            return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+            log.info("Deleted lottie file from database and s3 bucket");
+            return new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, null, false), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK);
     }
@@ -72,7 +75,7 @@ public class BrandingLayoutService {
 
     public ResponseEntity<MessageResponse> getBrandingLayoutById(String id) {
         Optional<BrandingLayout> brandingLayout = brandingLayoutRepository.findById(id);
-        return brandingLayout.map(layout -> new ResponseEntity<>(new MessageResponse("Success", layout, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
+        return brandingLayout.map(layout -> new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, layout, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
 
     }
 
@@ -114,7 +117,8 @@ public class BrandingLayoutService {
             }
             fileUploadService.uploadFile(icon);
             saveIconToDatabase(brandId, icon);
-            return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+            log.info("Created brand layout icon successfully");
+            return new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, null, false), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No record found against brand id", null, false), HttpStatus.OK);
     }
@@ -124,6 +128,7 @@ public class BrandingLayoutService {
         brandingLayoutIcon.setBrandId(brandId);
         brandingLayoutIcon.setIcon(icon.getOriginalFilename());
         brandingLayoutIconRepository.save(brandingLayoutIcon);
+        log.info("Saved icon successfully");
 
     }
 }
