@@ -1,12 +1,14 @@
 package com.seulah.appdesign.controller;
 
-import com.seulah.appdesign.request.*;
-import com.seulah.appdesign.service.*;
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
+import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.service.BrandColorService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -21,11 +23,13 @@ public class BrandColorController {
 
     @PostMapping("/brandingColor")
     public ResponseEntity<MessageResponse> saveBrandingColor(@RequestBody List<Map<String, String>> colors, @RequestParam String brandId) {
+        log.info("Saving brand Color {} against brand id :{}", colors, brandId);
         return brandColorService.saveBrandingColor(colors, brandId);
     }
 
     @GetMapping("/getColorByBrandId")
     public ResponseEntity<MessageResponse> getColorByBrandId(@RequestParam String brandId) {
+        log.info("Getting brand color brand id :{}", brandId);
         return brandColorService.getColorByBrandId(brandId);
     }
 
@@ -35,6 +39,4 @@ public class BrandColorController {
         log.info("Delete By Id: {}", id);
         return brandColorService.deleteById(id);
     }
-
-
 }

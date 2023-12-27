@@ -1,14 +1,28 @@
 package com.seulah.appdesign.service;
 
-import com.seulah.appdesign.entity.*;
-import com.seulah.appdesign.repository.*;
-import com.seulah.appdesign.request.*;
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.multipart.*;
 
-import java.io.*;
+import com.seulah.appdesign.entity.Branding;
+import com.seulah.appdesign.entity.BrandingFont;
+import com.seulah.appdesign.entity.FontFamily;
+import com.seulah.appdesign.repository.BrandFontRepository;
+import com.seulah.appdesign.repository.BrandingRepository;
+import com.seulah.appdesign.repository.FontFamilyRepository;
+import com.seulah.appdesign.request.MessageResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -21,10 +35,13 @@ public class BrandFontService {
 
     private final FileUploadService fileUploadService;
 
-    public BrandFontService(BrandFontRepository brandFontRepository, BrandingRepository brandingRepository, FileUploadService fileUploadService) {
+    private final FontFamilyRepository fontFamilyRepository;
+
+    public BrandFontService(BrandFontRepository brandFontRepository, BrandingRepository brandingRepository, FileUploadService fileUploadService, FontFamilyRepository fontFamilyRepository) {
         this.brandFontRepository = brandFontRepository;
         this.brandingRepository = brandingRepository;
         this.fileUploadService = fileUploadService;
+        this.fontFamilyRepository = fontFamilyRepository;
     }
 
 
@@ -35,8 +52,10 @@ public class BrandFontService {
                 fileUploadService.uploadFile(file);
                 saveToDatabase(file, file.getOriginalFilename(), brandId);
             }
+            log.info("Saved brand font data successfully");
             return new ResponseEntity<>(new MessageResponse("Successfully Uploaded", null, false), HttpStatus.OK);
         }
+        log.info("No data found against brand id {}", brandId);
         return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
     }
 
@@ -61,6 +80,7 @@ public class BrandFontService {
                 brandFontRepository.delete(font);
 
             });
+            log.info("delete brand font from database");
             return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
         }
 
@@ -95,6 +115,87 @@ public class BrandFontService {
         return result;
     }
 
+
+    public ResponseEntity<MessageResponse> saveFontFamily(String brandId, Object response) {
+        FontFamily fontFamily = new FontFamily();
+        fontFamily.setBrandId(brandId);
+        fontFamily.setResponse(response);
+        fontFamily = fontFamilyRepository.save(fontFamily);
+
+
+        try {
+            Map<String, Object> jsonResponse = (Map<String, Object>) ((LinkedHashMap) fontFamily.getResponse()).get("files");
+            Object menuUrls = ((LinkedHashMap) fontFamily.getResponse()).get("menu");
+
+            List<String> urls = extractUrls(jsonResponse);
+            List<String> menuUrl = extractUrlsForObject(menuUrls);
+
+            urls.forEach(this::downloadFile);
+            menuUrl.forEach(this::downloadFile);
+        } catch (Exception e) {
+            log.error("Exception during getting URL", e);
+            return new ResponseEntity<>(new MessageResponse("Error processing URLs", fontFamily, true), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(new MessageResponse("Font Family Saved Successfully", fontFamily, false), HttpStatus.OK);
+    }
+
+    public static List<String> extractUrls(Map<String, Object> files) {
+        List<String> urls = new ArrayList<>();
+
+        for (Map.Entry<String, Object> entry : files.entrySet()) {
+            Object fileUrlObject = entry.getValue();
+
+            if (fileUrlObject instanceof String) {
+                String fileUrl = (String) fileUrlObject;
+
+                if (fileUrl.contains("http")) {
+                    String url = fileUrl.substring(fileUrl.indexOf("http"), fileUrl.indexOf("ttf")) + "ttf";
+                    urls.add(url);
+                }
+            }
+        }
+
+        return urls;
+    }
+
+    public static List<String> extractUrlsForObject(Object files) {
+        List<String> urls = new ArrayList<>();
+        if (files instanceof String) {
+            String fileUrl = (String) files;
+
+            if (fileUrl.contains("http")) {
+                String url = fileUrl.substring(fileUrl.indexOf("http"), fileUrl.indexOf("ttf")) + "ttf";
+                urls.add(url);
+            }
+        }
+
+        return urls;
+    }
+
+    private void downloadFile(String fileUrl) {
+        try {
+            String destinationPath = "C:\\Users\\Public\\Downloads";
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<byte[]> response = restTemplate.getForEntity(fileUrl, byte[].class);
+            byte[] fileBytes = response.getBody();
+            if (fileBytes != null) {
+                saveToFile(fileBytes, destinationPath);
+                log.info("File downloaded successfully.");
+            } else {
+                log.error("File download failed. Response body is empty.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void saveToFile(byte[] fileBytes, String destinationFilePath) throws IOException {
+        Path destinationPath = Paths.get(destinationFilePath);
+        try (FileOutputStream fos = new FileOutputStream(destinationPath.toFile())) {
+            FileCopyUtils.copy(fileBytes, fos);
+        }
+    }
 
 }
 
