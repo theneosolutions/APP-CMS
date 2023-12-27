@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/cms/brandColor")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
 public class BrandColorController {
     private final BrandColorService brandColorService;
 

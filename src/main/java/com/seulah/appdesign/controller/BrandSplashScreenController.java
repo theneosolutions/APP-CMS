@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/cms/brandSplashScreen")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
 public class BrandSplashScreenController {
     private final BrandSplashScreenService brandSplashScreenService;
 
