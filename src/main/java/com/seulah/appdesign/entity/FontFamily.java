@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+
 /**
  * @author Muhammad Mansoor
  */
@@ -20,5 +22,5 @@ public class FontFamily {
 
     private String brandId;
 
-    private Object response;
+    private List<Object> response;
 }

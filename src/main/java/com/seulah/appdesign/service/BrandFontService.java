@@ -14,15 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.*;
 
 
@@ -117,27 +113,60 @@ public class BrandFontService {
 
 
     public ResponseEntity<MessageResponse> saveFontFamily(String brandId, Object response) {
-        FontFamily fontFamily = new FontFamily();
+
+        FontFamily fontFamily = fontFamilyRepository.findByBrandId(brandId);
+        if (fontFamily == null) {
+            fontFamily = new FontFamily();
+        }
         fontFamily.setBrandId(brandId);
-        fontFamily.setResponse(response);
+        if (fontFamily.getResponse() == null || fontFamily.getResponse().isEmpty()) {
+            fontFamily.setResponse(Collections.singletonList(response));
+        } else {
+            fontFamily.getResponse().add(response);
+        }
         fontFamily = fontFamilyRepository.save(fontFamily);
 
-
-        try {
-            Map<String, Object> jsonResponse = (Map<String, Object>) ((LinkedHashMap) fontFamily.getResponse()).get("files");
-            Object menuUrls = ((LinkedHashMap) fontFamily.getResponse()).get("menu");
-
-            List<String> urls = extractUrls(jsonResponse);
-            List<String> menuUrl = extractUrlsForObject(menuUrls);
-
-            urls.forEach(this::downloadFile);
-            menuUrl.forEach(this::downloadFile);
-        } catch (Exception e) {
-            log.error("Exception during getting URL", e);
-            return new ResponseEntity<>(new MessageResponse("Error processing URLs", fontFamily, true), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
         return new ResponseEntity<>(new MessageResponse("Font Family Saved Successfully", fontFamily, false), HttpStatus.OK);
+    }
+
+    public ResponseEntity<MessageResponse> getFontFile(String brandId) {
+        FontFamily fontFamily = fontFamilyRepository.findByBrandId(brandId);
+        if (fontFamily != null) {
+            List<String> responses = new ArrayList<>();
+            try {
+                fontFamily.getResponse().forEach(response -> {
+
+
+                    Map<String, Object> jsonResponse = (Map<String, Object>) ((LinkedHashMap) response).get("files");
+                    Object menuUrls = ((LinkedHashMap) response).get("menu");
+
+                    List<String> urls = extractUrls(jsonResponse);
+                    List<String> menuUrl = extractUrlsForObject(menuUrls);
+                    urls.forEach(url -> {
+                        try {
+                            responses.add(getBase64EncodedImage(url));
+                        } catch (IOException e) {
+                            log.info("Exception", e);
+                        }
+                    });
+
+                    menuUrl.forEach(url -> {
+                        try {
+                            responses.add(getBase64EncodedImage(url));
+                        } catch (IOException e) {
+                            log.info("Exception", e);
+                        }
+                    });
+
+                });
+            } catch (Exception e) {
+                log.error("Exception during getting URL", e);
+                return new ResponseEntity<>(new MessageResponse("Error processing URLs", null, true), HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(new MessageResponse("Success", responses, true), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new MessageResponse("NO_RECORD_FOUND", null, true), HttpStatus.BAD_REQUEST);
+
     }
 
     public static List<String> extractUrls(Map<String, Object> files) {
@@ -173,29 +202,21 @@ public class BrandFontService {
         return urls;
     }
 
-    private void downloadFile(String fileUrl) {
-        try {
-            String destinationPath = "C:\\Users\\Public\\Downloads";
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<byte[]> response = restTemplate.getForEntity(fileUrl, byte[].class);
-            byte[] fileBytes = response.getBody();
-            if (fileBytes != null) {
-                saveToFile(fileBytes, destinationPath);
-                log.info("File downloaded successfully.");
-            } else {
-                log.error("File download failed. Response body is empty.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+    public String getBase64EncodedImage(String uri) throws IOException {
+        java.net.URL url = new java.net.URL(uri);
+        InputStream is = url.openStream();
+        byte[] bytes = org.apache.commons.io.IOUtils.toByteArray(is);
+        return Base64.getEncoder().encodeToString(bytes);
     }
 
-    private static void saveToFile(byte[] fileBytes, String destinationFilePath) throws IOException {
-        Path destinationPath = Paths.get(destinationFilePath);
-        try (FileOutputStream fos = new FileOutputStream(destinationPath.toFile())) {
-            FileCopyUtils.copy(fileBytes, fos);
-        }
-    }
 
+    public ResponseEntity<MessageResponse> getFontFamilyForAdmin(String brandId) {
+        FontFamily fontFamily = fontFamilyRepository.findByBrandId(brandId);
+        if (fontFamily != null) {
+            return new ResponseEntity<>(new MessageResponse("Success", fontFamily, true), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new MessageResponse("No Record Found", null, true), HttpStatus.OK);
+    }
 }
 

@@ -43,8 +43,19 @@ public class BrandFontController {
     @PostMapping("/saveFontFamily")
     public ResponseEntity<MessageResponse> saveFontFamily(@RequestParam String brandId, @RequestBody Object response) {
         log.info("Saving Font family against brand id {}", response);
-        new Thread(() -> brandFontService.saveFontFamily(brandId, response)).start();
-        return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+        return brandFontService.saveFontFamily(brandId, response);
+
+    }
+
+    @GetMapping("/fontFamily/getFontFamily")
+    public ResponseEntity<MessageResponse> getFontFamily(@RequestParam String brandId) {
+        log.info("Getting font Family by brand id {} ", brandId);
+        return brandFontService.getFontFile(brandId);
+    }
+    @GetMapping("/fontFamily/getFontFamilyForAdmin")
+    public ResponseEntity<MessageResponse> getFontFamilyForAdmin(@RequestParam String brandId) {
+        log.info("Getting font Family by brand id {} ", brandId);
+        return brandFontService.getFontFamilyForAdmin(brandId);
     }
 
 
