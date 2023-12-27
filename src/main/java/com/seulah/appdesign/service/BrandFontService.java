@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import static com.seulah.appdesign.utils.Constants.SUCCESS;
+
 
 @Service
 @Slf4j
@@ -77,7 +79,7 @@ public class BrandFontService {
 
             });
             log.info("delete brand font from database");
-            return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
+            return new ResponseEntity<>(new MessageResponse(SUCCESS, null, false), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK);
@@ -161,9 +163,8 @@ public class BrandFontService {
                 });
             } catch (Exception e) {
                 log.error("Exception during getting URL", e);
-                return new ResponseEntity<>(new MessageResponse("Error processing URLs", null, true), HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(new MessageResponse("Success", responses, true), HttpStatus.OK);
+            return new ResponseEntity<>(new MessageResponse(SUCCESS, responses, true), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("NO_RECORD_FOUND", null, true), HttpStatus.BAD_REQUEST);
 
@@ -214,7 +215,7 @@ public class BrandFontService {
     public ResponseEntity<MessageResponse> getFontFamilyForAdmin(String brandId) {
         FontFamily fontFamily = fontFamilyRepository.findByBrandId(brandId);
         if (fontFamily != null) {
-            return new ResponseEntity<>(new MessageResponse("Success", fontFamily, true), HttpStatus.OK);
+            return new ResponseEntity<>(new MessageResponse(SUCCESS, fontFamily, true), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageResponse("No Record Found", null, true), HttpStatus.OK);
     }
