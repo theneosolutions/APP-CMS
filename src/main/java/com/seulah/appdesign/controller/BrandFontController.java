@@ -3,7 +3,6 @@ package com.seulah.appdesign.controller;
 import com.seulah.appdesign.request.MessageResponse;
 import com.seulah.appdesign.service.BrandFontService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +51,7 @@ public class BrandFontController {
         log.info("Getting font Family by brand id {} ", brandId);
         return brandFontService.getFontFile(brandId);
     }
+
     @GetMapping("/fontFamily/getFontFamilyForAdmin")
     public ResponseEntity<MessageResponse> getFontFamilyForAdmin(@RequestParam String brandId) {
         log.info("Getting font Family by brand id {} ", brandId);

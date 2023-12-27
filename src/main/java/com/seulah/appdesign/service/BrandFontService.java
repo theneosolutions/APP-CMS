@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.seulah.appdesign.utils.Constants.SUCCESS;
 
@@ -124,6 +125,11 @@ public class BrandFontService {
         if (fontFamily.getResponse() == null || fontFamily.getResponse().isEmpty()) {
             fontFamily.setResponse(Collections.singletonList(response));
         } else {
+            AtomicReference<Boolean> flag = new AtomicReference<>(false);
+            fontFamily.getResponse().stream().filter(res -> res.equals(response)).forEach(r -> flag.set(Boolean.TRUE));
+            if (Boolean.TRUE.equals(flag.get())) {
+                return new ResponseEntity<>(new MessageResponse("Already Exist", null, false), HttpStatus.OK);
+            }
             fontFamily.getResponse().add(response);
         }
         fontFamily = fontFamilyRepository.save(fontFamily);
