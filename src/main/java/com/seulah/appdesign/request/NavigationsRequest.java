@@ -15,4 +15,7 @@ public class NavigationsRequest {
     private String bottomTab;
 
     private String drawer;
+
+
+    private String langCode;
 }

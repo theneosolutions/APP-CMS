@@ -8,4 +8,5 @@ public final class Constants {
 
     public static final String SUCCESS = "Success";
     public static final String SUCCESSFULLY_UPDATED = "Successfully Updated";
+    public static final String NO_RECORD_FOUND = "No Record Found";
 }

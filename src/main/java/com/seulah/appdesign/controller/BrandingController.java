@@ -9,8 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/cms/branding")
@@ -23,9 +21,9 @@ public class BrandingController {
     }
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> saveBranding(@RequestParam String brandName) {
+    public ResponseEntity<MessageResponse> saveBranding(@RequestParam String brandName, @RequestParam(required = false) String langCode) {
         log.info("Saving Branding {}", brandName);
-        return brandingService.saveBranding(brandName);
+        return brandingService.saveBranding(brandName, langCode);
     }
 
 
@@ -48,9 +46,9 @@ public class BrandingController {
     }
 
     @PutMapping(value = "/updateById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> updateById(@RequestParam String id, @RequestParam String brandName) {
+    public ResponseEntity<MessageResponse> updateById(@RequestParam String id, @RequestParam String brandName, @RequestParam(required = false) String langCode) {
         log.info("Update Branding {} By Id {}", brandName, id);
-        return brandingService.updateById(id, brandName);
+        return brandingService.updateById(id, brandName, langCode);
     }
 
     @GetMapping(value = "/getBrandDetail", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,9 +58,15 @@ public class BrandingController {
     }
 
     @GetMapping(value = "/getBrandDetailByName", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BrandDetailResponse> getBrandDetailByBrandName(@RequestParam String brandName) throws IOException {
+    public ResponseEntity<BrandDetailResponse> getBrandDetailByBrandName(@RequestParam String brandName) {
         log.info("Getting Branding Detail By Brand Name {}", brandName);
         return brandingService.getBrandDetailByBrandName(brandName);
+    }
+
+    @GetMapping(value = "/getBrandsByLangCode", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> getBrandsByLangCode(@RequestParam String languageCode) {
+        log.info("Getting Brands By LanguageCode {}", languageCode);
+        return brandingService.getBrandsByLangCode(languageCode);
     }
 
 }

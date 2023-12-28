@@ -20,5 +20,7 @@ public class Branding {
     @Indexed(unique = true, background = true)
     private String brandName;
 
+    private String languageCode;
+
 
 }

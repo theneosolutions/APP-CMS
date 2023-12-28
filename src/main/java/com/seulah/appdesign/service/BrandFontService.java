@@ -48,7 +48,11 @@ public class BrandFontService {
         Optional<Branding> brandingOptional = brandingRepository.findById(brandId);
         if (brandingOptional.isPresent()) {
             for (MultipartFile file : fontFiles) {
-                fileUploadService.uploadFile(file);
+                try {
+                    fileUploadService.uploadFile(file);
+                } catch (Exception e) {
+                    log.error("Exception during upload file ", e);
+                }
                 saveToDatabase(file, file.getOriginalFilename(), brandId);
             }
             log.info("Saved brand font data successfully");

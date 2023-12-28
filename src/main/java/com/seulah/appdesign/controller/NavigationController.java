@@ -37,6 +37,11 @@ public class NavigationController {
         log.info("Get All ");
         return navigationService.getAll();
     }
+    @GetMapping(value = "/getAllByLanguageCode", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> getAllByLanguageCode(@RequestParam String langCode) {
+        log.info("Get All by language code :{}",langCode);
+        return navigationService.getAllByLanguageCode(langCode);
+    }
 
     @DeleteMapping(value = "/deleteById", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MessageResponse> deleteById(@RequestParam String id) {

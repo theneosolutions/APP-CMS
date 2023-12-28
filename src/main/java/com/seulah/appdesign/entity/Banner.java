@@ -1,8 +1,11 @@
 package com.seulah.appdesign.entity;
 
-import lombok.*;
-import org.springframework.data.annotation.*;
-import org.springframework.data.mongodb.core.mapping.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
@@ -19,5 +22,7 @@ public class Banner {
 
     private int height;
     private int width;
+
+    private String languageCode;
 
 }
