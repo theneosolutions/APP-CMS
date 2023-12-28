@@ -6,7 +6,6 @@ import com.seulah.appdesign.repository.*;
 import com.seulah.appdesign.request.BrandDetailResponse;
 import com.seulah.appdesign.request.LayoutDetail;
 import com.seulah.appdesign.request.MessageResponse;
-import com.seulah.appdesign.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+
+import static com.seulah.appdesign.utils.Constants.SUCCESS;
 
 
 @Service
@@ -45,7 +46,7 @@ public class BrandingService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBranding(String brandingName) {
+    public ResponseEntity<MessageResponse> saveBranding(String brandingName, String langCode) {
         Branding branding = brandingRepository.findByBrandName(brandingName);
         if (branding != null) {
             log.info("Same brand name already exist in database");
@@ -53,6 +54,11 @@ public class BrandingService {
         }
         branding = new Branding();
         branding.setBrandName(brandingName);
+        if (langCode == null || langCode.isEmpty()) {
+            branding.setLanguageCode("en");
+        } else {
+            branding.setLanguageCode(langCode);
+        }
         branding = brandingRepository.save(branding);
         log.info("brand saved successfully");
         return new ResponseEntity<>(new MessageResponse("Successfully Created App Design", branding, false), HttpStatus.CREATED);
@@ -60,26 +66,26 @@ public class BrandingService {
 
     public ResponseEntity<MessageResponse> getBrandingById(String id) {
         Optional<Branding> appDesign = brandingRepository.findById(id);
-        return appDesign.map(design -> new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, design, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
+        return appDesign.map(design -> new ResponseEntity<>(new MessageResponse(SUCCESS, design, false), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK));
 
     }
 
     public ResponseEntity<MessageResponse> getAll() {
         List<Branding> brandingList = brandingRepository.findAll();
-        return new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, brandingList, false), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse(SUCCESS, brandingList, false), HttpStatus.OK);
     }
 
     public ResponseEntity<MessageResponse> deleteById(String id) {
         Optional<Branding> appDesign = brandingRepository.findById(id);
         if (appDesign.isPresent()) {
             brandingRepository.delete(appDesign.get());
-            return new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, null, false), HttpStatus.OK);
+            return new ResponseEntity<>(new MessageResponse(SUCCESS, null, false), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new MessageResponse("No Record Found", null, false), HttpStatus.OK);
     }
 
-    public ResponseEntity<MessageResponse> updateById(String id, String brandName) {
+    public ResponseEntity<MessageResponse> updateById(String id, String brandName, String langCode) {
         Optional<Branding> appDesignOptional = brandingRepository.findById(id);
         if (appDesignOptional.isEmpty()) {
             log.info("Data not found against the brand id {}", id);
@@ -88,6 +94,10 @@ public class BrandingService {
         Branding branding = appDesignOptional.get();
         if (brandName != null && !brandName.isEmpty()) {
             branding.setBrandName(brandName);
+        }
+
+        if (langCode != null && !langCode.isEmpty()) {
+            branding.setLanguageCode(langCode);
         }
 
         branding = brandingRepository.save(branding);
@@ -141,5 +151,10 @@ public class BrandingService {
             return getBrandDetail(branding.getId());
         }
         return null;
+    }
+
+    public ResponseEntity<MessageResponse> getBrandsByLangCode(String languageCode) {
+        List<Branding> brandingList = brandingRepository.findByLanguageCode(languageCode.toLowerCase());
+        return new ResponseEntity<>(new MessageResponse(SUCCESS, brandingList, false), HttpStatus.OK);
     }
 }

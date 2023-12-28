@@ -31,6 +31,11 @@ public class DesignComponentService {
 
     public ResponseEntity<MessageResponse> saveDesignComponent(DesignComponentRequest designComponentRequest) {
         DesignComponent designComponent = new DesignComponent();
+        if (designComponentRequest.getLangCode() == null || designComponentRequest.getLangCode().isEmpty()) {
+            designComponent.setLanguageCode("en");
+        } else {
+            designComponent.setLanguageCode(designComponentRequest.getLangCode().toLowerCase());
+        }
         designComponent.setComponents(designComponentRequest.getComponents());
         designComponent.setSizeRedisCard(designComponentRequest.getSizeRedisCard());
         designComponent = designComponentRepository.save(designComponent);

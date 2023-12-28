@@ -24,9 +24,14 @@ public class NavigationService {
     }
 
     public ResponseEntity<MessageResponse> saveNavigation(NavigationsRequest navigationsRequest) {
-        Navigations navigations = new Navigations();
 
+        Navigations navigations = new Navigations();
         navigations.setNavbar(navigationsRequest.getNavbar());
+        if (navigationsRequest.getLangCode() == null || navigationsRequest.getLangCode().isEmpty()) {
+            navigations.setLanguageCode("en");
+        } else {
+            navigations.setLanguageCode(navigationsRequest.getLangCode().toLowerCase());
+        }
         navigations.setBottomTab(navigationsRequest.getBottomTab());
         navigations.setDrawer(navigationsRequest.getDrawer());
         navigations = navigationRepository.save(navigations);
@@ -69,10 +74,18 @@ public class NavigationService {
             if (navigationsRequest.getDrawer() != null && !navigationsRequest.getDrawer().isEmpty()) {
                 navigationsOptional.get().setDrawer(navigationsRequest.getDrawer());
             }
+            if (navigationsRequest.getLangCode() != null && !navigationsRequest.getLangCode().isEmpty()) {
+                navigationsOptional.get().setLanguageCode(navigationsRequest.getLangCode());
+            }
             log.info("Navigation updated successfully {}", navigationsOptional);
             return new ResponseEntity<>(new MessageResponse("Successfully Updated", navigationRepository.save(navigationsOptional.get()), false), HttpStatus.OK);
         }
         log.info("Record does not exist in the database");
         return new ResponseEntity<>(new MessageResponse("No Record Found Against this Id", null, false), HttpStatus.OK);
+    }
+
+    public ResponseEntity<MessageResponse> getAllByLanguageCode(String langCode) {
+        List<Navigations> navigationsList = navigationRepository.findByLanguageCode(langCode.toLowerCase());
+        return new ResponseEntity<>(new MessageResponse(SUCCESS, navigationsList, false), HttpStatus.OK);
     }
 }

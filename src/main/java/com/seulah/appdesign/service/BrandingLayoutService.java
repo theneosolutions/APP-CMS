@@ -44,7 +44,11 @@ public class BrandingLayoutService {
     public ResponseEntity<MessageResponse> createBrandingLayout(String brandId, MultipartFile lottieFile) {
         Optional<Branding> branding = brandingRepository.findById(brandId);
         if (branding.isPresent()) {
-            fileUploadService.uploadFile(lottieFile);
+            try {
+                fileUploadService.uploadFile(lottieFile);
+            } catch (Exception e) {
+                log.error("Exception during uploading file ", e);
+            }
             saveToDatabase(brandId, lottieFile);
             log.info("Created branding layout lottie file ");
             return new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, null, false), HttpStatus.OK);
@@ -115,7 +119,11 @@ public class BrandingLayoutService {
                 log.error("Only ICO images are allowed.");
                 return new ResponseEntity<>(new MessageResponse("Only ICO images are allowed. ", null, false), HttpStatus.BAD_REQUEST);
             }
-            fileUploadService.uploadFile(icon);
+            try {
+                fileUploadService.uploadFile(icon);
+            } catch (Exception e) {
+                log.error("Exception during uploading file ", e);
+            }
             saveIconToDatabase(brandId, icon);
             log.info("Created brand layout icon successfully");
             return new ResponseEntity<>(new MessageResponse(Constants.SUCCESS, null, false), HttpStatus.OK);

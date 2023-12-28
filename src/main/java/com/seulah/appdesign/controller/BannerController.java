@@ -20,9 +20,9 @@ public class BannerController {
     }
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageResponse> saveBanner(@RequestParam String bannerDesign, @RequestPart MultipartFile bannerImage, @RequestParam int height, @RequestParam int width) {
+    public ResponseEntity<MessageResponse> saveBanner(@RequestParam String bannerDesign, @RequestPart MultipartFile bannerImage, @RequestParam int height, @RequestParam int width,@RequestParam(required = false) String langCode) {
         log.info("Saving Banner {} , height {}, width {}", bannerDesign, height, width);
-        return bannerService.saveBanner(bannerImage, bannerDesign, height, width);
+        return bannerService.saveBanner(bannerImage, bannerDesign, height, width,langCode);
     }
 
 
@@ -30,6 +30,12 @@ public class BannerController {
     public ResponseEntity<MessageResponse> getBannerByID(@RequestParam String id) {
         log.info("Get By Id: {}", id);
         return bannerService.getBannerByID(id);
+    }
+
+    @GetMapping(value = "/getBannerByLanguageCode", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> getBannerByLanguageCode(@RequestParam String langCode) {
+        log.info("Get By Language code : {}", langCode);
+        return bannerService.getBannerByLanguageCode(langCode);
     }
 
     @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)

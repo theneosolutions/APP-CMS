@@ -13,4 +13,6 @@ import lombok.Setter;
 public class DesignComponentRequest {
     private String sizeRedisCard;
     private String components;
+
+    private String langCode;
 }

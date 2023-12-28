@@ -46,7 +46,11 @@ public class BrandLogoService {
         if (brandingLogo != null) {
             fileUploadService.deleteFile(brandingLogo.getLogo());
         }
-        fileUploadService.uploadFile(file);
+        try {
+            fileUploadService.uploadFile(file);
+        } catch (Exception e) {
+            log.error("Exception during uploading file ", e);
+        }
         saveToDatabase(file, brandId, height, width);
         log.info("Brand logo saved successfully");
         return new ResponseEntity<>(new MessageResponse("Success", null, false), HttpStatus.OK);
