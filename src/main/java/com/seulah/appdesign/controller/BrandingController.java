@@ -14,7 +14,7 @@ import java.io.IOException;
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/cms/branding")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","http://localhost:8085"}, maxAge = 3600, allowCredentials = "true")
 public class BrandingController {
     private final BrandingService brandingService;
 
