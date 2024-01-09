@@ -2,6 +2,9 @@ package com.seulah.appdesign.apicontroller.selaaapi.service;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seulah.appdesign.apicontroller.selaaapi.dto.ApiResponse;
+import com.seulah.appdesign.apicontroller.selaaapi.dto.OperationsBuyResponse;
+import com.seulah.appdesign.apicontroller.selaaapi.dto.OperationsTransferResponse;
 import com.seulah.appdesign.apicontroller.selaaapi.repo.OperationBuyRepository;
 import com.seulah.appdesign.apicontroller.selaaapi.repo.OperationTransferRepository;
 import com.seulah.appdesign.apicontroller.selaaapi.request.OperationsBuyRequest;
@@ -10,6 +13,7 @@ import com.seulah.appdesign.apicontroller.selaaapi.dto.ApiResponse;
 import com.seulah.appdesign.apicontroller.selaaapi.dto.OperationsBuyResponse;
 import com.seulah.appdesign.apicontroller.selaaapi.dto.OperationsTransferResponse;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +24,7 @@ import java.util.Objects;
 
 
 @Service
+@Slf4j
 public class OperationsBuyService {
     private final RestTemplate restTemplate;
     private final OperationBuyRepository operationBuyRepository;
@@ -71,12 +76,16 @@ public class OperationsBuyService {
 
         // Build the URI with parameters if needed
         String url = "https://devapi.selaa.sa/operations/transfer";
+        ResponseEntity<String> response = null;
         HttpEntity<OperationsTransferRequest> requestEntity = new HttpEntity<>(operationsTransferRequest, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
-        System.out.println(response.getBody());
+        try {
+            response = restTemplate.postForEntity(url, requestEntity, String.class);
+        } catch (Exception e) {
+            log.error("Exception", e);
+        }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            OperationsTransferResponse responseObject = objectMapper.readValue(response.getBody(), OperationsTransferResponse.class);
+            OperationsTransferResponse responseObject = objectMapper.readValue(response != null && response.getBody() != null ? response.getBody() : "", OperationsTransferResponse.class);
 
             saveTransferDataToDatabase(responseObject);
 

@@ -19,4 +19,6 @@ public class DesignComponent {
 
     private String sizeRedisCard;
     private String components;
+
+    private String languageCode;
 }

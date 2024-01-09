@@ -21,4 +21,6 @@ public class Navigations {
     private String bottomTab;
 
     private String drawer;
+
+    private String languageCode;
 }
