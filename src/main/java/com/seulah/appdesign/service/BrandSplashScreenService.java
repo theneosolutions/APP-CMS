@@ -1,5 +1,7 @@
 package com.seulah.appdesign.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seulah.appdesign.entity.BrandSliderScreen;
 import com.seulah.appdesign.entity.Branding;
 import com.seulah.appdesign.entity.BrandingSplashScreen;
@@ -91,29 +93,27 @@ public class BrandSplashScreenService {
     }
 
 
-    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(BrandSliderScreen brandSliderScreen) {
-        Optional<BrandSliderScreen> branding = brandSliderScreenRepository.findByMainTittle(brandSliderScreen.getMainTittle());
-        boolean value = branding.get().getBrandSliderScreenList().stream()
-                .anyMatch(e -> e.getPosition().equals(brandSliderScreen.getBrandSliderScreenList().get(0).getPosition()));
-        if (branding.isPresent()) {
+    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(BrandSliderScreen brandSliderScreen,String pos) {
+       BrandSliderScreen branding = brandSliderScreenRepository.findByMainTittle(brandSliderScreen.getMainTittle());
+        if (branding!=null) {
             // fileUploadService.uploadFile(splashScreenImage);
             try {
-
-                if(value){
-                    return new ResponseEntity<>(new MessageResponse("Position is already exist", null, false), HttpStatus.FOUND);
-                }
-                branding.get().getBrandSliderScreenList().addAll(brandSliderScreen.getBrandSliderScreenList());
-                sliderSaveToDatabase(branding.get());
-                return new ResponseEntity<>(new MessageResponse("Record has been saved", null, false), HttpStatus.OK);
+               for(BrandSliderRequest items : branding.getBrandSliderScreenList()){
+                   if(items.getPosition().equals(pos)){
+                       return new ResponseEntity<>(new MessageResponse("Position is already exist", null, false), HttpStatus.OK);
+                   }
+               }
+                branding.getBrandSliderScreenList().addAll(brandSliderScreen.getBrandSliderScreenList());
+                sliderSaveToDatabase(branding);
+                return new ResponseEntity<>(new MessageResponse("Record has been updated", null, false), HttpStatus.OK);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }else {
-            branding.get().getBrandSliderScreenList().addAll(brandSliderScreen.getBrandSliderScreenList());
-            sliderSaveToDatabase(branding.get());
-            return new ResponseEntity<>(new MessageResponse("Record has been saved", null, false), HttpStatus.OK);
+            sliderSaveToDatabase(brandSliderScreen);
+            return new ResponseEntity<>(new MessageResponse("New Record has been saved", null, false), HttpStatus.OK);
 
         }
         return new ResponseEntity<>(new MessageResponse("Something Went Wrong", null, false), HttpStatus.BAD_GATEWAY);
@@ -126,6 +126,7 @@ public class BrandSplashScreenService {
     }
     public String getBrandSplashScreenByBrandId(String brandId) {
         BrandingSplashScreen brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId).orElse(null);
+
         if (brandingSplashScreen != null) {
             return brandingSplashScreen.getSplashScreen();
         }

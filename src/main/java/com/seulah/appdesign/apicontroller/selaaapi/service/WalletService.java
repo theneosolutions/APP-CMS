@@ -2,8 +2,10 @@ package com.seulah.appdesign.apicontroller.selaaapi.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seulah.appdesign.apicontroller.selaaapi.dto.TopUpWalletAmount;
 import com.seulah.appdesign.apicontroller.selaaapi.dto.WalletBalance;
 import com.seulah.appdesign.apicontroller.selaaapi.repo.WalletGetBalanceRepository;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,16 +21,16 @@ public class WalletService {
     private final RestTemplate restTemplate;
     private final WalletGetBalanceRepository walletGetBalanceRepository;
 
-    public WalletService(RestTemplate restTemplate, WalletGetBalanceRepository walletGetBalanceRepository) {
-        this.restTemplate = restTemplate;
+    public WalletService(RestTemplateBuilder restTemplateBuilder, WalletGetBalanceRepository walletGetBalanceRepository) {
+        this.restTemplate = restTemplateBuilder
+                .basicAuthentication("b2a46063-5a53-41aa-aac5-b10439b4ffc0", "4fc58273-3169-4073-a2a6-21f54c397ab3")
+                .build();
         this.walletGetBalanceRepository = walletGetBalanceRepository;
     }
 
     public ResponseEntity<?> getWalletBalance() {
             HttpHeaders headers = new HttpHeaders();
             headers.set("accept", "application/json");
-            headers.set("Authorization", "Basic YjJhNDYwNjMtNWE1My00MWFhLWFhYzUtYjEwNDM5YjRmZmMwOjRmYzU4MjczLTMxNjktNDA3My1hMmE2LTIxZjU0YzM5N2FiMw==");
-
             // Build the URI with parameters if needed
             String url = "https://devapi.selaa.sa/wallets/getWalletBalance";
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -52,11 +54,9 @@ public class WalletService {
         walletGetBalanceRepository.save(responseObject);
     }
 
-    public ResponseEntity<?> topupWalletAmount(Object obj) {
+    public ResponseEntity<?> topupWalletAmount(TopUpWalletAmount obj) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
-        headers.set("Authorization", "Basic YjJhNDYwNjMtNWE1My00MWFhLWFhYzUtYjEwNDM5YjRmZmMwOjRmYzU4MjczLTMxNjktNDA3My1hMmE2LTIxZjU0YzM5N2FiMw==");
-
         // Build the URI with parameters if needed
         String url = "https://devapi.selaa.sa/wallets/topupWalletAmount";
         HttpEntity<Object> requestEntity = new HttpEntity<>(obj,headers);

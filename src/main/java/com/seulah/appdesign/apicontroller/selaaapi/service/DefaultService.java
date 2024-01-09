@@ -7,10 +7,12 @@ import com.seulah.appdesign.apicontroller.selaaapi.dto.DefaultHistoryMain;
 import com.seulah.appdesign.apicontroller.selaaapi.repo.DefaultHistoryRepository;
 import com.seulah.appdesign.apicontroller.selaaapi.repo.DefaultTransactionRepository;
 import com.seulah.appdesign.apicontroller.selaaapi.dto.DefaultTransaction;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,8 +24,10 @@ public class DefaultService {
     private final DefaultTransactionRepository defaultTransactionReposiotry;
     private final DefaultHistoryRepository defaultHistoryMain;
 
-    public DefaultService(RestTemplate restTemplate, DefaultTransactionRepository defaultTransactionReposiotry, DefaultHistoryRepository defaultHistoryMain) {
-        this.restTemplate = restTemplate;
+    public DefaultService(RestTemplateBuilder restTemplateBuilder, DefaultTransactionRepository defaultTransactionReposiotry, DefaultHistoryRepository defaultHistoryMain) {
+        this.restTemplate = restTemplateBuilder
+                .basicAuthentication("b2a46063-5a53-41aa-aac5-b10439b4ffc0", "4fc58273-3169-4073-a2a6-21f54c397ab3")
+                .build();
         this.defaultTransactionReposiotry = defaultTransactionReposiotry;
         this.defaultHistoryMain = defaultHistoryMain;
     }
@@ -31,8 +35,6 @@ public class DefaultService {
     public ResponseEntity<?> getAllTransactions() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
-        headers.set("Authorization", "Basic YjJhNDYwNjMtNWE1My00MWFhLWFhYzUtYjEwNDM5YjRmZmMwOjRmYzU4MjczLTMxNjktNDA3My1hMmE2LTIxZjU0YzM5N2FiMw==");
-
         // Build the URI with parameters if needed
         String url = "https://devapi.selaa.sa/transactions";
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -57,8 +59,6 @@ public class DefaultService {
     public ResponseEntity<?> getAllHistory() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
-        headers.set("Authorization", "Basic YjJhNDYwNjMtNWE1My00MWFhLWFhYzUtYjEwNDM5YjRmZmMwOjRmYzU4MjczLTMxNjktNDA3My1hMmE2LTIxZjU0YzM5N2FiMw==");
-
         // Build the URI with parameters if needed
         String url = "https://devapi.selaa.sa/history";
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);

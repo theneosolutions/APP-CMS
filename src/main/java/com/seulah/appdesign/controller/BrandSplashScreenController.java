@@ -1,6 +1,7 @@
 package com.seulah.appdesign.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.seulah.appdesign.entity.BrandSliderScreen;
 import com.seulah.appdesign.request.BrandSliderRequest;
 import com.seulah.appdesign.request.MessageResponse;
@@ -23,7 +24,8 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","http://localhost:8085"}, maxAge = 3600, allowCredentials = "true")
 public class BrandSplashScreenController {
     private final BrandSplashScreenService brandSplashScreenService;
-
+    private List<BrandSliderRequest> brandSliderRequests = new ArrayList<>();
+    private String fileContent;
     public BrandSplashScreenController(BrandSplashScreenService brandSplashScreenService) {
         this.brandSplashScreenService = brandSplashScreenService;
     }
@@ -38,14 +40,11 @@ public class BrandSplashScreenController {
     @PostMapping("/brandingSliderScreen")
     public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam(value = "mainTittle") String mainTittle, @RequestParam(value = "brandId") String brandId, @RequestParam(value = "desc") String desc, @RequestParam(value = "title") String title, @RequestParam(value = "position") String position, @RequestParam(value = "file") MultipartFile brandSliderScreenList) throws IOException {
         byte[] fileBytes = brandSliderScreenList.getBytes();
-        String fileContent = new String(fileBytes);
-
-        BrandSliderRequest brandSliderRequest = new BrandSliderRequest(title, desc, fileContent, position);
-        List<BrandSliderRequest> brandSliderRequests = new ArrayList<>();
-        brandSliderRequests.add(brandSliderRequest);
+        fileContent = new String(fileBytes);
+        brandSliderRequests.add(new BrandSliderRequest(title, desc, fileContent, position));
         BrandSliderScreen brandSliderScreen = new BrandSliderScreen(mainTittle, brandSliderRequests, brandId);
         log.info("saved brand slider screen against brand id {}", brandId);
-        return brandSplashScreenService.saveBrandingSliderScreen(brandSliderScreen);
+        return brandSplashScreenService.saveBrandingSliderScreen(brandSliderScreen,position);
     }
 
     @GetMapping("/brandSliderScreen/getById")
@@ -60,7 +59,7 @@ public class BrandSplashScreenController {
     }
 
     @GetMapping("/brandSplashScreen/getById")
-    public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId) {
+    public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId) throws JsonProcessingException {
         HashMap<String, String> responseMap = new HashMap<>();
         return ResponseEntity.ok().body(responseMap.put("SplashScreen", brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
     }

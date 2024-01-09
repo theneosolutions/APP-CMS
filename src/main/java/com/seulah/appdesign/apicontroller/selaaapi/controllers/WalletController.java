@@ -1,5 +1,6 @@
 package com.seulah.appdesign.apicontroller.selaaapi.controllers;
 
+import com.seulah.appdesign.apicontroller.selaaapi.dto.TopUpWalletAmount;
 import com.seulah.appdesign.apicontroller.selaaapi.service.WalletService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class WalletController {
 
 
     @PostMapping("/topupWalletAmount")
-    public ResponseEntity<?> topupWalletAmountRequest(@RequestBody Object obj) {
+    public ResponseEntity<?> topupWalletAmountRequest(@RequestBody TopUpWalletAmount obj) {
         return service.topupWalletAmount(obj);
     }
 }

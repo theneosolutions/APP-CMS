@@ -10,4 +10,5 @@ public class ApiConfig {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
 }
