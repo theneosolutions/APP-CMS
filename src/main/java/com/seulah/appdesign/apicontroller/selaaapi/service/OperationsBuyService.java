@@ -9,18 +9,13 @@ import com.seulah.appdesign.apicontroller.selaaapi.repo.OperationBuyRepository;
 import com.seulah.appdesign.apicontroller.selaaapi.repo.OperationTransferRepository;
 import com.seulah.appdesign.apicontroller.selaaapi.request.OperationsBuyRequest;
 import com.seulah.appdesign.apicontroller.selaaapi.request.OperationsTransferRequest;
-import com.seulah.appdesign.apicontroller.selaaapi.dto.ApiResponse;
-import com.seulah.appdesign.apicontroller.selaaapi.dto.OperationsBuyResponse;
-import com.seulah.appdesign.apicontroller.selaaapi.dto.OperationsTransferResponse;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Objects;
 
 
 @Service

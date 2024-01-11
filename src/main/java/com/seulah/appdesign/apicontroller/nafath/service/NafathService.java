@@ -11,6 +11,7 @@ public class NafathService {
     String baseUrl = "/api/v1/mfa";
     String appId;
 
+    ResponseEntity<String> getStatus,getjwk;
     public NafathService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -32,7 +33,7 @@ public class NafathService {
         );
         if (response.getBody() != null) {
             String url = baseUrl + "/request/status";
-            ResponseEntity<String> getStatus = restTemplate.exchange(
+        getStatus = restTemplate.exchange(
                     uriTemplate,
                     HttpMethod.POST,
                     entity,
@@ -41,6 +42,15 @@ public class NafathService {
                     requestId
             );
             System.out.println(url);
+        }
+        else if(getStatus.getBody()!=null){
+            String url = baseUrl + "/jwk";
+            getjwk = restTemplate.exchange(
+                    uriTemplate,
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
         }
     }
 }
