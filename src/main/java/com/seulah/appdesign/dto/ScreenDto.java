@@ -4,6 +4,8 @@ package com.seulah.appdesign.dto;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -12,4 +14,6 @@ import org.springframework.stereotype.Service;
 public class ScreenDto {
     private String name;
     private Object components;
+    private List<Object> buttons;
+    private List<Object> input;
 }
