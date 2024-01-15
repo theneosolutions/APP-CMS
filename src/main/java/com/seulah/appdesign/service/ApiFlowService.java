@@ -58,6 +58,20 @@ public class ApiFlowService {
            return ResponseEntity.ok(response);
        }
     }
+    public ResponseEntity<?> updateAppFlow(List<ScreenDto> screenDto,String brandId){;
+        ScreenFlow appFlow = appFlowRepository.findByBrandId(brandId);
+        if(appFlow!=null){
+            appFlow.setBrandId(brandId);
+            appFlow.setScreenFlow(screenDto);
+            appFlowRepository.save(appFlow);
+            response.put("message","Record updated Success Fully!");
+            return ResponseEntity.ok(response);
+        }else {
+            response.put("message","No Record Found !");
+            return ResponseEntity.ok(response);
+        }
+    }
+
 
     public ResponseEntity<?> getAppFlow(String brandId) {
         Map<String ,ScreenFlow> appResponse = new HashMap<>();
