@@ -5,4 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ScreenFlowRepository extends MongoRepository<ScreenFlow,String> {
     ScreenFlow findByBrandId(String brandId);
+
 }

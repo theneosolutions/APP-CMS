@@ -1,6 +1,7 @@
 package com.seulah.appdesign.apicontroller.gosi.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seulah.appdesign.apicontroller.gosi.dto.GosiDTO;
 import com.seulah.appdesign.apicontroller.selaaapi.dto.OperationsTransferResponse;
 import com.seulah.appdesign.apicontroller.selaaapi.request.OperationsTransferRequest;
 import org.springframework.http.HttpEntity;
@@ -19,25 +20,17 @@ public class EmployeeStatusService {
         this.restTemplate = restTemplate;
     }
 
-    public void getStatusByCustomerId(String appId, String appKey, String platformKey, String organizationNumber, String customerId){
+    public ResponseEntity<?> getStatusByCustomerId(String appId, String appKey, String platformKey, String organizationNumber, String customerId, GosiDTO gosiDTO){
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
         headers.set("APP-ID", appId);
         headers.set("APP-KEY", appKey);
         headers.set("PLATFORM-KEY", platformKey);
         headers.set("ORGANIZATION-NUMBER", organizationNumber);
-        headers.set("customerId", customerId);
 
         // Build the URI with parameters if needed
-        String url = "https://devapi.selaa.sa/operations/transfer";
-        HttpEntity<?> requestEntity = new HttpEntity<>(headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                requestEntity,
-                String.class,
-                customerId
-        );
+        String url = "/api/v1/gosi/income/"+customerId;
+        HttpEntity<GosiDTO> requestEntity = new HttpEntity<>(gosiDTO, headers);
+        return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class, customerId);
     }
 }

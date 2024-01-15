@@ -30,20 +30,4 @@ public class ApiController {
         log.info("Saving Api Flow {}, brandId {}", apiFlowRequest,brandId);
         return apiFlowService.saveApiFlow(brandId,apiFlowRequest);
     }
-
-    @PostMapping(value = "/saveAppFlow", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveAppFlow(@RequestParam String brandId, @RequestBody List<ScreenDto> screenDtos) {
-        log.info("Saving App Flow {}", screenDtos);
-        return apiFlowService.saveAppFlow(screenDtos,brandId);
-    }
-    @PatchMapping(value = "/updateAppFlow", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateAppFlow(@RequestParam String brandId, @RequestBody List<ScreenDto> screenDtos) {
-        log.info("Saving App Flow {}", screenDtos);
-        return apiFlowService.updateAppFlow(screenDtos,brandId);
-    }
-    @GetMapping(value = "/getAppFlow", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAppFlow(@RequestParam String brandId) {
-        log.info("Saving App Flow {}", brandId);
-        return apiFlowService.getAppFlow(brandId);
-    }
 }
