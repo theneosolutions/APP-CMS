@@ -2,9 +2,6 @@ package com.seulah.appdesign.apicontroller.gosi.dto;
 
 import lombok.*;
 
-/**
- * @author Muhammad Mansoor
- */
 @Getter
 @Setter
 @ToString
