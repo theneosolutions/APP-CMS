@@ -1,8 +1,7 @@
 package com.seulah.appdesign.apicontroller.gosi.dto;
 
 import lombok.*;
-
-import java.util.List;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author Muhammad Mansoor
@@ -12,8 +11,10 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class GosiDTO {
+@Document
+public class Gosi {
+    private String id;
     private String requestNumber;
     private String message;
-    private List<EmploymentStatusInfo> employmentStatusInfos;
+    private EmploymentStatusInfo employmentStatusInfos;
 }

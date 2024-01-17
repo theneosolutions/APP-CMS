@@ -1,26 +1,23 @@
 package com.seulah.appdesign.apicontroller.gosi.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seulah.appdesign.apicontroller.gosi.dto.GosiDTO;
-import com.seulah.appdesign.apicontroller.selaaapi.dto.OperationsTransferResponse;
-import com.seulah.appdesign.apicontroller.selaaapi.request.OperationsTransferRequest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import com.seulah.appdesign.apicontroller.gosi.dto.Gosi;
+import com.seulah.appdesign.apicontroller.gosi.repo.GosiRepo;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class EmployeeStatusService {
 
     private final RestTemplate restTemplate;
-
-    public EmployeeStatusService(RestTemplate restTemplate) {
+    private final GosiRepo gosiRepo;
+    public EmployeeStatusService(RestTemplate restTemplate, GosiRepo gosiRepo) {
         this.restTemplate = restTemplate;
+        this.gosiRepo = gosiRepo;
     }
 
-    public ResponseEntity<?> getStatusByCustomerId(String appId, String appKey, String platformKey, String organizationNumber, String customerId, GosiDTO gosiDTO){
+    public ResponseEntity<?> getStatusByCustomerId(String appId, String appKey, String platformKey, String organizationNumber, String customerId){
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
         headers.set("APP-ID", appId);
@@ -28,9 +25,21 @@ public class EmployeeStatusService {
         headers.set("PLATFORM-KEY", platformKey);
         headers.set("ORGANIZATION-NUMBER", organizationNumber);
 
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
         // Build the URI with parameters if needed
-        String url = "/api/v1/gosi/income/"+customerId;
-        HttpEntity<GosiDTO> requestEntity = new HttpEntity<>(gosiDTO, headers);
-        return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class, customerId);
+        String apiUrl = "https://dakhli.api.elm.sa:443/api/v1/gosi/income/" + customerId;
+
+        try {
+            ResponseEntity<Gosi> response = restTemplate.exchange(apiUrl, HttpMethod.GET, requestEntity, Gosi.class);
+            Gosi gosi = response.getBody();
+            gosi.setId(customerId);
+            gosiRepo.save(gosi);
+            return response;
+        } catch (RestClientException e) {
+            // Handle exception, log it, or return an error response
+            e.printStackTrace();
+            return new ResponseEntity<>("Error during API call", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
