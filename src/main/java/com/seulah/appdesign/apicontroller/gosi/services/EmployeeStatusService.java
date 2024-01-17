@@ -24,12 +24,9 @@ public class EmployeeStatusService {
         headers.set("APP-KEY", appKey);
         headers.set("PLATFORM-KEY", platformKey);
         headers.set("ORGANIZATION-NUMBER", organizationNumber);
-
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-
         // Build the URI with parameters if needed
         String apiUrl = "https://dakhli.api.elm.sa:443/api/v1/gosi/income/" + customerId;
-
         try {
             ResponseEntity<Gosi> response = restTemplate.exchange(apiUrl, HttpMethod.GET, requestEntity, Gosi.class);
             Gosi gosi = response.getBody();
