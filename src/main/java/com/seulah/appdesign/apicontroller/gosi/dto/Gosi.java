@@ -18,5 +18,5 @@ public class Gosi {
     private String id;
     private String requestNumber;
     private String message;
-    private List<EmploymentStatusInfo> employmentStatusInfo;
+    private EmploymentStatusInfo[] employmentStatusInfo;
 }
