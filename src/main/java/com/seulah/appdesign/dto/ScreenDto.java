@@ -14,6 +14,5 @@ import java.util.List;
 public class ScreenDto {
     private String name;
     private Object components;
-    private List<Object> buttons;
-    private List<Object> input;
+    private List<Object> button;
 }
