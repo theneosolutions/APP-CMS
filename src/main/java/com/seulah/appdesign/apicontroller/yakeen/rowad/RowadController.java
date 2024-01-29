@@ -5,7 +5,7 @@ package com.seulah.appdesign.apicontroller.yakeen.rowad;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("\"/api/v1/cms/yakeen/rowad")
+@RequestMapping("/api/v1/cms/yakeen/rowad")
 public class RowadController {
 
     private final RowadService rowadService;
