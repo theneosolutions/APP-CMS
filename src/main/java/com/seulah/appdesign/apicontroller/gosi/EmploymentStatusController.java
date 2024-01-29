@@ -15,13 +15,19 @@ public class EmploymentStatusController {
     public EmploymentStatusController(EmployeeStatusService employeeStatusService) {
         this.employeeStatusService = employeeStatusService;
     }
-@GetMapping("/income")
+
+    @GetMapping("/income")
     public ResponseEntity<?> getEmploymentStatusInfo(@RequestParam("APP-ID") String appId,
                                                      @RequestParam("APP-KEY") String appKey,
                                                      @RequestParam("PLATFORM-KEY") String platformKey,
                                                      @RequestParam("ORGANIZATION-NUMBER") String organizationNumber,
                                                      @RequestParam("customerId") String customerId) {
         return employeeStatusService.getStatusByCustomerId(appId, appKey, platformKey, organizationNumber, customerId);
+    }
+
+    @GetMapping("/getDataById")
+    public ResponseEntity<?> getEmploymentStatusInfo(@RequestParam("idNumber") String id) {
+        return employeeStatusService.getData(id);
     }
 }
 

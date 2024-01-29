@@ -7,17 +7,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 @Service
 public class EmployeeStatusService {
 
     private final RestTemplate restTemplate;
     private final GosiRepo gosiRepo;
+
     public EmployeeStatusService(RestTemplate restTemplate, GosiRepo gosiRepo) {
         this.restTemplate = restTemplate;
         this.gosiRepo = gosiRepo;
     }
 
-    public ResponseEntity<?> getStatusByCustomerId(String appId, String appKey, String platformKey, String organizationNumber, String customerId){
+    public ResponseEntity<?> getStatusByCustomerId(String appId, String appKey, String platformKey, String organizationNumber, String customerId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
         headers.set("APP-ID", appId);
@@ -37,6 +40,15 @@ public class EmployeeStatusService {
             // Handle exception, log it, or return an error response
             e.printStackTrace();
             return new ResponseEntity<>("Error during API call", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> getData(String id) {
+        Optional<Gosi> gosi = gosiRepo.findById(id);
+        if (gosi.isPresent()) {
+            return ResponseEntity.ok().body(gosi);
+        } else {
+            return ResponseEntity.badRequest().body("No Record Found");
         }
     }
 }

@@ -13,4 +13,5 @@ public interface BrandSliderScreenRepository extends MongoRepository<BrandSlider
     @Query("{ 'brandId' : ?0 }")
     List<BrandSliderScreen> findByBrandId(String brandId);
     BrandSliderScreen findByMainTittle(String mainTittle);
+
 }
