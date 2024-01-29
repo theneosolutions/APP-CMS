@@ -35,6 +35,8 @@ public class YakeenService {
                 id,
                 mobile
         );
+
+        System.out.println(response.getBody());
     }
 
 

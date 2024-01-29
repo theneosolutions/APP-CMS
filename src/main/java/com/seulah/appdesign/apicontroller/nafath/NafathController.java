@@ -17,8 +17,7 @@ public class NafathController {
     @RequestMapping("/nafath")
     public String verificationByNafath(@RequestParam String local,
                                        @RequestParam String requestId){
-        nafathService.getRequestData(local,requestId);
-    return "";
+     return  nafathService.getRequestData(local,requestId);
     }
 
 

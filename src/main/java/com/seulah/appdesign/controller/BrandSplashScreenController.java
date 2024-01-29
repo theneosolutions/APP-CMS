@@ -24,8 +24,10 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","https://main.d2j34yk77rmups.amplifyapp.com/","http://localhost:8085"}, maxAge = 3600, allowCredentials = "true")
 public class BrandSplashScreenController {
     private final BrandSplashScreenService brandSplashScreenService;
-    private List<BrandSliderRequest> brandSliderRequests = new ArrayList<>();
+
     private String fileContent;
+    BrandSliderRequest brandSliderRequest = new BrandSliderRequest();
+    BrandSliderScreen brandSliderScreen = new BrandSliderScreen();
     public BrandSplashScreenController(BrandSplashScreenService brandSplashScreenService) {
         this.brandSplashScreenService = brandSplashScreenService;
     }
@@ -38,13 +40,18 @@ public class BrandSplashScreenController {
     }
 
     @PostMapping("/brandingSliderScreen")
-    public ResponseEntity<MessageResponse> saveBrandingSliderScreen(@RequestParam(value = "mainTittle") String mainTittle, @RequestParam(value = "brandId") String brandId, @RequestParam(value = "desc") String desc, @RequestParam(value = "title") String title, @RequestParam(value = "position") String position, @RequestParam(value = "file") MultipartFile brandSliderScreenList) throws IOException {
-        byte[] fileBytes = brandSliderScreenList.getBytes();
-        fileContent = new String(fileBytes);
-        brandSliderRequests.add(new BrandSliderRequest(title, desc, fileContent, position));
-        BrandSliderScreen brandSliderScreen = new BrandSliderScreen(mainTittle, brandSliderRequests, brandId);
+    public ResponseEntity<?> saveBrandingSliderScreen(@RequestParam(value = "mainTittle") String mainTittle,
+                                                                    @RequestParam(value = "brandId") String brandId,
+                                                                    @RequestParam(value = "desc") String desc,
+                                                                    @RequestParam(value = "title") String title,
+                                                                    @RequestParam(value = "position") String position,
+                                                                    @RequestParam(value = "file") MultipartFile file) throws IOException {
+
+
         log.info("saved brand slider screen against brand id {}", brandId);
-        return brandSplashScreenService.saveBrandingSliderScreen(brandSliderScreen,position);
+        return brandSplashScreenService.saveAllSliders(mainTittle,brandId,desc,title,
+                position, file);
+       // return brandSplashScreenService.saveBrandingSliderScreen(brandSliderScreen,position);
     }
 
     @GetMapping("/brandSliderScreen/getById")
@@ -59,7 +66,7 @@ public class BrandSplashScreenController {
     }
 
     @GetMapping("/brandSplashScreen/getById")
-    public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId) throws JsonProcessingException {
+    public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId)  {
         HashMap<String, String> responseMap = new HashMap<>();
         return ResponseEntity.ok().body(responseMap.put("SplashScreen", brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
     }

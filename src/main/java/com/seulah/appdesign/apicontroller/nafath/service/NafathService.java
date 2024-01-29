@@ -16,7 +16,7 @@ public class NafathService {
         this.restTemplate = restTemplate;
     }
 
-    public void getRequestData(String local, String requestId) {
+    public String getRequestData(String local, String requestId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         headers.set("APP-ID", appId);
@@ -31,6 +31,7 @@ public class NafathService {
                 local,
                 requestId
         );
+
         if (response.getBody() != null) {
             String url = baseUrl + "/request/status";
         getStatus = restTemplate.exchange(
@@ -52,5 +53,6 @@ public class NafathService {
                     String.class
             );
         }
+        return response.getBody();
     }
 }
