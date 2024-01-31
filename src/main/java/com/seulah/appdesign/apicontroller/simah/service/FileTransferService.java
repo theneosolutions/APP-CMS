@@ -1,11 +1,17 @@
 package com.seulah.appdesign.apicontroller.simah.service;
 
 
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.ChannelSftp;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.integration.file.remote.session.CachingSessionFactory;
+import org.springframework.integration.file.remote.session.SessionFactory;
+import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
 import org.springframework.stereotype.Service;
 
+@Configuration
 @Service
 public class FileTransferService {
     @Value("${sftp.host}")
@@ -30,37 +36,19 @@ public class FileTransferService {
     @Value("${sftp.channelTimeout}")
     private Integer channelTimeout;
 
-
-    public void sftpSessionFactory() {
-        String host = sftpHost;
-        String username = sftpUser;
-        String privateKeyPath = "/path/to/private-key"; // Replace with the actual path to your private key file
-        String passphrase = "your-passphrase";
-        int port = 22;
-
-        String localFilePath = "/path/to/local/file.txt";
-        String remoteDirectory = "/path/on/sftp/server/";
-
-        JSch jsch = new JSch();
-
-        try {
-            jsch.addIdentity(privateKeyPath, passphrase);
-            Session session = jsch.getSession(username, host, port);
-            session.setConfig("StrictHostKeyChecking", "no");
-            session.connect();
-
-            ChannelSftp channelSftp = (ChannelSftp) session.openChannel("sftp");
-            channelSftp.connect();
-
-            // Upload file
-            channelSftp.put(localFilePath, remoteDirectory);
-
-            // Disconnect
-            channelSftp.disconnect();
-            session.disconnect();
-        } catch (JSchException | SftpException e) {
-            e.printStackTrace();
+    @Bean
+    public SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory() {
+        DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory(true);
+        factory.setHost(sftpHost);
+        factory.setPort(sftpPort);
+        factory.setUser(sftpUser);
+        if (sftpPrivateKey != null) {
+            factory.setPrivateKey(sftpPrivateKey);
+            factory.setPrivateKeyPassphrase(sftpPrivateKeyPassphrase);
+        } else {
+            factory.setPassword(sftpPasword);
         }
-
+        factory.setAllowUnknownKeys(true);
+        return new CachingSessionFactory<ChannelSftp.LsEntry>(factory);
     }
 }
