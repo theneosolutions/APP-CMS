@@ -18,8 +18,8 @@ public class SimahController {
 
     @GetMapping("test")
     public String sftUpload(){
-        SessionFactory<ChannelSftp.LsEntry> test = fileTransferService.sftpSessionFactory();
-        System.out.println(test.getSession()+"Arham");
+        fileTransferService.sftpSessionFactory();
+        System.out.println("Arham");
         return "hello";
     }
 }
