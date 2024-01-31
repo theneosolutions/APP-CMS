@@ -1,8 +1,6 @@
 package com.seulah.appdesign.apicontroller.simah;
 
-import com.jcraft.jsch.ChannelSftp;
 import com.seulah.appdesign.apicontroller.simah.service.FileTransferService;
-import org.springframework.integration.file.remote.session.SessionFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +15,7 @@ public class SimahController {
     }
 
     @GetMapping("test")
-    public String sftUpload(){
+    public String sftUpload() {
         fileTransferService.sftpSessionFactory();
         System.out.println("Arham");
         return "hello";
