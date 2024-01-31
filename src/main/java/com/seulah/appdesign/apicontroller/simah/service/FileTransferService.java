@@ -2,53 +2,61 @@ package com.seulah.appdesign.apicontroller.simah.service;
 
 
 import com.jcraft.jsch.ChannelSftp;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.file.remote.session.CachingSessionFactory;
+import org.springframework.integration.file.remote.session.Session;
 import org.springframework.integration.file.remote.session.SessionFactory;
 import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
 import org.springframework.stereotype.Service;
 
-@Configuration
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 @Service
 public class FileTransferService {
-    @Value("${sftp.host}")
-    private String sftpHost;
 
-    @Value("${sftp.port}")
-    private Integer sftpPort;
 
-    @Value("${sftp.username}")
-    private String sftpUser;
+    Resource sftpPrivateKey = new ClassPathResource("697_SEAH_KEY");
 
-    @Value("${sftp.password}")
-    private String sftpPasword;
-    @Value("${sftp.privatekey}")
-    private Resource sftpPrivateKey;
-    @Value("${sftp.passphrase}")
-    private String sftpPrivateKeyPassphrase;
+//    @Autowired
+//    private Session session;
+//
+//    public void uploadFile(String remoteDirectory, String localFilePath, String remoteFileName) throws SftpException, IOException, JSchException, FileNotFoundException {
+//        ChannelSftp channelSftp = (ChannelSftp) session.openChannel("sftp");
+//        channelSftp.connect();
+//
+//        File localFile = new File(localFilePath);
+//        channelSftp.put(new FileInputStream(localFile), remoteFileName);
+//
+//        channelSftp.cd(remoteDirectory);
+//        channelSftp.disconnect();
+//    }
 
-    @Value("${sftp.sessionTimeout}")
-    private Integer sessionTimeout;
-
-    @Value("${sftp.channelTimeout}")
-    private Integer channelTimeout;
-
-    @Bean
-    public SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory() {
+    public void test() {
         DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory(true);
-        factory.setHost(sftpHost);
-        factory.setPort(sftpPort);
-        factory.setUser(sftpUser);
-        if (sftpPrivateKey != null) {
-            factory.setPrivateKey(sftpPrivateKey);
-            factory.setPrivateKeyPassphrase(sftpPrivateKeyPassphrase);
-        } else {
-            factory.setPassword(sftpPasword);
-        }
+        factory.setHost("mftuat.simah.com");
+        factory.setPort(22);
+        factory.setUser("697_SEAH");
+        //  String  sftpPrivateKey = "src/main/resources/697_SEAH_KEY.ppk";
+        String privateKeyPassPhrase = "697@Seah";
+
+        factory.setPrivateKey(sftpPrivateKey);
+        factory.setPrivateKeyPassphrase(privateKeyPassPhrase);
+
         factory.setAllowUnknownKeys(true);
-        return new CachingSessionFactory<ChannelSftp.LsEntry>(factory);
+
+        uploadTextFile("a","/upload/CONSUMER/","test.txt",new CachingSessionFactory<>(factory));
     }
+    public void uploadTextFile(String content, String remoteDirectory, String fileName, SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory) {
+        try (Session<ChannelSftp.LsEntry> session = sftpSessionFactory.getSession()) {
+            String fullPath = remoteDirectory + "/" + fileName;
+
+            InputStream inputStream = new ByteArrayInputStream(content.getBytes());
+            session.write(inputStream, fullPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
