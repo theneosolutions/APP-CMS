@@ -16,8 +16,12 @@ public class DefaultInstallmentsController {
     }
 
     @PostMapping("addCardInstallment")
-    public ResponseEntity<?> addInstallmentCard(@RequestBody InstallmentsEntity installmentsEntity, @RequestParam MultipartFile file) {
-        return installmentCardService.addInstallments(installmentsEntity, file);
+    public ResponseEntity<?> addInstallmentCard(@RequestParam("file")  MultipartFile file,
+                                                @RequestParam("title") String title,
+                                                @RequestParam("desc")  String desc,
+                                                @RequestParam("price") String price,
+                                                @RequestParam("months") String months) {
+        return installmentCardService.addInstallments(new InstallmentsEntity(title,desc,price,months), file);
     }
 
     @GetMapping("getAllCardInstallment")

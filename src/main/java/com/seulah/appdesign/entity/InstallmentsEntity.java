@@ -21,4 +21,11 @@ public class InstallmentsEntity {
     private String price;
     private String months;
     private String url;
+
+    public InstallmentsEntity(String title, String desc, String price, String months) {
+        this.title = title;
+        this.desc = desc;
+        this.price = price;
+        this.months = months;
+    }
 }
