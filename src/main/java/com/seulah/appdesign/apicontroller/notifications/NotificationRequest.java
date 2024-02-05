@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -16,4 +17,5 @@ public class NotificationRequest {
     private String content;
     private Map<String, String> data;
     private String image;
+
 }

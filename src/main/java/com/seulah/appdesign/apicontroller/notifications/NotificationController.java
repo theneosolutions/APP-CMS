@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,8 @@ public class NotificationController {
     private final List<String> deviceTokens = new ArrayList<>(); // In-memory storage for device tokens
 
     @PostMapping("/notification")
-    public String sendNotification(@RequestBody NotificationRequest request,@RequestParam String topic) throws ExecutionException, InterruptedException, FirebaseMessagingException {
-      return fcmService.sendNotification(request, topic);
+    public String sendNotification(@RequestParam String subject, @RequestParam String content, @RequestParam MultipartFile file, @RequestParam String topic) throws ExecutionException, InterruptedException, FirebaseMessagingException {
+      return fcmService.sendNotification(subject,content,file, topic);
     }
 
     @PostMapping("/register")
