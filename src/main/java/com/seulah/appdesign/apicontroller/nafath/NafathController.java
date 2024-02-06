@@ -14,11 +14,14 @@ public class NafathController {
         this.nafathService = nafathService;
     }
 
-    @RequestMapping("/nafath")
+    @PostMapping("/nafath")
     public String verificationByNafath(@RequestParam String local,
                                        @RequestParam String requestId){
      return  nafathService.getRequestData(local,requestId);
     }
 
-
+    @PostMapping("/getNafathDetails")
+    public Object callBackUrlByNafath(@RequestBody Object o){
+        return  o;
+    }
 }
