@@ -135,13 +135,13 @@ public class BrandSplashScreenService {
         log.info("Slider has been saved to the database");
     }
 
-    public ResponseEntity<?> getBrandSplashScreenByBrandId(String brandId) {
-        BrandingSplashScreen brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId).orElse(null);
+    public BrandingSplashScreen getBrandSplashScreenByBrandId(String brandId) {
+        Optional<BrandingSplashScreen> brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId);
 
         try {
-            return ResponseEntity.ok().body(brandingSplashScreen);
+            return brandingSplashScreen.get();
         } catch (NullPointerException e) {
-            return ResponseEntity.badRequest().body(null);
+            return null;
         }
     }
 

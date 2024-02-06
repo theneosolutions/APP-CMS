@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.seulah.appdesign.entity.BrandSliderScreen;
 import com.seulah.appdesign.request.BrandSliderRequest;
 import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.request.SplashScreenResponse;
 import com.seulah.appdesign.service.BrandSplashScreenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -67,8 +68,7 @@ public class BrandSplashScreenController {
 
     @GetMapping("/brandSplashScreen/getById")
     public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId)  {
-        HashMap<String, ResponseEntity<?>> responseMap = new HashMap<>();
-        return ResponseEntity.ok().body(responseMap.put("SplashScreen", brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
+        return ResponseEntity.ok().body(new SplashScreenResponse(brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
     }
 
 
