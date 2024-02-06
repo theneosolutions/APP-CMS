@@ -67,7 +67,7 @@ public class BrandSplashScreenController {
 
     @GetMapping("/brandSplashScreen/getById")
     public ResponseEntity<?> getBrandSplashScreenByBrandId(@RequestParam String brandId)  {
-        HashMap<String, String> responseMap = new HashMap<>();
+        HashMap<String, ResponseEntity<?>> responseMap = new HashMap<>();
         return ResponseEntity.ok().body(responseMap.put("SplashScreen", brandSplashScreenService.getBrandSplashScreenByBrandId(brandId)));
     }
 
