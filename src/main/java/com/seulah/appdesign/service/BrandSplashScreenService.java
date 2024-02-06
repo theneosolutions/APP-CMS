@@ -137,7 +137,6 @@ public class BrandSplashScreenService {
 
     public BrandingSplashScreen getBrandSplashScreenByBrandId(String brandId) {
         Optional<BrandingSplashScreen> brandingSplashScreen = brandSplashScreenRepository.findByBrandId(brandId);
-
         try {
             return brandingSplashScreen.get();
         } catch (NullPointerException e) {

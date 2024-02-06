@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NafathService {
     private final RestTemplate restTemplate;
-    String baseUrl = "/api/v1/mfa";
+    String baseUrl = "https://www.rabet.sa/api/v1/mfa";
     String appId;
 
     ResponseEntity<String> getStatus,getjwk;
@@ -19,7 +19,7 @@ public class NafathService {
     public String getRequestData(String local, String requestId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        headers.set("APP-ID", appId);
+        headers.set("APP-ID", "eb4ba20f");
         HttpEntity<?> entity = new HttpEntity<>(headers);
         String uriTemplate = baseUrl + "/request?local={local}&requestId={requestId}";
 
