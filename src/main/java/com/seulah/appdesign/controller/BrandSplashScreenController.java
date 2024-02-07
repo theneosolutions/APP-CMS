@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/cms/brandSplashScreen")
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","https://main.d2j34yk77rmups.amplifyapp.com/","http://localhost:8085"}, maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","https://dev-cms.d3k8cagii9iejo.amplifyapp.com/","http://localhost:8085"}, maxAge = 3600, allowCredentials = "true")
 public class BrandSplashScreenController {
     private final BrandSplashScreenService brandSplashScreenService;
 
