@@ -1,10 +1,7 @@
 package com.seulah.appdesign.apicontroller.oursms;
 
 import com.seulah.appdesign.apicontroller.oursms.service.OursmsService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/cms")
@@ -17,7 +14,7 @@ public class OursmsController {
         this.oursmsService = oursmsService;
     }
 
-    @RequestMapping("/sms")
+    @GetMapping("/sms")
     public String ourSMS(@RequestParam String idNumber, @RequestParam String otp){
         return oursmsService.ourSms(idNumber,otp);
     }
