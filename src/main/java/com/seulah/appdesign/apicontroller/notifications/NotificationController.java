@@ -19,8 +19,8 @@ public class NotificationController {
     private final List<String> deviceTokens = new ArrayList<>(); // In-memory storage for device tokens
 
     @PostMapping("/notification")
-    public String sendNotification(@RequestParam String subject, @RequestParam String content, @RequestParam MultipartFile file, @RequestParam String topic) throws ExecutionException, InterruptedException, FirebaseMessagingException {
-      return fcmService.sendNotification(subject,content,file, topic);
+    public String sendNotification(@RequestParam String subject, @RequestParam String content, @RequestParam MultipartFile file, @RequestParam String topic,@RequestParam String navigation) throws ExecutionException, InterruptedException, FirebaseMessagingException {
+      return fcmService.sendNotification(subject,content,file, topic,navigation);
     }
 
     @PostMapping("/register")

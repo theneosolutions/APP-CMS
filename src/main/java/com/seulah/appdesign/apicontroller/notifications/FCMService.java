@@ -18,7 +18,7 @@ public class FCMService {
         this.fileUploadService = fileUploadService;
     }
 
-    public String sendNotification(String subject, String content, MultipartFile file, String topic) throws FirebaseMessagingException {
+    public String sendNotification(String subject, String content, MultipartFile file, String topic, String navigation) throws FirebaseMessagingException {
         fileUploadService.uploadFile(file);
         Notification notification = Notification
                 .builder()
@@ -31,6 +31,7 @@ public class FCMService {
                 .builder()
                 .setToken(topic)
                 .setNotification(notification)
+                .putData("navigation",navigation)
                 .build();
 
         return firebaseMessagingConfig.send(message);
