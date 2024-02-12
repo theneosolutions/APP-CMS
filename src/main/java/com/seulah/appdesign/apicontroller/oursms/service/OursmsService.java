@@ -19,12 +19,12 @@ public class OursmsService {
         this.restTemplate = restTemplate;
     }
 
-    public String ourSms(String idNumber){
+    public String ourSms(String idNumber,String otp){
         String[] destsArray = {idNumber, idNumber};
         smsRequest = new SmsRequest();
         smsRequest.setSrc("");;
         smsRequest.setDests(destsArray);
-        smsRequest.setBody("Arham");
+        smsRequest.setBody(otp);
         smsRequest.setPriority(0);
         smsRequest.setDelay(0);
         smsRequest.setValidity(0);

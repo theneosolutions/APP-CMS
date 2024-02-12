@@ -18,8 +18,8 @@ public class OursmsController {
     }
 
     @RequestMapping("/sms")
-    public String ourSMS(@RequestParam String idNumber){
-        return oursmsService.ourSms(idNumber);
+    public String ourSMS(@RequestParam String idNumber, @RequestParam String otp){
+        return oursmsService.ourSms(idNumber,otp);
     }
 
 }
