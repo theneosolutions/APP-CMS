@@ -1,10 +1,7 @@
 package com.seulah.appdesign.apicontroller.oursms.service;
 
 import com.seulah.appdesign.apicontroller.oursms.dto.SmsRequest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,16 +11,17 @@ import java.util.Arrays;
 public class OursmsService {
     private final RestTemplate restTemplate;
     SmsRequest smsRequest;
+    private final String apiUrl = "https://api.oursms.com/msgs/sms";
+    private final String bearerToken = "Bearer fgih_GLbk32-AUv6Ucqn"; // Replace with your actual bearer token
 
     public OursmsService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public String ourSms(String idNumber,String otp){
-        String[] destsArray = {idNumber, idNumber};
+    public String ourSms(String mobileNumber,String otp){
         smsRequest = new SmsRequest();
-        smsRequest.setSrc("");;
-        smsRequest.setDests(destsArray);
+        smsRequest.setSrc("SeulahFin");;
+        smsRequest.setDests(new String[]{mobileNumber, mobileNumber});
         smsRequest.setBody(otp);
         smsRequest.setPriority(0);
         smsRequest.setDelay(0);
@@ -33,10 +31,12 @@ public class OursmsService {
         smsRequest.setPrevDups(0);
         smsRequest.setMsgClass("");
         HttpHeaders headers = new HttpHeaders();
-        headers.set("accept", "application/json");
+        headers.setBearerAuth(bearerToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
         HttpEntity<SmsRequest> requestEntity = new HttpEntity<>(smsRequest,headers);
-      ResponseEntity<String> response = restTemplate.exchange(
-                "https://api.oursms.com/msgs/sms", HttpMethod.POST, requestEntity, String.class);
+      ResponseEntity<String> response = restTemplate.exchange(apiUrl,
+              HttpMethod.POST, requestEntity, String.class);
         if(response.getBody()!=null){
             return "true";
         }
