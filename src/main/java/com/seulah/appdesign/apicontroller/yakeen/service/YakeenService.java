@@ -25,7 +25,7 @@ private static final String appId = "83597d3b";
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         headers.set("APP-ID", appId);
         headers.set("APP-KEY", appKey);
-        headers.set("SERVICE-KEY", serviceKey);
+        headers.set("SERVICE_KEY", serviceKey);
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
         String uriTemplate = baseUrl + "person/" + id + "/owns-mobile/" + mobile;
