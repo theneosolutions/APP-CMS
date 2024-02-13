@@ -14,5 +14,13 @@ public class YakeenDto {
     private String id;
     private String mobile;
     private boolean isOwner;
+    private String code;
+    private String message;
 
+
+    public YakeenDto(String referenceNumber, String code, String message) {
+        this.referenceNumber = referenceNumber;
+        this.code = code;
+        this.message = message;
+    }
 }
