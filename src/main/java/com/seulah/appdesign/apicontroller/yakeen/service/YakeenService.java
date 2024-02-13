@@ -1,6 +1,7 @@
 package com.seulah.appdesign.apicontroller.yakeen.service;
 
 
+import com.seulah.appdesign.apicontroller.yakeen.YakeenResponseError;
 import com.seulah.appdesign.apicontroller.yakeen.dto.YakeenDto;
 import com.seulah.appdesign.request.MessageResponse;
 import org.springframework.http.*;
@@ -40,7 +41,8 @@ public class YakeenService {
         } catch (Exception e) {
             // Handle other HTTP status codes as needed
             System.out.println("Unexpected error. " + e.getMessage());
-            return ResponseEntity.badRequest().body("An invalid mobile number was used, please provide a valid mobile number (9665XXXXXXXX)");
+
+            return ResponseEntity.badRequest().body(new YakeenResponseError(false,"An invalid mobile number was used, please provide a valid mobile number "+mobile));
         }
 
     }
