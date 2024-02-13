@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+
 @Service
 public class YakeenService {
     private final RestTemplate restTemplate;
@@ -23,6 +25,7 @@ public class YakeenService {
     }
 
     public ResponseEntity<?> getRequestData(String id, String mobile) {
+        HashMap<String, String> map = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         headers.set("APP-ID", appId);
@@ -32,17 +35,24 @@ public class YakeenService {
         HttpEntity<?> entity = new HttpEntity<>(headers);
         String uriTemplate = baseUrl + "person/" + id + "/owns-mobile/" + mobile;
         try {
-         ResponseEntity<YakeenDto>  response  = restTemplate.exchange(
+            ResponseEntity<YakeenDto> response = restTemplate.exchange(
                     uriTemplate,
                     HttpMethod.GET,
                     entity,
                     YakeenDto.class
             );
-            return ResponseEntity.ok().body(response.getBody());
+            if (response.getBody().getIsOwner() == "true") {
+                return ResponseEntity.ok().body(new MessageResponse("Verified", response.getBody(), false));
+
+            } else {
+                return ResponseEntity.ok().body(new MessageResponse("This is mobile is not verified with this id number", response.getBody(), true));
+
+            }
+
         } catch (HttpClientErrorException.BadRequest e) {
             // Handle other HTTP status codes as needed
             System.out.println("Unexpected error. " + e.getMessage());
-            return ResponseEntity.badRequest().body(new YakeenResponseError(false,"An invalid mobile number was used, please provide a valid mobile number "+mobile));
+            return ResponseEntity.badRequest().body(new YakeenResponseError(false, "An invalid mobile number was used, please provide a valid mobile number " + mobile));
         }
 
     }
