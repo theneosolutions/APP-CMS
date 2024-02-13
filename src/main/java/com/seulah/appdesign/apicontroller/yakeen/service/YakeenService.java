@@ -37,7 +37,7 @@ public class YakeenService {
                     entity,
                     YakeenDto.class
             );
-            return ResponseEntity.ok().body(response.getBody().isOwner());
+            return ResponseEntity.ok().body(response.getBody());
         } catch (Exception e) {
             // Handle other HTTP status codes as needed
             System.out.println("Unexpected error. " + e.getMessage());

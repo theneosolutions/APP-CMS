@@ -13,5 +13,5 @@ public class YakeenDto {
     private String referenceNumber;
     private String id;
     private String mobile;
-    private boolean isOwner;
+    private String isOwner;
 }
