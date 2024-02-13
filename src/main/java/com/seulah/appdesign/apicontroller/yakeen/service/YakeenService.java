@@ -40,7 +40,7 @@ public class YakeenService {
         } catch (Exception e) {
             // Handle other HTTP status codes as needed
             System.out.println("Unexpected error. " + e.getMessage());
-            return ResponseEntity.badRequest().body(response.getBody().getMessage());
+            return ResponseEntity.badRequest().body("An invalid mobile number was used, please provide a valid mobile number (9665XXXXXXXX)");
         }
 
     }
