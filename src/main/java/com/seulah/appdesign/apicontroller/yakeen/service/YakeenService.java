@@ -20,29 +20,25 @@ private static final String appId = "83597d3b";
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<?> getRequestData(String id, String mobile){
+    public ResponseEntity<?> getRequestData(String id, String mobile) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        headers.set("APP-ID",appId);
-        headers.set("APP-KEY",appKey);
-        headers.set("SERVICE-KEY",serviceKey);
+        headers.set("APP-ID", appId);
+        headers.set("APP-KEY", appKey);
+        headers.set("SERVICE-KEY", serviceKey);
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
-        String uriTemplate = baseUrl + "/person/"+id+"/owns-mobile/"+mobile;
+        String uriTemplate = baseUrl + "person/" + id + "/owns-mobile/" + mobile;
 
-        ResponseEntity<YakeenDto> response = restTemplate.exchange(
+        ResponseEntity<YakeenDto> response = restTemplate.getForEntity(
                 uriTemplate,
-                HttpMethod.GET,
-                entity,
                 YakeenDto.class,
-                id,
-                mobile
+                entity
         );
 
         System.out.println(response.getBody());
 
-        return  ResponseEntity.ok().body(response.getBody().isOwner());
+        return ResponseEntity.ok().body(response.getBody().isOwner());
     }
-
 
 }
