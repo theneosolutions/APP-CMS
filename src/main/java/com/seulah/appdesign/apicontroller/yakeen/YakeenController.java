@@ -2,10 +2,7 @@ package com.seulah.appdesign.apicontroller.yakeen;
 
 import com.seulah.appdesign.apicontroller.yakeen.service.YakeenService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/cms")
@@ -17,7 +14,7 @@ public class YakeenController {
         this.yakeenService = nafathService;
     }
 
-    @RequestMapping("/yakeen")
+    @PostMapping("/yakeen")
     public ResponseEntity<?> verificationByYakeen(@RequestParam String idNumber,
                                                   @RequestParam String mobile) {
         return yakeenService.getRequestData(idNumber, mobile);
