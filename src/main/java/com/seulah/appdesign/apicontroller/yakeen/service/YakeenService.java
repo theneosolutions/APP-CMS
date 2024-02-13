@@ -16,7 +16,7 @@ public class YakeenService {
     private static final String appId = "83597d3b";
     private static final String appKey = "f611b6a0b405544534a5b0355862f701";
     private static final String serviceKey = "98fd9fd5-3ff7-4c28-a0bd-d4b8de7c8c78";
-    ResponseEntity<YakeenDto> response;
+
     public YakeenService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -31,7 +31,7 @@ public class YakeenService {
         HttpEntity<?> entity = new HttpEntity<>(headers);
         String uriTemplate = baseUrl + "person/" + id + "/owns-mobile/" + mobile;
         try {
-           response  = restTemplate.exchange(
+         ResponseEntity<YakeenDto>  response  = restTemplate.exchange(
                     uriTemplate,
                     HttpMethod.GET,
                     entity,
@@ -41,7 +41,6 @@ public class YakeenService {
         } catch (Exception e) {
             // Handle other HTTP status codes as needed
             System.out.println("Unexpected error. " + e.getMessage());
-
             return ResponseEntity.badRequest().body(new YakeenResponseError(false,"An invalid mobile number was used, please provide a valid mobile number "+mobile));
         }
 
