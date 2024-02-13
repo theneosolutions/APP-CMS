@@ -12,9 +12,9 @@ public class YakeenService {
     private final RestTemplate restTemplate;
     String baseUrl = "https://yakeen-lite.api.elm.sa:443/api/v1/";
 
-private static final String appId = "83597d3b";
-    private static final   String appKey="f611b6a0b405544534a5b0355862f701";
-    private static final  String serviceKey="98fd9fd5-3ff7-4c28-a0bd-d4b8de7c8c78";
+    private static final String appId = "83597d3b";
+    private static final String appKey = "f611b6a0b405544534a5b0355862f701";
+    private static final String serviceKey = "98fd9fd5-3ff7-4c28-a0bd-d4b8de7c8c78";
 
     public YakeenService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -30,15 +30,26 @@ private static final String appId = "83597d3b";
         HttpEntity<?> entity = new HttpEntity<>(headers);
         String uriTemplate = baseUrl + "person/" + id + "/owns-mobile/" + mobile;
 
-        ResponseEntity<YakeenDto> response = restTemplate.getForEntity(
+        ResponseEntity<Object> response = restTemplate.exchange(
                 uriTemplate,
-                YakeenDto.class,
-                entity
+                HttpMethod.GET,
+                entity,
+                Object.class
         );
 
-        System.out.println(response.getBody());
-
-        return ResponseEntity.ok().body(response.getBody().isOwner());
+        if (response.getStatusCode() == HttpStatus.OK) {
+            // Process the successful response
+            Object responseBody = response.getBody();
+            return ResponseEntity.ok().body(responseBody);
+        } else if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            // Handle the specific error for invalid mobile number
+            System.out.println("Invalid mobile number. Please provide a valid mobile number.");
+            return ResponseEntity.ok().body("Invalid mobile number. Please provide a valid mobile number.");
+        } else {
+            // Handle other HTTP status codes as needed
+            System.out.println("Unexpected error. Status code: " + response.getStatusCode());
+            return ResponseEntity.badRequest().body("Unexpected error. Status code:");
+        }
     }
 
 }
