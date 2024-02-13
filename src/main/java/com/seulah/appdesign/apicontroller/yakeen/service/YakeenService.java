@@ -45,7 +45,7 @@ public class YakeenService {
                 return ResponseEntity.ok().body(new MessageResponse("Verified", response.getBody(), false));
 
             } else {
-                return ResponseEntity.ok().body(new MessageResponse("This is mobile is not verified with this id number", response.getBody(), true));
+                return ResponseEntity.ok().body(new MessageResponse("This mobile number is not verified for the given ID number.", response.getBody(), true));
 
             }
 
