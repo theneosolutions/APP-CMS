@@ -34,7 +34,7 @@ public class BaseService {
     public ResponseEntity<?> getTerms() {
       List<Terms> terms =  termsRepo.findAll();
       if(terms!=null){
-          return ResponseEntity.ok().body(terms.get(0));
+          return ResponseEntity.ok().body(terms);
       }
       return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
     }
