@@ -42,7 +42,7 @@ public class YakeenService {
                     YakeenDto.class
             );
             if (response.getBody().getIsOwner() == "true") {
-                return ResponseEntity.ok().body(new MessageResponse("Verified", response.getBody(), false));
+                return ResponseEntity.ok().body(new MessageResponse("Mobile number is Verified", response.getBody(), false));
 
             } else {
                 return ResponseEntity.ok().body(new MessageResponse("This mobile number is not verified for the given ID number.", response.getBody(), true));
