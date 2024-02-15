@@ -25,9 +25,10 @@ public class BaseService {
             items.setDesc(terms.getDesc());
             termsRepo.save(items);
             return ResponseEntity.badRequest().body(new MessageResponse("Terms & Condition has been Updated",null,false));
+        }else {
+            termsRepo.save(terms);
+            return ResponseEntity.badRequest().body(new MessageResponse("Terms & Condition has been Saved", null, false));
         }
-        termsRepo.save(terms);
-        return ResponseEntity.badRequest().body(new MessageResponse("Terms & Condition has been Saved",null,true));
     }
 
     public ResponseEntity<?> getTerms() {
