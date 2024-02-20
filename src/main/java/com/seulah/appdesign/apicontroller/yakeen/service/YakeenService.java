@@ -44,6 +44,8 @@ public class YakeenService {
             if (response.getBody().getIsOwner() == "true") {
                 return ResponseEntity.ok().body(new MessageResponse("Mobile number is Verified", response.getBody(), false));
 
+            } else if (response.getBody().getMessage() != null) {
+                return ResponseEntity.ok().body(new MessageResponse("An invalid mobile number was used, please provide a valid mobile number (9665XXXXXXXX)", response.getBody().getReferenceNumber(), true));
             } else {
                 return ResponseEntity.ok().body(new MessageResponse("This mobile number is not verified for the given ID number.", response.getBody(), true));
 

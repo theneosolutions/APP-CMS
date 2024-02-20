@@ -10,8 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class YakeenDto {
-    private String referenceNumber;
     private String id;
     private String mobile;
     private String isOwner;
+    private String code;
+    private String referenceNumber;
+    private String message;
 }
