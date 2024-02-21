@@ -22,4 +22,8 @@ public class IVRService {
         // Print the response body
         System.out.println("Response body: " + responseEntity.getBody());
     }
+
+    public void confirmRequest(String status) {
+        System.out.println("Response body confirmRequest{}: " + status);
+    }
 }

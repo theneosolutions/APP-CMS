@@ -17,4 +17,8 @@ public class IVRController {
     public void createRequest(@RequestParam String username,@RequestParam String password,@RequestParam String phone){
         ivrService.callRequest(username,password,phone);
     }
+    @GetMapping("/callRequest")
+    public void confirmRequest(@RequestParam String status){
+        ivrService.confirmRequest(status);
+    }
 }
