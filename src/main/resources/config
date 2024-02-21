@@ -1,0 +1,6 @@
+[DEFAULT]
+user=ocid1.user.oc1..aaaaaaaaoixf44ymoirufe3qhidhd2rdniecihhwc2bi5fk66fpjvmgwjp6a
+fingerprint=e3:ac:87:e2:b6:34:51:cc:d3:b1:0a:11:db:d4:6c:36
+tenancy=ocid1.tenancy.oc1..aaaaaaaajlddajnsajsi3lvg3kiwz66aojcgofj2skd5jdhdjddmhlr4y2ga
+region=me-jeddah-1
+key_file=private_key_name.pem
