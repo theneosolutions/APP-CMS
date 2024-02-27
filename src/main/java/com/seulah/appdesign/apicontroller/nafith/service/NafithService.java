@@ -26,7 +26,7 @@ public class NafithService {
     HttpHeaders headers = new HttpHeaders();
     String[] gidValues;
     String[] ridValues;
-    String data = "{\"debtor\":{\"national_id\":\"1069282455\"},\"city_of_issuance\":\"1\",\"city_of_payment\":\"1\",\"debtor_phone_number\":\"0546258295\",\"total_value\":1000,\"currency\":\"SAR\",\"max_approve_duration\":6400,\"reference_id\":\"1\",\"country_of_issuance\":\"SA\",\"country_of_payment\":\"SA\",\"sanad\":[{\"due_type\":\"upon request\",\"due_date\":\"2026-12-28\",\"total_value\":1000,\"reference_id\":\"sanad1\"}]}";
+    String data = "{\"debtor\":{\"national_id\":\"1069282455\"},\"city_of_issuance\":\"1\",\"city_of_payment\":\"1\",\"debtor_phone_number\":\"0546258295\",\"total_value\":3000,\"currency\":\"SAR\",\"max_approve_duration\":6400,\"reference_id\":\"1\",\"country_of_issuance\":\"SA\",\"country_of_payment\":\"SA\",\"sanad\":[{\"due_type\":\"upon request\",\"due_date\":\"2026-12-28\",\"total_value\":1000,\"reference_id\":\"sanad1\"}]}";
     String method = "POST";
     String endpoint = "/api/sanad-group/";
     String sanadObject = "";

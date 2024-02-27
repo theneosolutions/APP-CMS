@@ -1,5 +1,10 @@
 package com.seulah.appdesign.apicontroller.ivr.repo;
 
 
-public interface IVRRepo {
+import com.seulah.appdesign.apicontroller.ivr.model.IVRStatus;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface IVRRepo extends MongoRepository<IVRStatus,String> {
 }

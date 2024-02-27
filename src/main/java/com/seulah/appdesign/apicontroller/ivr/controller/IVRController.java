@@ -1,6 +1,7 @@
 package com.seulah.appdesign.apicontroller.ivr.controller;
 
 import com.seulah.appdesign.apicontroller.ivr.service.IVRService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,11 @@ public class IVRController {
         ivrService.callRequest(username,password,phone);
     }
     @GetMapping("/confirmRequest")
-    public void confirmRequest(@RequestParam String status){
-        ivrService.confirmRequest(status);
+    public ResponseEntity<?> confirmRequest(@RequestParam("status") int status,@RequestParam("mobile") String mobile){
+        if(status!=0) {
+          return ivrService.confirmRequest(status,mobile);
+        }else {
+            return  ivrService.confirmRequest(status,mobile);
+        }
     }
 }

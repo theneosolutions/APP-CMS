@@ -1,24 +1,31 @@
 package com.seulah.appdesign.apicontroller.nafath.service;
 
 
+import com.seulah.appdesign.apicontroller.nafath.entity.NafathPayload;
 import com.seulah.appdesign.apicontroller.nafath.entity.NafathResponse;
+import com.seulah.appdesign.apicontroller.nafath.repo.NafathPayloadRepo;
 import com.seulah.appdesign.apicontroller.nafath.repo.NafathResponseRepo;
 import com.seulah.appdesign.apicontroller.nafath.request.NafathRequest;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Base64;
+import java.util.StringTokenizer;
+
 @Service
 public class NafathService {
     private final RestTemplate restTemplate;
     private final NafathResponseRepo nafathResponseRepo;
+    private final NafathPayloadRepo nafathPayloadRepo;
     String baseUrl = "https://nafath.api.elm.sa/stg/api/v1/mfa";
 
-    ResponseEntity<String> getStatus, getjwk;
 
-    public NafathService(RestTemplate restTemplate, NafathResponseRepo nafathResponseRepo) {
+
+    public NafathService(RestTemplate restTemplate, NafathResponseRepo nafathResponseRepo,  NafathPayloadRepo nafathPayloadRepo) {
         this.restTemplate = restTemplate;
         this.nafathResponseRepo = nafathResponseRepo;
+        this.nafathPayloadRepo = nafathPayloadRepo;
     }
 
     public  ResponseEntity<?> getRequestData(String local, String requestId, NafathRequest nafathRequest) {
@@ -45,10 +52,23 @@ public class NafathService {
 
     public ResponseEntity<Object> saveResponse(NafathResponse nafathResponse) {
         if (nafathResponse != null) {
-            System.out.println(nafathResponse.toString()+"Arham");
-            return ResponseEntity.ok().body(nafathResponseRepo.save(nafathResponse));
+          Object o =  decodeJWT(nafathResponse.getToken());
+            nafathResponseRepo.save(nafathResponse);
+            nafathPayloadRepo.save(new NafathPayload(nafathResponse.getTransId(),o));
+            return ResponseEntity.ok().body("Saved Data SuccessFull");
         } else {
             return ResponseEntity.badRequest().body("No Record Found");
         }
+    }
+    public static String decodeJWT(String jwtToken) {
+        StringTokenizer st = new StringTokenizer(jwtToken, ".");
+        if (st.countTokens() != 3) {
+            throw new IllegalArgumentException("Invalid JWT token format");
+        }
+
+        String header = new String(Base64.getUrlDecoder().decode(st.nextToken()));
+        String payload = new String(Base64.getUrlDecoder().decode(st.nextToken()));
+
+        return  payload;
     }
 }
