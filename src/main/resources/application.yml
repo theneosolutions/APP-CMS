@@ -29,14 +29,14 @@ eureka:
   instance:
     ip-address: true
 image:
-  path: ${image.path}
+  path: http://seulahtest.s3-website-us-east-1.amazonaws.com
 cloud:
   aws:
     credentials:
-      access-key: ${access_key}
-      secret-key: ${secret_key}
+      access-key: AKIATDONUYHMXNZBVOVC
+      secret-key: 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
     region:
-      static: ${s3_region}
+      static: s3_region=us-east-1
     stack:
       auto: false
 
@@ -45,3 +45,19 @@ application:
     name: seulahbucket
 
 
+sftp:
+  password: password
+  port: '22'
+  host: 127.0.0.1
+  channelTimeout: '15000'
+  sessionTimeout: '15000'
+  username: user
+  passphrase: aa
+  privatekey: aaa
+
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
