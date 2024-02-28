@@ -40,7 +40,6 @@ jobs:
       - name: Build with Maven        
         run: |
           mvn --version
-          mongod --version
           ls -la
           mvn clean
           mvn install
