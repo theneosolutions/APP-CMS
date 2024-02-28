@@ -9,9 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        maven: [3.9.6, 3.9.0]
+    #strategy:
+      #matrix:
+        #maven: [3.9.6, 3.9.0]
 
     steps:
       - name: Checkout code
@@ -27,8 +27,10 @@ jobs:
       - name: Set up Maven
         uses: hb0730/maven-action@v1.0.2
         with:
+          url: https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+          maven-verison: 3.9.6
           #java-version: '17'
-          maven-version: ${{ matrix.maven-version }}
+          #maven-version: ${{ matrix.maven-version }}
           
       - name: Build with Maven        
         run: |
