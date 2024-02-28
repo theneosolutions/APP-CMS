@@ -20,14 +20,14 @@ jobs:
           ref: bucket # Replace 'main' with the name of the branch you want to checkout
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v1
         with:
           java-version: '17'
 
       - name: Set up Maven
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          java-version: '11'
           maven-version: ${{ matrix.maven-version }}
           
       - name: Build with Maven        
