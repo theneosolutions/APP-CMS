@@ -54,10 +54,14 @@ public class NafathService {
             Object o = decodeJWT(nafathResponse.getToken());
             nafathResponseRepo.save(nafathResponse);
             nafathPayloadRepo.save(new NafathPayload(nafathResponse.getTransId(), o));
+            sendNotification();
             return ResponseEntity.ok().body("Saved Data SuccessFull");
         } else {
             return ResponseEntity.badRequest().body("No Record Found");
         }
+    }
+
+    private void sendNotification() {
     }
 
     public static String decodeJWT(String jwtToken) {
