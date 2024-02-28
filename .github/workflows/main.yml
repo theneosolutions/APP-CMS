@@ -22,12 +22,14 @@ jobs:
 
       - name: Build with Maven        
         run: |
+          mvn --version
           mvn clean
           mvn install
 
       - name: Display with tree cmd        
-        run: tree
-      
+        run: |
+         ls -la 
+         ls -la target
       
       #- name: Deploy to EC2 instance
         #run: |
