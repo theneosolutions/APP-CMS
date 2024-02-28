@@ -35,6 +35,7 @@ jobs:
       - name: Build with Maven        
         run: |
           mvn --version
+          ls -la
           mvn clean
           mvn install
 
