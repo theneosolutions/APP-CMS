@@ -1,36 +1,29 @@
-name: CI
+name: Build and Deploy
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push events but only for the "bucket" branch
   push:
-    branches: 
-      - bucket
+    branches:
+      - '*'
 
-  # Triggers the workflow on pull request events but only for the "bucket" branch
-  pull_request:
-    branches: 
-      - bucket
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: bucket # Replace 'main' with the name of the branch you want to checkout
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-      - name: Switch Branch Develop
-        run: git checkout develop
-      - name: Display PWD
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+
+      - name: Display content
         run: ls -la 
+
+      #- name: Deploy to EC2 instance
+        #run: |
+          # Replace the following command with your deployment script
+          #echo "Deploying to EC2 instance..."
