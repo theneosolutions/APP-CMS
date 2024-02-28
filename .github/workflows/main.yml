@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        maven-version: [3.9.6, 3.9.0]
 
     steps:
       - name: Checkout code
@@ -20,12 +24,6 @@ jobs:
         with:
           java-version: '17'
           
-      - name: Set up Maven
-        uses: actions/setup-java@v1
-        with:
-          java-version: '17'
-          maven-version: '3.9.6'
-
       - name: Build with Maven        
         run: |
           mvn --version
