@@ -117,9 +117,29 @@ public class NafithService {
         ResponseEntity<Object> response = restTemplate.exchange(url,HttpMethod.GET, entity,Object.class);
 
 
-        sanadDetailsRepo.save(new SanadDetails(response));
-        System.out.println(response);
+        sanadDetailsRepo.save(new SanadDetails(response.getBody()));
+        System.out.println(response.getBody());
 
         return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity<byte[]> downloadPDF(String uuid) {
+        // Setting up the headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Nafith-Tracking-Id", "T6");
+        headers.set("X-Nafith-Timestamp", "1709041904653");
+        headers.set("X-Nafith-Signature", "l/XWKm6cUfdPTKhACy2K0KiFsZQKw1V/Gikr42eylDo=");
+        headers.set("Authorization", "Bearer CBdK1VIPET1IpPBeQgOWh9PJTdEuom");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // URL from the curl command
+        String url = "https://sandbox.nafith.sa/api/sanad-group/download/"+uuid+"/";
+
+        // Making the GET request for file download
+        ResponseEntity<byte[]> response = restTemplate.getForEntity(url, byte[].class, entity);
+
+        return ResponseEntity.ok().body(response.getBody());
+
     }
 }

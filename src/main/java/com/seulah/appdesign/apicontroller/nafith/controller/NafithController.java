@@ -34,5 +34,9 @@ public class NafithController {
         System.out.println(sanad);
         return ResponseEntity.ok("True");
     }
+    @PostMapping("/downloadPDF")
+    public ResponseEntity<?> downloadPDF(@RequestParam String uuid){
+       return nafithService.downloadPDF(uuid);
+    }
 
 }
