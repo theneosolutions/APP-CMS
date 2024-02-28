@@ -21,14 +21,13 @@ public class NafathService {
     String baseUrl = "https://nafath.api.elm.sa/stg/api/v1/mfa";
 
 
-
-    public NafathService(RestTemplate restTemplate, NafathResponseRepo nafathResponseRepo,  NafathPayloadRepo nafathPayloadRepo) {
+    public NafathService(RestTemplate restTemplate, NafathResponseRepo nafathResponseRepo, NafathPayloadRepo nafathPayloadRepo) {
         this.restTemplate = restTemplate;
         this.nafathResponseRepo = nafathResponseRepo;
         this.nafathPayloadRepo = nafathPayloadRepo;
     }
 
-    public  ResponseEntity<?> getRequestData(String local, String requestId, NafathRequest nafathRequest) {
+    public ResponseEntity<?> getRequestData(String local, String requestId, NafathRequest nafathRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         headers.set("APP-ID", "eb4ba20f");
@@ -52,14 +51,15 @@ public class NafathService {
 
     public ResponseEntity<Object> saveResponse(NafathResponse nafathResponse) {
         if (nafathResponse != null) {
-          Object o =  decodeJWT(nafathResponse.getToken());
+            Object o = decodeJWT(nafathResponse.getToken());
             nafathResponseRepo.save(nafathResponse);
-            nafathPayloadRepo.save(new NafathPayload(nafathResponse.getTransId(),o));
+            nafathPayloadRepo.save(new NafathPayload(nafathResponse.getTransId(), o));
             return ResponseEntity.ok().body("Saved Data SuccessFull");
         } else {
             return ResponseEntity.badRequest().body("No Record Found");
         }
     }
+
     public static String decodeJWT(String jwtToken) {
         StringTokenizer st = new StringTokenizer(jwtToken, ".");
         if (st.countTokens() != 3) {
@@ -69,6 +69,6 @@ public class NafathService {
         String header = new String(Base64.getUrlDecoder().decode(st.nextToken()));
         String payload = new String(Base64.getUrlDecoder().decode(st.nextToken()));
 
-        return  payload;
+        return payload;
     }
 }
