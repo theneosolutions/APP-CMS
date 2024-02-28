@@ -129,7 +129,7 @@ public class NafithService {
         headers.set("X-Nafith-Tracking-Id", "T6");
         headers.set("X-Nafith-Timestamp", "1709041904653");
         headers.set("X-Nafith-Signature", "l/XWKm6cUfdPTKhACy2K0KiFsZQKw1V/Gikr42eylDo=");
-        headers.set("Authorization", "Bearer CBdK1VIPET1IpPBeQgOWh9PJTdEuom");
+        headers.setBearerAuth("CBdK1VIPET1IpPBeQgOWh9PJTdEuom");
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
@@ -137,7 +137,7 @@ public class NafithService {
         String url = "https://sandbox.nafith.sa/api/sanad-group/download/"+uuid+"/";
 
         // Making the GET request for file download
-        ResponseEntity<byte[]> response = restTemplate.getForEntity(url, byte[].class, entity);
+        ResponseEntity<byte[]> response = restTemplate.exchange(url,HttpMethod.GET, entity,byte[].class);
 
         return ResponseEntity.ok().body(response.getBody());
 
