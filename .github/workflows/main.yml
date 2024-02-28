@@ -49,7 +49,11 @@ jobs:
          ls -la 
          ls -la target
       
-      #- name: Deploy to EC2 instance
-        #run: |
-          # Replace the following command with your deployment script
-          #echo "Deploying to EC2 instance..."
+      - uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          source: app-design-0.0.1-SNAPSHOT.jar
+          target: /home/opc/
