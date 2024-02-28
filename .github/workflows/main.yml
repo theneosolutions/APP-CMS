@@ -18,11 +18,17 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: '11'
+          java-version: '17'
 
-      - name: Build with Maven
-        run: mvn clean install 
+      - name: Build with Maven        
+        run: |
+          mvn clean
+          mvn install
 
+      - name: Display with tree cmd        
+        run: tree
+      
+      
       #- name: Deploy to EC2 instance
         #run: |
           # Replace the following command with your deployment script
