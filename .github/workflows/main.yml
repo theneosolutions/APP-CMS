@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - "bucket"
-
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name = bucket'
+        required: true
+        default: 'bucket'
+        
 jobs:
   build:
     runs-on: ubuntu-latest
