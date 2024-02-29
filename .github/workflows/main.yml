@@ -1,9 +1,9 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches:
-      - "bucket"
+#  push:
+#    branches:
+#      - "bucket"
   workflow_dispatch:
     inputs:
       branch:
