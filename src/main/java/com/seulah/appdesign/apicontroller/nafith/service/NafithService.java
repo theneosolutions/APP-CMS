@@ -6,8 +6,11 @@ import com.seulah.appdesign.apicontroller.nafith.model.SanadDetails;
 import com.seulah.appdesign.apicontroller.nafith.repo.CallBackResponse;
 import com.seulah.appdesign.apicontroller.nafith.repo.CreateSingleSanadGroupRepo;
 import com.seulah.appdesign.apicontroller.nafith.repo.SanadDetailsRepo;
+import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.HashMap;
 
 @Service
 public class NafithService {
@@ -54,7 +58,7 @@ public class NafithService {
             headers.set("X-Nafith-Timestamp", "1709041904653");
             headers.set("X-Nafith-Tracking-Id", "145");
             headers.set("X-Nafith-Signature", hmacSha256(secretKey, message));
-            headers.setBearerAuth("CBdK1VIPET1IpPBeQgOWh9PJTdEuom");
+            headers.setBearerAuth(getAccessToken());
             HttpEntity<?> requestEntity = new HttpEntity<>(o, headers);
             // Build the URI with parameters if needed
             String apiUrl = "https://sandbox.nafith.sa/api/sanad-group/";
@@ -100,14 +104,39 @@ public class NafithService {
         System.out.println(sanad);
     }
 
+    public String getAccessToken(){
+
+        // Setting up the headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set("Authorization", "Basic NWZmWG5uSzJ6M2Y1RVYwalo0TFlhOVRCYTNEdkFBVzdhUlR6bjRWQjpPVjdNRnFJNVQ4QmRnMGh3MmpaTW1pSE5ldGpqNjFhWG9BaTZjNE8zSTBWVUJETzJaU0owd1dnSGJkd0ViZjNKYkozTTdqdVRydUI0NDhBS0Fpa0NrU1JoMXhlSERjRXhXOVFwMEhSektLczc1c0VoeVZjM3M2ZE5rTnNJNEdmWQ==");
+
+        // Setting up the request body
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type", "client_credentials");
+        map.add("scope", "read write");
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
+
+        // URL from the curl command
+        String url = "https://sandbox.nafith.sa/api/oauth/token/";
+
+        // Making the POST request
+        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+        JSONObject jsonResponse = new JSONObject(response.getBody());
+        String accessToken = jsonResponse.getString("access_token");
+
+        return accessToken;
+    }
+
     public ResponseEntity<?> getSanadDetails(String group_uuid,String sanad_uid) {
         // Setting up the headers
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Nafith-Tracking-Id", "t4");
         headers.set("X-Nafith-Timestamp", "1709041904653");
         headers.set("X-Nafith-Signature", "IcP6fLluv1felWN3MgQOnn3zbb6xcHXsd+O2p+Q7yAY=");
-        headers.setBearerAuth("CBdK1VIPET1IpPBeQgOWh9PJTdEuom");
-
+        headers.setBearerAuth(getAccessToken());
+        System.out.println(getAccessToken());
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         // URL from the curl command
@@ -122,15 +151,15 @@ public class NafithService {
 
         return ResponseEntity.ok().body(response);
     }
-
-    public ResponseEntity<byte[]> downloadPDF(String uuid) {
+    HashMap<String,String> map = new HashMap<>();
+    public ResponseEntity<?> downloadPDF(String uuid) {
         // Setting up the headers
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Nafith-Tracking-Id", "T6");
         headers.set("X-Nafith-Timestamp", "1709041904653");
         headers.set("X-Nafith-Signature", "l/XWKm6cUfdPTKhACy2K0KiFsZQKw1V/Gikr42eylDo=");
-        headers.setBearerAuth("CBdK1VIPET1IpPBeQgOWh9PJTdEuom");
-
+        headers.setBearerAuth(getAccessToken());
+        System.out.println(getAccessToken());
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         // URL from the curl command
@@ -138,8 +167,19 @@ public class NafithService {
 
         // Making the GET request for file download
         ResponseEntity<byte[]> response = restTemplate.exchange(url,HttpMethod.GET, entity,byte[].class);
+        if (response.getBody() != null && response.getBody().length > 0) {
+            // Convert byte array to Base64 encoded string
+            String base64EncodedPdf = Base64.getEncoder().encodeToString(response.getBody());
+            // base64EncodedPdf now contains your PDF in Base64 encoded form
+            System.out.println("Base64 Encoded PDF: " + base64EncodedPdf);
 
-        return ResponseEntity.ok().body(response.getBody());
+            map.put("Base64",base64EncodedPdf);
+            return ResponseEntity.ok().body(map);
+        } else {
+            return ResponseEntity.badRequest().body("No PDF data received from the server");
+
+        }
+
 
     }
 }
