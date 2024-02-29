@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - "*"
+      - "bucket"
 
 jobs:
   build:
@@ -49,12 +49,5 @@ jobs:
          ls -la 
          #ls -la target
       
-      - uses: easingthemes/ssh-deploy@main
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
-          source: README.md
-          target: /home/opc/
+      #- uses: easingthemes/ssh-deploy@main
+        #with:
