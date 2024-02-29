@@ -51,14 +51,31 @@ public class NafathService {
 
     public ResponseEntity<Object> saveResponse(NafathResponse nafathResponse) {
         if (nafathResponse != null) {
-            Object o = decodeJWT(nafathResponse.getToken());
-            nafathResponseRepo.save(nafathResponse);
-            nafathPayloadRepo.save(new NafathPayload(nafathResponse.getTransId(), o));
-            sendNotification();
-            return ResponseEntity.ok().body("Saved Data SuccessFull");
+            try {
+                Object o = decodeJWT(nafathResponse.getToken());
+                nafathResponseRepo.save(nafathResponse);
+                nafathPayloadRepo.save(new NafathPayload(nafathResponse.getTransId(), o));
+                sendNotification();
+                saveDataInMysql(o);
+                return ResponseEntity.ok().body("Saved Data SuccessFull");
+            } catch (NullPointerException e) {
+                return ResponseEntity.badRequest().body("No Record Found");
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Something went wrong");
+            }
         } else {
             return ResponseEntity.badRequest().body("No Record Found");
         }
+    }
+
+    private void saveDataInMysql(Object o) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        headers.set("APP-ID", "eb4ba20f");
+        headers.set("APP-KEY", "9bb86fcc9488a1ed8c54185a4dd58005");
+        HttpEntity<?> entity = new HttpEntity<>(o, headers);
+        String uriTemplate ="https://seulah.com/";
+
     }
 
     private void sendNotification() {
