@@ -8,10 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    #strategy:
-      #matrix:
-        #maven: [3.9.6, 3.9.0]
+
 
     steps:
       - name: Checkout code
@@ -29,8 +26,6 @@ jobs:
         with:
           url: https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
           maven-verison: 3.9.6
-          #java-version: '17'
-          #maven-version: ${{ matrix.maven-version }}
 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.10.0
@@ -49,5 +44,3 @@ jobs:
          ls -la 
          #ls -la target
       
-      #- uses: easingthemes/ssh-deploy@main
-        #with:
