@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.HashMap;
 
 @Service
 public class IVRService {
@@ -41,7 +42,7 @@ public class IVRService {
 
         // Print the response body
         System.out.println("Response body: " + response);
-        return ResponseEntity.ok().body("response: {}"+response);
+        return ResponseEntity.ok().body(new HashMap<>().put("message","Success"));
     }
 
     public ResponseEntity<?> confirmRequest(int status, String mobile) {

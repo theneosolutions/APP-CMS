@@ -19,9 +19,8 @@ public class NafithController {
     private NafithService nafithService;
     String trackingId, timestamp,signature;
     @PostMapping("/sanad-group")
-    public ResponseEntity<String> setSanadGroup(@RequestBody Object sanad) {
-        nafithService.setSanadGroup(sanad);
-        return ResponseEntity.ok("Sanad Group created successfully");
+    public ResponseEntity<?> setSanadGroup(@RequestBody Object sanad) {
+        return nafithService.setSanadGroup(sanad);
     }
 
     @PostMapping("/getSanadDetails")
