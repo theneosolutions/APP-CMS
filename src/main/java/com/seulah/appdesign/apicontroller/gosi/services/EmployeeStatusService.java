@@ -44,6 +44,7 @@ public class EmployeeStatusService {
             Gosi gosi = response.getBody();
             gosi.setId(customerId);
             gosiRepo.save(gosi);
+            gosi.setStatus("true");
             return response;
         } catch (RestClientException e) {
             // Handle exception, log it, or return an error response
