@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -28,7 +29,7 @@ public class EmployeeStatusService {
         this.restTemplate = restTemplate;
         this.gosiRepo = gosiRepo;
     }
-
+    Gosi gosi= new Gosi();
     public ResponseEntity<?> getStatusByCustomerId(String customerId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
@@ -49,7 +50,17 @@ public class EmployeeStatusService {
         } catch (RestClientException e) {
             // Handle exception, log it, or return an error response
             e.printStackTrace();
-            return new ResponseEntity<>("Error during API call", HttpStatus.INTERNAL_SERVER_ERROR);
+           gosi.setStatus("false");
+           gosi.setMessage("No Record Found From GOSI");
+           gosi.setEmploymentStatusInfo(null);
+            return ResponseEntity.ok().body(gosi);
+        } catch (Exception e) {
+            // Handle exception, log it, or return an error response
+            e.printStackTrace();
+            gosi.setStatus("false");
+            gosi.setMessage("No Record Found From GOSI");
+            gosi.setEmploymentStatusInfo(null);
+            return new ResponseEntity<>(gosi, HttpStatus.BAD_REQUEST);
         }
     }
 
