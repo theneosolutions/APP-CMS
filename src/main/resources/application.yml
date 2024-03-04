@@ -37,8 +37,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     ip-address: true
-image:
-  path: http://seulahtest.s3-website-us-east-1.amazonaws.com
+
 cloud:
   aws:
     credentials:
@@ -48,6 +47,8 @@ cloud:
       static: s3_region=us-east-1
     stack:
       auto: false
+    image:
+      path: http://seulahtest.s3-website-us-east-1.amazonaws.com
 
 application:
   bucket:

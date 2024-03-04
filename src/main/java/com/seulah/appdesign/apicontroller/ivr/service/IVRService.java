@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.util.Collections;
@@ -27,14 +28,19 @@ public class IVRService {
     }
 
     public void callRequest(String username, String password, String phone) {
-        // Define the URL with parameters
-        String url = "https://autodialer.bevatel.com/autodialer/api/call.php?username=" + username + "&password=" + password + "&phone=" + phone;
 
         // Make the HTTP GET request and store the response
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String url = UriComponentsBuilder.fromHttpUrl("https://autodialer.bevatel.com/autodialer/api/call.php")
+                .queryParam("username", username)
+                .queryParam("password", password)
+                .queryParam("phone", phone)
+                .toUriString();
+
+        // Perform the GET request
+        String response = restTemplate.getForObject(url, String.class);
 
         // Print the response body
-        System.out.println("Response body: " + responseEntity.getBody());
+        System.out.println("Response body: " + response);
     }
 
     public ResponseEntity<?> confirmRequest(int status, String mobile) {
