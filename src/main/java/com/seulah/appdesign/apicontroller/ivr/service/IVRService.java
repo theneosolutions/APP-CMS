@@ -27,7 +27,7 @@ public class IVRService {
         this.ivrRepo = ivrRepo;
     }
 
-    public void callRequest(String username, String password, String phone) {
+    public ResponseEntity<?> callRequest(String username, String password, String phone) {
 
         // Make the HTTP GET request and store the response
         String url = UriComponentsBuilder.fromHttpUrl("https://autodialer.bevatel.com/autodialer/api/call.php")
@@ -41,6 +41,7 @@ public class IVRService {
 
         // Print the response body
         System.out.println("Response body: " + response);
+        return ResponseEntity.ok().body("response: {}"+response);
     }
 
     public ResponseEntity<?> confirmRequest(int status, String mobile) {
