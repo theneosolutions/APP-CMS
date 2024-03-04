@@ -11,6 +11,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,11 +42,9 @@ public class NafithService {
         this.sanadDetailsRepo = sanadDetailsRepo;
         this.restTemplate = restTemplate;
     }
-
+    HashMap<String,String> response = new HashMap<>();
     public ResponseEntity<?> setSanadGroup(Object o) {
         try {
-
-
             String encodedData = Base64.getEncoder().encodeToString(data.getBytes(StandardCharsets.UTF_8));
             String message = String.format("%s\n%s\n%s\nid=%s&t=%s&ed=%s",
                     method, "nafith.sa", endpoint, "", "1709041904653", encodedData);
@@ -70,12 +69,17 @@ public class NafithService {
             } catch (RestClientException e) {
                 // Handle exception, log it, or return an error response
                 e.printStackTrace();
-                return new ResponseEntity<>("Error during API call", HttpStatus.INTERNAL_SERVER_ERROR);
+                response.put("message","INTERNAL_SERVER_ERROR");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Error during API call", HttpStatus.NOT_FOUND);
+            response.put("message","INTERNAL_SERVER_ERROR");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }catch (HttpClientErrorException.BadRequest e){
+            response.put("message","Error during API call");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
     }
