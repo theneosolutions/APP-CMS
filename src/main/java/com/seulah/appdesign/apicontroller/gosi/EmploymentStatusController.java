@@ -17,12 +17,8 @@ public class EmploymentStatusController {
     }
 
     @GetMapping("/income")
-    public ResponseEntity<?> getEmploymentStatusInfo(@RequestParam("APP-ID") String appId,
-                                                     @RequestParam("APP-KEY") String appKey,
-                                                     @RequestParam("PLATFORM-KEY") String platformKey,
-                                                     @RequestParam("ORGANIZATION-NUMBER") String organizationNumber,
-                                                     @RequestParam("customerId") String customerId) {
-        return employeeStatusService.getStatusByCustomerId(appId, appKey, platformKey, organizationNumber, customerId);
+    public ResponseEntity<?> addEmploymentStatusInfo(@RequestParam("customerId") String customerId) {
+        return employeeStatusService.getStatusByCustomerId(customerId);
     }
 
     @GetMapping("/getDataById")

@@ -6,6 +6,7 @@ import com.seulah.appdesign.apicontroller.nafath.entity.NafathResponse;
 import com.seulah.appdesign.apicontroller.nafath.repo.NafathPayloadRepo;
 import com.seulah.appdesign.apicontroller.nafath.repo.NafathResponseRepo;
 import com.seulah.appdesign.apicontroller.nafath.request.NafathRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +20,10 @@ public class NafathService {
     private final NafathResponseRepo nafathResponseRepo;
     private final NafathPayloadRepo nafathPayloadRepo;
     String baseUrl = "https://nafath.api.elm.sa/stg/api/v1/mfa";
-
+    @Value("${spring.application.nafath.appId}")
+    private String appId;
+    @Value("${spring.application.nafath.appKey}")
+    private String appKey;
 
     public NafathService(RestTemplate restTemplate, NafathResponseRepo nafathResponseRepo, NafathPayloadRepo nafathPayloadRepo) {
         this.restTemplate = restTemplate;
@@ -30,8 +34,8 @@ public class NafathService {
     public ResponseEntity<?> getRequestData(String local, String requestId, NafathRequest nafathRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        headers.set("APP-ID", "eb4ba20f");
-        headers.set("APP-KEY", "9bb86fcc9488a1ed8c54185a4dd58005");
+        headers.set("APP-ID", appId);
+        headers.set("APP-KEY", appKey);
         HttpEntity<?> entity = new HttpEntity<>(nafathRequest, headers);
         String uriTemplate = baseUrl + "/request?local={local}&requestId={requestId}";
 

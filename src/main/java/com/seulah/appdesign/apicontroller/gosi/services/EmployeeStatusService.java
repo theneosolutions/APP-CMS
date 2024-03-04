@@ -2,6 +2,7 @@ package com.seulah.appdesign.apicontroller.gosi.services;
 
 import com.seulah.appdesign.apicontroller.gosi.dto.Gosi;
 import com.seulah.appdesign.apicontroller.gosi.repo.GosiRepo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -14,13 +15,21 @@ public class EmployeeStatusService {
 
     private final RestTemplate restTemplate;
     private final GosiRepo gosiRepo;
+    @Value("${spring.application.gosi.appId}")
+    private String appId;
+    @Value("${spring.application.gosi.appKey}")
+    private String appKey;
+    @Value("${spring.application.gosi.platformKey}")
+    private String platformKey;
+    @Value("${spring.application.gosi.organizationNumber}")
+    private String organizationNumber;
 
     public EmployeeStatusService(RestTemplate restTemplate, GosiRepo gosiRepo) {
         this.restTemplate = restTemplate;
         this.gosiRepo = gosiRepo;
     }
 
-    public ResponseEntity<?> getStatusByCustomerId(String appId, String appKey, String platformKey, String organizationNumber, String customerId) {
+    public ResponseEntity<?> getStatusByCustomerId(String customerId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
         headers.set("APP-ID", appId);

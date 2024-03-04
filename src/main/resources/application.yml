@@ -18,6 +18,15 @@ spring:
       matching-strategy: ant_path_matcher
   application:
     name: CMS-SERVICE
+    gosi:
+      appId: 6e6adfc9
+      appKey: 9093c0db181932602b18f9b231a0f1fd
+      platformKey: 84ac2d21-6a7a-4742-9cf0-1d9811fb95ab
+      organizationNumber: 7033740874
+    nafath:
+      appId: eb4ba20f
+      appKey: 9bb86fcc9488a1ed8c54185a4dd58005
+
 server:
   port: 8090
 eureka:
@@ -61,3 +70,4 @@ sftp:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
