@@ -20,7 +20,7 @@ public class FCMService {
     }
 
     public String sendNotification(String subject, String content, MultipartFile file, String topic, String navigation) throws FirebaseMessagingException {
-        fileUploadService.uploadFile(file);
+      //  fileUploadService.uploadFile(file);
         Notification notification = Notification
                 .builder()
                 .setTitle(subject)
