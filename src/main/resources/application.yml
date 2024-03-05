@@ -53,6 +53,7 @@ cloud:
 application:
   bucket:
     name: seulahbucket
+  leanToken: d07e9715-ae87-4c03-912c-d0b4ae220aa2
 
 
 sftp:

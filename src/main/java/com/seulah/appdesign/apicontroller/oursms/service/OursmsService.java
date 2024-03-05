@@ -24,7 +24,6 @@ public class OursmsService {
             if (mobileNumber != null) {
                 smsRequest = new SmsRequest();
                 smsRequest.setSrc("SeulahFin");
-                ;
                 smsRequest.setDests(new String[]{mobileNumber, mobileNumber});
                 smsRequest.setBody(otp);
 
