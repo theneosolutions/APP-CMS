@@ -16,8 +16,8 @@ public class OursmsController {
 
     @GetMapping("/sms")
     public String ourSMS(@RequestParam String idNumber, @RequestParam String otp){
-        return otp;
-       // return oursmsService.ourSms(idNumber,otp);
+        //return otp;
+        return oursmsService.ourSms(idNumber,otp);
     }
 
 }
