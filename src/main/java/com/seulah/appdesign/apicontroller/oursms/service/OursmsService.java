@@ -25,7 +25,11 @@ public class OursmsService {
                 smsRequest = new SmsRequest();
                 smsRequest.setSrc("SeulahFin");
                 smsRequest.setDests(new String[]{mobileNumber, mobileNumber});
-                smsRequest.setBody(otp);
+                String message = String.format(
+                        "عزيزي العميل، أنت تحاول الدخول إلى الخدمات المصرفية عبر الإنترنت. كلمة المرور الخاصة بك هي %s. يرجى عدم مشاركة هذا مع أي شخص. وهي صالحة لمدة 1 دقيقة.",
+                        otp
+                );
+                smsRequest.setBody(message);
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.setBearerAuth(bearerToken);
