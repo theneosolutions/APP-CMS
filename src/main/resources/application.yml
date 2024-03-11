@@ -24,8 +24,8 @@ spring:
       platformKey: 84ac2d21-6a7a-4742-9cf0-1d9811fb95ab
       organizationNumber: 7033740874
     nafath:
-      appId: eb4ba20f
-      appKey: 9bb86fcc9488a1ed8c54185a4dd58005
+      appId: b4ae3f06
+      appKey: 51b80331bf8f423772f87d7245aa8c09
 
 server:
   port: 8090
