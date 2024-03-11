@@ -39,29 +39,29 @@ public class DocumentService {
 
     ResponseEntity<LoanResponse> response;
 
-    public ResponseEntity<?> getLoanDetailsByUser(String userId) {
-        String url = "http://localhost:8091/api/v1/los/loanTypeFormula/getLoanDetailsByUser?userId=" + Long.parseLong(userId);
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("accept", "application/json");
-            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
-            response = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
-                    LoanResponse.class);
-            firstImage();
-            secondImage();
-            thirdImage();
-            String[] images = {"C:\\test\\test.png", "C:\\test\\test2.png", "C:\\test\\test3.png"};
-            createPdfFromImages(images, "C:\\test\\output.pdf");
-
-            return response; // Or process the response as needed
-        } catch (HttpClientErrorException e) {
-            return ResponseEntity.ok().body("Client error occurred: " + e.getMessage());
-        } catch (ResourceAccessException e) {
-            return ResponseEntity.badRequest().body("Failed to access resource: " + e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("An error occurred: " + e.getMessage());
-        }
-    }
+//    public ResponseEntity<?> getLoanDetailsByUser(String userId) {
+//        String url = "http://localhost:8091/api/v1/los/loanTypeFormula/getLoanDetailsByUser?userId=" + Long.parseLong(userId);
+//        try {
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.set("accept", "application/json");
+//            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+//            response = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+//                    LoanResponse.class);
+//            firstImage();
+//            secondImage();
+//            thirdImage();
+//            String[] images = {"C:\\test\\test.png", "C:\\test\\test2.png", "C:\\test\\test3.png"};
+//            createPdfFromImages(images, "C:\\test\\output.pdf");
+//
+//            return response; // Or process the response as needed
+//        } catch (HttpClientErrorException e) {
+//            return ResponseEntity.ok().body("Client error occurred: " + e.getMessage());
+//        } catch (ResourceAccessException e) {
+//            return ResponseEntity.badRequest().body("Failed to access resource: " + e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("An error occurred: " + e.getMessage());
+//        }
+//    }
 
 
     private void firstImage() throws Exception {
