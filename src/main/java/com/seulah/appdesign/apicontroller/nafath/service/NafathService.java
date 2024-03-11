@@ -19,7 +19,8 @@ public class NafathService {
     private final RestTemplate restTemplate;
     private final NafathResponseRepo nafathResponseRepo;
     private final NafathPayloadRepo nafathPayloadRepo;
-    String baseUrl = "https://nafath.api.elm.sa/stg/api/v1/mfa";
+    String baseUrl = "https://nafath.api.elm.sa/api/v1/mfa";
+    
     @Value("${spring.application.nafath.appId}")
     private String appId;
     @Value("${spring.application.nafath.appKey}")
