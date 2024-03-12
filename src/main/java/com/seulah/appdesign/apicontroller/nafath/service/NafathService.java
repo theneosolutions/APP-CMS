@@ -20,7 +20,7 @@ public class NafathService {
     private final NafathResponseRepo nafathResponseRepo;
     private final NafathPayloadRepo nafathPayloadRepo;
     String baseUrl = "https://nafath.api.elm.sa/api/v1/mfa";
-    
+
     @Value("${spring.application.nafath.appId}")
     private String appId;
     @Value("${spring.application.nafath.appKey}")
@@ -32,6 +32,8 @@ public class NafathService {
         this.nafathPayloadRepo = nafathPayloadRepo;
     }
 
+    ResponseEntity<Object> response;
+
     public ResponseEntity<?> getRequestData(String local, String requestId, NafathRequest nafathRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
@@ -40,18 +42,21 @@ public class NafathService {
         HttpEntity<?> entity = new HttpEntity<>(nafathRequest, headers);
         String uriTemplate = baseUrl + "/request?local={local}&requestId={requestId}";
 
-
-        ResponseEntity<Object> response = restTemplate.exchange(
-                uriTemplate,
-                HttpMethod.POST,
-                entity,
-                Object.class,
-                local,
-                requestId
-        );
-        System.out.println(response.getBody());
-
-        return response;
+        try {
+            response = restTemplate.exchange(
+                    uriTemplate,
+                    HttpMethod.POST,
+                    entity,
+                    Object.class,
+                    local,
+                    requestId
+            );
+            System.out.println(response.getBody());
+            return  ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            System.out.println(response.getBody());
+            return  ResponseEntity.badRequest().body(response);
+        }
     }
 
     public ResponseEntity<Object> saveResponse(NafathResponse nafathResponse) {
@@ -79,7 +84,7 @@ public class NafathService {
         headers.set("APP-ID", "eb4ba20f");
         headers.set("APP-KEY", "9bb86fcc9488a1ed8c54185a4dd58005");
         HttpEntity<?> entity = new HttpEntity<>(o, headers);
-        String uriTemplate ="https://seulah.com/";
+        String uriTemplate = "https://seulah.com/";
 
     }
 
