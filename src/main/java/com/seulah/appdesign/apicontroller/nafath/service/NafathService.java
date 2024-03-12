@@ -52,10 +52,10 @@ public class NafathService {
                     requestId
             );
             System.out.println(response.getBody());
-            return  ResponseEntity.ok().body(response);
+            return  ResponseEntity.ok().body(response.getBody());
         } catch (Exception e) {
             System.out.println(response.getBody());
-            return  ResponseEntity.badRequest().body(response);
+            return  ResponseEntity.badRequest().body(response.getBody());
         }
     }
 
