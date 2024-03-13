@@ -28,7 +28,7 @@ public class NafathController {
     public ResponseEntity<Object> callBackUrlByNafath(@RequestBody NafathResponse nafathResponse) {
         return nafathService.saveResponse(nafathResponse);
     }
-    @GetMapping
+    @GetMapping("/getNafathDetails")
     public ResponseEntity<Object> getDetailsByNafath() {
         return nafathService.getDetailsByNafath();
     }
