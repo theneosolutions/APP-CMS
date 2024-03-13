@@ -102,4 +102,8 @@ public class NafathService {
 
         return payload;
     }
+
+    public ResponseEntity<Object> getDetailsByNafath() {
+        return ResponseEntity.ok().body(nafathResponseRepo.findAll());
+    }
 }

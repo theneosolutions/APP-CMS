@@ -28,4 +28,8 @@ public class NafathController {
     public ResponseEntity<Object> callBackUrlByNafath(@RequestBody NafathResponse nafathResponse) {
         return nafathService.saveResponse(nafathResponse);
     }
+    @GetMapping
+    public ResponseEntity<Object> getDetailsByNafath() {
+        return nafathService.getDetailsByNafath();
+    }
 }
