@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/v1/cms/terms")
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","https://dev-dms.dd3kk1j719cpv.amplifyapp.com/response/term-conditions"}, maxAge = 3600, allowCredentials = "true")
 public class BaseController {
 
     private final BaseService baseService;
