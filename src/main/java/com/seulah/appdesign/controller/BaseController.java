@@ -1,5 +1,6 @@
 package com.seulah.appdesign.controller;
 
+import com.seulah.appdesign.entity.AgreementForm;
 import com.seulah.appdesign.entity.Terms;
 import com.seulah.appdesign.request.MessageResponse;
 import com.seulah.appdesign.service.BaseService;
@@ -11,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/v1/cms/terms")
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","https://dev-cms.d3k8cagii9iejo.amplifyapp.com/","https://dev-dms.dd3kk1j719cpv.amplifyapp.com/"}, maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","https://dev-dms.dd3kk1j719cpv.amplifyapp.com/response/term-conditions"}, maxAge = 3600, allowCredentials = "true")
 public class BaseController {
 
     private final BaseService baseService;
@@ -28,5 +29,15 @@ public class BaseController {
     @GetMapping(value = "/getTerms")
     public ResponseEntity<?> getTerms() {
         return baseService.getTerms();
+    }
+
+    @PostMapping(value = "/saveAgreement")
+    public ResponseEntity<?> saveAgreement(@RequestBody AgreementForm agreementForm) {
+        log.info("Saving Terms {} ,  condition {}", agreementForm.getTitle(),agreementForm.getDesc());
+        return baseService.saveAgreement(agreementForm);
+    }
+    @GetMapping(value = "/getAgreement")
+    public ResponseEntity<?> getAgreement() {
+        return baseService.getAgreement();
     }
 }
