@@ -33,7 +33,8 @@ public class NafithService {
     String method = "POST";
     String endpoint = "/api/sanad-group/";
 
-    String secretKey = "98fTu4ZrOy9J3fhGlim46hO8o0MyIkPC97lAF8HLgvVIsPBipdpWIU1Cs9kBfYNTzmuTvRSBG6pDkQOL1vPRt1Df1bxAyTy2Iw0ssyDlVKb8UmoK9YaeLEiKeHWkC8nY";
+   // String secretKey = "98fTu4ZrOy9J3fhGlim46hO8o0MyIkPC97lAF8HLgvVIsPBipdpWIU1Cs9kBfYNTzmuTvRSBG6pDkQOL1vPRt1Df1bxAyTy2Iw0ssyDlVKb8UmoK9YaeLEiKeHWkC8nY";
+   String secretKey ="zgNyLTBJpIHWqVMJCSFyMIUTRHIgqzpbzMMc8316U59g4wyELuZGX3wMtHCRRr39kBRfiOtHZhAeV8Sl85FTT4RXXLsDMvsAcidE8oNaj16clPynhtitvc2GcqaKJm2i";
     private final RestTemplate restTemplate;
 
     public NafithService(CreateSingleSanadGroupRepo createSingleSanadGroupRepo, CallBackResponse callBackResponse, SanadDetailsRepo sanadDetailsRepo, RestTemplate restTemplate) {
@@ -113,8 +114,8 @@ public class NafithService {
         // Setting up the headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", "Basic NWZmWG5uSzJ6M2Y1RVYwalo0TFlhOVRCYTNEdkFBVzdhUlR6bjRWQjpPVjdNRnFJNVQ4QmRnMGh3MmpaTW1pSE5ldGpqNjFhWG9BaTZjNE8zSTBWVUJETzJaU0owd1dnSGJkd0ViZjNKYkozTTdqdVRydUI0NDhBS0Fpa0NrU1JoMXhlSERjRXhXOVFwMEhSektLczc1c0VoeVZjM3M2ZE5rTnNJNEdmWQ==");
-
+   //sandBox   //  headers.set("Authorization", "Basic NWZmWG5uSzJ6M2Y1RVYwalo0TFlhOVRCYTNEdkFBVzdhUlR6bjRWQjpPVjdNRnFJNVQ4QmRnMGh3MmpaTW1pSE5ldGpqNjFhWG9BaTZjNE8zSTBWVUJETzJaU0owd1dnSGJkd0ViZjNKYkozTTdqdVRydUI0NDhBS0Fpa0NrU1JoMXhlSERjRXhXOVFwMEhSektLczc1c0VoeVZjM3M2ZE5rTnNJNEdmWQ==");
+        headers.set("Authorization","REFacXQ1NFZtREtVcWFoM1BLeXhsMWthd0ZRYmFHVjJXVXNST2V6Rzo0REZuYnQ4ckRXd0locWVaMGdiMU1jZlJBdE1VcnBGWjdsMzJXWmtrRkdVcTV1UDhHWVZkZjVtRVQ3aVZGdm4wbGdQU1UySGNjU2tLNTRYZUZMMjZKbWI4UTN3cjhoeU9Ca01ZcmZ6VmlkN3NBMWVZOWZRM2RCeG41TVU0TGxSUA==");
         // Setting up the request body
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type", "client_credentials");
@@ -123,8 +124,8 @@ public class NafithService {
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 
         // URL from the curl command
-        String url = "https://sandbox.nafith.sa/api/oauth/token/";
-
+   //sandbox     String url = "https://sandbox.nafith.sa/api/oauth/token/";
+        String url = "https://nafith.sa/api/oauth/token/";
         // Making the POST request
         ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
         JSONObject jsonResponse = new JSONObject(response.getBody());
@@ -144,7 +145,7 @@ public class NafithService {
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         // URL from the curl command
-        String url = "https://sandbox.nafith.sa/api/sanad/"+group_uuid+"/"+sanad_uid+"/";
+        String url = "https://nafith.sa/api/sanad/"+group_uuid+"/"+sanad_uid+"/";
 
         // Making the GET request
         ResponseEntity<Object> response = restTemplate.exchange(url,HttpMethod.GET, entity,Object.class);
