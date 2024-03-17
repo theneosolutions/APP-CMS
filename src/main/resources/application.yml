@@ -1,3 +1,11 @@
+tns:
+  app:
+    jwtCookieName: bezkoder
+    jwtExpirationMs: 300000
+    jwtSecret: ======================SeulahApi=Spring===========================
+
+
+
 spring:
   servlet:
     multipart:
