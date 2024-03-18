@@ -31,6 +31,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader("Authorization");
+        String requestURI = request.getRequestURI();
+        if (requestURI.equals("/api/v1/cms/sms")) {
+            filterChain.doFilter(request, response);
+        }
         if (jwt != null) {
             if(extractRoleFromToken(jwt).equals("ROLE_USER")){
                 filterChain.doFilter(request,response);
