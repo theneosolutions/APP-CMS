@@ -38,10 +38,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request,response);
             }
             else {
-                throw new ServletException("Insufficient permissions");
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Insufficient permissions");
             }
         }else {
-            throw new ServletException("Invalid token: "+request.getHeader("Authorization"));
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
         }
     }
 
