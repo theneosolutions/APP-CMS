@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/cms/selaApi")
-@CrossOrigin(origins = {"http://localhost:300","http://localhost:3001","http://localhost:8085"}, maxAge = 3600, allowCredentials = "true")
 public class DefaultController {
     private final DefaultService defaultService;
 
