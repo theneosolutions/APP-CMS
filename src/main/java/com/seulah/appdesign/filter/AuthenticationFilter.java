@@ -1,5 +1,6 @@
 package com.seulah.appdesign.filter;
 
+import com.seulah.appdesign.exceptions.CustomAuthenticationException;
 import com.seulah.appdesign.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -42,10 +43,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request,response);
             }
             else {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Insufficient permissions");
+                throw  new CustomAuthenticationException("Insufficient permissions");
             }
         }else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
+            throw  new CustomAuthenticationException("Authentication failed");
         }
     }
 
