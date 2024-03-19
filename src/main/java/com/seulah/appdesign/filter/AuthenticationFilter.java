@@ -30,31 +30,32 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader("Authorization");
+        filterChain.doFilter(request, response);
         String requestURI = request.getRequestURI();
-        if (requestURI.equals("/api/v1/cms/sms")) {
-            filterChain.doFilter(request, response);
-        }
-        if (requestURI.equals("/api/v1/cms/esign/emad")) {
-            filterChain.doFilter(request, response);
-        }
-        if(requestURI.equals("/api/v1/cms/screenFlow/getAppFlow")){
-            filterChain.doFilter(request, response);
-        }
-        if(requestURI.equals("/api/v1/cms/brandSplashScreen/")){
-            filterChain.doFilter(request, response);
-        }
-        if (jwt != null) {
-            if("ROLE_USER".equals(extractRoleFromToken(jwt))){
-                filterChain.doFilter(request, response);
-            } else if("ROLE_ADMIN".equals(extractRoleFromToken(jwt))){
-                filterChain.doFilter(request, response);
-            }
-            else {
-                throw new CustomAuthenticationException("Insufficient permissions");
-            }
-        }else {
-            throw  new CustomAuthenticationException("Authentication failed");
-        }
+//        if (requestURI.equals("/api/v1/cms/sms")) {
+//
+//        }
+//        if (requestURI.equals("/api/v1/cms/esign/emad")) {
+//            filterChain.doFilter(request, response);
+//        }
+//        if(requestURI.equals("/api/v1/cms/screenFlow/getAppFlow")){
+//            filterChain.doFilter(request, response);
+//        }
+//        if(requestURI.equals("/api/v1/cms/brandSplashScreen/")){
+//            filterChain.doFilter(request, response);
+//        }
+//        if (jwt != null) {
+//            if("ROLE_USER".equals(extractRoleFromToken(jwt))){
+//                filterChain.doFilter(request, response);
+//            } else if("ROLE_ADMIN".equals(extractRoleFromToken(jwt))){
+//                filterChain.doFilter(request, response);
+//            }
+//            else {
+//                throw new CustomAuthenticationException("Insufficient permissions");
+//            }
+//        }else {
+//            throw  new CustomAuthenticationException("Authentication failed");
+//        }
     }
 
     private String extractRoleFromToken(String token) {
