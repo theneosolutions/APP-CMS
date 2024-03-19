@@ -40,6 +40,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if(requestURI.equals("/api/v1/cms/screenFlow/getAppFlow")){
             filterChain.doFilter(request, response);
         }
+        if(requestURI.equals("/api/v1/cms/brandSplashScreen/")){
+            filterChain.doFilter(request, response);
+        }
         if (jwt != null) {
             if("ROLE_USER".equals(extractRoleFromToken(jwt))){
                 filterChain.doFilter(request, response);
