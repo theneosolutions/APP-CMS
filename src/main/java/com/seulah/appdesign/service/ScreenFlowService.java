@@ -69,15 +69,15 @@ public class ScreenFlowService {
         }
     }
 
-    public ResponseEntity<?> getAppFlow(String brandId) {
+    public ResponseEntity<Map<String ,ScreenFlow>> getAppFlow(String brandId) {
         Map<String ,ScreenFlow> appResponse = new HashMap<>();
 
         ScreenFlow appFlow = appFlowRepository.findByBrandId(brandId);
-        if(appFlow!=null){
+        try{
             appResponse.put("appFlow",appFlow);
             return ResponseEntity.ok(appResponse);
-        }else{
-            appResponse.put("appFlow",null);
+        }catch (NullPointerException e){
+            appResponse.put("message",null);
             return ResponseEntity.ok(appResponse);
         }
     }
