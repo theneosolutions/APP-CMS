@@ -37,13 +37,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }
         if (jwt != null) {
-            if(extractRoleFromToken(jwt)=="ROLE_USER"){
-                filterChain.doFilter(request,response);
-            }else if(extractRoleFromToken(jwt)=="ROLE_ADMIN"){
-                filterChain.doFilter(request,response);
+            if("ROLE_USER".equals(extractRoleFromToken(jwt))){
+                filterChain.doFilter(request, response);
+            } else if("ROLE_ADMIN".equals(extractRoleFromToken(jwt))){
+                filterChain.doFilter(request, response);
             }
             else {
-                throw  new CustomAuthenticationException("Insufficient permissions");
+                throw new CustomAuthenticationException("Insufficient permissions");
             }
         }else {
             throw  new CustomAuthenticationException("Authentication failed");
