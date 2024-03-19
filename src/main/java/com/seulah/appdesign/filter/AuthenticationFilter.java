@@ -8,8 +8,6 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +34,12 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (requestURI.equals("/api/v1/cms/sms")) {
             filterChain.doFilter(request, response);
         }
+        if (requestURI.equals("/api/v1/cms/esign/emad")) {
+            filterChain.doFilter(request, response);
+        }
+        if(requestURI.equals("/api/v1/cms/screenFlow/getAppFlow")){
+            filterChain.doFilter(request, response);
+        }
         if (jwt != null) {
             if("ROLE_USER".equals(extractRoleFromToken(jwt))){
                 filterChain.doFilter(request, response);
@@ -60,8 +64,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             return claims.get("roles", String.class); // Ensure the key "roles" is correct
         } catch (JwtException e) {
             // Log the exception for debugging
-            Logger logger = LoggerFactory.getLogger(getClass());
-            logger.error("Error parsing JWT: {}", e.getMessage());
+          // Logger logger = LoggerFactory.getLogger(getClass());
+          // logger.error("Error parsing JWT: {}", e.getMessage());
             return null;
         }// Assuming the role is stored in a claim named 'role'
     }
