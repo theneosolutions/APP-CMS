@@ -37,9 +37,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }
         if (jwt != null) {
-            if(extractRoleFromToken(jwt).equals("ROLE_USER")){
+            if(extractRoleFromToken(jwt)=="ROLE_USER"){
                 filterChain.doFilter(request,response);
-            }else if(extractRoleFromToken(jwt).equals("ROLE_ADMIN")){
+            }else if(extractRoleFromToken(jwt)=="ROLE_ADMIN"){
                 filterChain.doFilter(request,response);
             }
             else {
