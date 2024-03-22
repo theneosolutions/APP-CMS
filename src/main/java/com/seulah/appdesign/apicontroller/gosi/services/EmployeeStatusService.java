@@ -71,9 +71,7 @@ public class EmployeeStatusService {
     private void sendDataToLos(Gosi gosi,String userId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
-        String gosiJson = new Gson().toJson(gosi);
-        HttpEntity<String> httpEntity =new  HttpEntity<>(gosiJson,headers);
-        System.out.println(urlLos+userId);
+        HttpEntity<?> httpEntity =new  HttpEntity<>(gosi,headers);
         restTemplate.exchange(
                 urlLos+userId,
                 HttpMethod.POST,  // Change to POST or PUT as appropriate
