@@ -1,5 +1,6 @@
 package com.seulah.appdesign.apicontroller.gosi.services;
 
+import com.google.gson.Gson;
 import com.seulah.appdesign.apicontroller.gosi.dto.Gosi;
 import com.seulah.appdesign.apicontroller.gosi.repo.GosiRepo;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,8 +71,15 @@ public class EmployeeStatusService {
     private void sendDataToLos(Gosi gosi,String userId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("accept", "application/json");
-        HttpEntity<String> httpEntity =new  HttpEntity<>(headers);
-        restTemplate.exchange(urlLos+userId, HttpMethod.GET, httpEntity, Gosi.class);
+        String gosiJson = new Gson().toJson(gosi);
+        HttpEntity<String> httpEntity =new  HttpEntity<>(gosiJson,headers);
+        System.out.println(urlLos+userId);
+        restTemplate.exchange(
+                urlLos+userId,
+                HttpMethod.POST,  // Change to POST or PUT as appropriate
+                httpEntity,
+                Gosi.class
+        );
     }
 
     public ResponseEntity<?> getData(String id) {
