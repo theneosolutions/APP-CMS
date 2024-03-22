@@ -31,7 +31,7 @@ public class EmployeeStatusService {
         this.gosiRepo = gosiRepo;
     }
     Gosi gosi= new Gosi();
-    String urlLos="http://localhost:8091/api/v1/los/gosi/user?userId=";
+    String urlLos="https://0bf4-182-180-181-136.ngrok-free.app/api/v1/los/gosi/user?userId=";
 
     public ResponseEntity<?> getStatusByCustomerId(String customerId, String userId) {
         HttpHeaders headers = new HttpHeaders();
