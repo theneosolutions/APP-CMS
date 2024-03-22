@@ -14,8 +14,8 @@ public class EmploymentStatusController {
     }
 
     @GetMapping("/income")
-    public ResponseEntity<?> addEmploymentStatusInfo(@RequestParam("customerId") String customerId) {
-        return employeeStatusService.getStatusByCustomerId(customerId);
+    public ResponseEntity<?> addEmploymentStatusInfo(@RequestParam("customerId") String customerId,@RequestParam String userId) {
+        return employeeStatusService.getStatusByCustomerId(customerId,userId);
     }
 
     @GetMapping("/getDataById")
