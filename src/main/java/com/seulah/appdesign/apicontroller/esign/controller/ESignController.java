@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @RequestMapping("/api/v1/cms/esign")
 public class ESignController {
 
-    @GetMapping("/emad")
+    @PostMapping("/emad")
     public void eSign(@RequestBody MultipartFile pdfPath){
         try {
             // Temp Folder Path
@@ -38,10 +38,6 @@ public class ESignController {
             ClassPathResource res = new ClassPathResource("certificates/ClientSDKDev.pfx");
            // File file = copyResourceToFile(res);
             String pFXFilePath = res.getFile().getAbsolutePath();
-
-
-
-
 
 
 
