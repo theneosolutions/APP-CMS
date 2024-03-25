@@ -16,7 +16,7 @@ public class IVRController {
 
     @GetMapping("/callRequest")
     public void createRequest( @RequestParam String phone) {
-        ivrService.callRequest("pot8576", "Hfikfekqcjso2f", phone);
+        ivrService.callRequest("seulah", "hitozq69JklSdfgecy", phone);
     }
 
     @GetMapping("/confirmRequest")
