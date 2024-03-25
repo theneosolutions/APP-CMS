@@ -51,10 +51,9 @@ public class NafathService {
                     local,
                     requestId
             );
-            System.out.println(response.getBody());
+            System.out.println(appId+appKey+response.getBody());
             return  ResponseEntity.ok().body(response.getBody());
         } catch (Exception e) {
-            System.out.println(response.getBody());
             return  ResponseEntity.badRequest().body(response.getBody());
         }
     }
