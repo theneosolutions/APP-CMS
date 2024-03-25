@@ -42,7 +42,7 @@ public class IVRService {
 
         // Print the response body
         System.out.println("Response body: " + response);
-        return ResponseEntity.ok().body(new HashMap<>().put("message","Success"));
+        return ResponseEntity.ok().body(new HashMap<>().put("message",response));
     }
 
     public ResponseEntity<?> confirmRequest(int status, String mobile) {
