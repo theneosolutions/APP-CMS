@@ -73,12 +73,12 @@ public class ScreenFlowService {
         Map<String ,ScreenFlow> appResponse = new HashMap<>();
 
         ScreenFlow appFlow = appFlowRepository.findByBrandId(brandId);
-        try{
+        if(appFlow!=null){
             appResponse.put("appFlow",appFlow);
-            return ResponseEntity.ok(appResponse);
-        }catch (NullPointerException e){
+            return ResponseEntity.ok().body(appResponse);
+        }else {
             appResponse.put("message",null);
-            return ResponseEntity.ok(appResponse);
+            return ResponseEntity.ok().body(appResponse);
         }
     }
 }

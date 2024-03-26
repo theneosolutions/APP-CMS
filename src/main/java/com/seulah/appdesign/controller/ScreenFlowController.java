@@ -41,7 +41,7 @@ public class ScreenFlowController {
 
     @GetMapping(value = "/getAppFlow", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAppFlow(@RequestParam String brandId) {
-        log.info("Saving App Flow {}", brandId);
+        log.info("Get App Flow {}", brandId);
         return apiFlowService.getAppFlow(brandId);
     }
 }
