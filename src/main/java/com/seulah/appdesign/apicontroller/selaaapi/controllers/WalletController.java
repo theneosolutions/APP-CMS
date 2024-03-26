@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/cms/selaApi/")
+@CrossOrigin(origins = {"http://localhost:3000", "https://dev-dms.dd3kk1j719cpv.amplifyapp.com/", "http://localhost:8085"}, maxAge = 3600, allowCredentials = "true")
 public class WalletController {
     private final WalletService service;
 
