@@ -1,24 +1,24 @@
-//package com.seulah.appdesign.apicontroller.esign.controller;
-//
-//
-//import com.amazonaws.util.Base64;
-//import com.emdha.esign.*;
-//import org.springframework.core.io.ClassPathResource;
-//import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.multipart.MultipartFile;
-//
-//import javax.net.ssl.*;
-//import java.io.*;
-//import java.net.URL;
-//import java.net.URLEncoder;
-//import java.nio.file.Files;
-//import java.nio.file.Path;
-//import java.security.SecureRandom;
-//import java.util.ArrayList;
-//@RestController
-//@RequestMapping("/api/v1/cms/esign")
-//public class ESignController {
-//
+package com.seulah.appdesign.apicontroller.esign.controller;
+
+
+import com.amazonaws.util.Base64;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.net.ssl.*;
+import java.io.*;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+@RestController
+@RequestMapping("/api/v1/cms/esign")
+public class ESignController {
+
 //    @PostMapping("/emad")
 //    public void eSign(@RequestBody MultipartFile pdfPath){
 //        try {
@@ -136,57 +136,57 @@
 //        }
 //
 //    }
-//
-//    //Method to post request XML
-//    private static String postXML(String eSignURL, String requestXML) throws Exception {
-//        URL url = new URL(eSignURL);
-//        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-//
-//        SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
-//        sslcontext.init(new KeyManager[0], new TrustManager[]{new DummyTrustManager()}, new SecureRandom());
-//        SSLSocketFactory factory = sslcontext.getSocketFactory();
-//
-//        connection.setRequestMethod("POST");
-//        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//        connection.setRequestProperty("Content-Length", "" + Integer.toString(requestXML.getBytes().length));
-//        connection.setRequestProperty("Content-Language", "en-US");
-//        connection.setUseCaches(false);
-//        connection.setDoInput(true);
-//        connection.setDoOutput(true);
-//        connection.setSSLSocketFactory(factory);
-//        connection.setHostnameVerifier(new DummyHostnameVerifier());
-//
-//        try ( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
-//            wr.writeBytes(requestXML);
-//            wr.flush();
-//        }
-//        InputStream is = connection.getInputStream();
-//        String response;
-//        try ( BufferedReader rd = new BufferedReader(new InputStreamReader(is))) {
-//            String line = null;
-//            response = "";
-//            while ((line = rd.readLine()) != null) {
-//                response = response + line + "\r";
-//            }
-//        }
-//        return response;
-//    }
-//
-//    private static String docBase64(MultipartFile filePath) throws IOException {
-//        System.out.println("Arham"+filePath.getBytes().toString());
-//        return Base64.encodeAsString(filePath.getBytes());
-//    }
-//
-//    private static File copyResourceToFile(ClassPathResource resource) throws IOException {
-//        Path tempFile = Files.createTempFile(null, null);
-//        try (InputStream is = resource.getInputStream(); FileOutputStream os = new FileOutputStream(tempFile.toFile())) {
-//            byte[] buffer = new byte[1024];
-//            int bytesRead;
-//            while ((bytesRead = is.read(buffer)) != -1) {
-//                os.write(buffer, 0, bytesRead);
-//            }
-//        }
-//        return tempFile.toFile();
-//    }
-//
-//}
+
+    //Method to post request XML
+    private static String postXML(String eSignURL, String requestXML) throws Exception {
+        URL url = new URL(eSignURL);
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+
+        SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
+      //  sslcontext.init(new KeyManager[0], new TrustManager[]{new DummyTrustManager()}, new SecureRandom());
+        SSLSocketFactory factory = sslcontext.getSocketFactory();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setRequestProperty("Content-Length", "" + Integer.toString(requestXML.getBytes().length));
+        connection.setRequestProperty("Content-Language", "en-US");
+        connection.setUseCaches(false);
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setSSLSocketFactory(factory);
+     //   connection.setHostnameVerifier(new DummyHostnameVerifier());
+
+        try ( DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+            wr.writeBytes(requestXML);
+            wr.flush();
+        }
+        InputStream is = connection.getInputStream();
+        String response;
+        try ( BufferedReader rd = new BufferedReader(new InputStreamReader(is))) {
+            String line = null;
+            response = "";
+            while ((line = rd.readLine()) != null) {
+                response = response + line + "\r";
+            }
+        }
+        return response;
+    }
+
+    private static String docBase64(MultipartFile filePath) throws IOException {
+        System.out.println("Arham"+filePath.getBytes().toString());
+        return Base64.encodeAsString(filePath.getBytes());
+    }
+
+    private static File copyResourceToFile(ClassPathResource resource) throws IOException {
+        Path tempFile = Files.createTempFile(null, null);
+        try (InputStream is = resource.getInputStream(); FileOutputStream os = new FileOutputStream(tempFile.toFile())) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+        }
+        return tempFile.toFile();
+    }
+
+}
