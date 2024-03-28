@@ -1,0 +1,83 @@
+tns:
+  app:
+    jwtCookieName: bezkoder
+    jwtExpirationMs: 300000
+    jwtSecret: ======================SeulahApi=Spring===========================
+
+
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  data:
+    mongodb.uri: ${db_url:mongodb://localhost:27017/seulah-app-design?createDatabaseIfNotExist=true}
+    mongodb:
+      auto-index-creation: true
+  sql:
+    init.mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: CMS-SERVICE
+    gosi:
+      appId: 6e6adfc9
+      appKey: 9093c0db181932602b18f9b231a0f1fd
+      platformKey: 84ac2d21-6a7a-4742-9cf0-1d9811fb95ab
+      organizationNumber: 7033740874
+    nafath:
+      appId: b4ae3f06
+      appKey: 51b80331bf8f423772f87d7245aa8c09
+
+server:
+  port: 8090
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    ip-address: true
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIATDONUYHMXNZBVOVC
+      secret-key: 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
+    region:
+      static: s3_region=us-east-1
+    stack:
+      auto: false
+    image:
+      path: http://seulahtest.s3-website-us-east-1.amazonaws.com
+
+application:
+  bucket:
+    name: seulahbucket
+  leanToken: d07e9715-ae87-4c03-912c-d0b4ae220aa2
+
+
+sftp:
+  password: password
+  port: '22'
+  host: 127.0.0.1
+  channelTimeout: '15000'
+  sessionTimeout: '15000'
+  username: user
+  passphrase: aa
+  privatekey: aaa
+
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+

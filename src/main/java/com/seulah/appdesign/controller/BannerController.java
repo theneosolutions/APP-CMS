@@ -1,0 +1,59 @@
+package com.seulah.appdesign.controller;
+
+import com.seulah.appdesign.request.MessageResponse;
+import com.seulah.appdesign.service.BannerService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@RestController
+@RequestMapping("/api/v1/cms/banner")
+@Slf4j
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001","https://dev-cms.d3k8cagii9iejo.amplifyapp.com/","http://localhost:8085"}, maxAge = 3600, allowCredentials = "true")
+public class BannerController {
+    private final BannerService bannerService;
+
+    public BannerController(BannerService bannerService) {
+        this.bannerService = bannerService;
+    }
+
+    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> saveBanner(@RequestParam String bannerDesign, @RequestPart MultipartFile bannerImage, @RequestParam int height, @RequestParam int width,@RequestParam(required = false) String langCode) {
+        log.info("Saving Banner {} , height {}, width {}", bannerDesign, height, width);
+        return bannerService.saveBanner(bannerImage, bannerDesign, height, width,langCode);
+    }
+
+
+    @GetMapping(value = "/getById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> getBannerByID(@RequestParam String id) {
+        log.info("Get By Id: {}", id);
+        return bannerService.getBannerByID(id);
+    }
+
+    @GetMapping(value = "/getBannerByLanguageCode", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> getBannerByLanguageCode(@RequestParam String langCode) {
+        log.info("Get By Language code : {}", langCode);
+        return bannerService.getBannerByLanguageCode(langCode);
+    }
+
+    @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> getAll() {
+        log.info("Get All ");
+        return bannerService.getAll();
+    }
+
+    @DeleteMapping(value = "/deleteById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageResponse> deleteById(@RequestParam String id) {
+        log.info("Delete By Id: {}", id);
+        return bannerService.deleteById(id);
+    }
+
+    @GetMapping("/getBannerImageById")
+    public byte[] getBannerImageById(@RequestParam String id) {
+        return bannerService.getBannerImageById(id);
+    }
+}
+
+
