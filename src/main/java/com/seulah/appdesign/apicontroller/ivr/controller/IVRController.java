@@ -23,4 +23,8 @@ public class IVRController {
     public ResponseEntity<?> confirmRequest(@RequestParam("status") int status, @RequestParam("mobile") String mobile) {
         return ivrService.confirmRequest(status, mobile);
     }
+    @GetMapping("/declinedRequest")
+    public ResponseEntity<?> declinedRequest(@RequestParam("status") int status, @RequestParam("mobile") String mobile) {
+        return ivrService.confirmRequest(status, mobile);
+    }
 }
